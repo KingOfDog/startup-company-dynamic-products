@@ -1,0 +1,168 @@
+<h1>
+    <i class="fa fa-cubes"></i>
+    Dynamic Products
+    <i class="fa fa-times pull-right close-button" close-all-ui></i>
+</h1>
+
+<div class="flex-row" style="height: 100%">
+    <div class="flex2" style="height: 100%; overflow: auto;">
+        <ul class="left-tabs">
+            <li ng-repeat="tab in dynamicCtrl.tabs" ng-click="dynamicCtrl.tab = tab.name"
+                ng-class="{ active: tab.name == dynamicCtrl.tab }">
+                <span>
+                    <i class="fa {{tab.icon}}"></i>
+                    {{tab.name}}
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="flex4 padding" style="height: 100%; overflow: auto;">
+        <div ng-switch="dynamicCtrl.tab">
+            <!-- Features -->
+            <div ng-switch-when="Features" class="column">
+                <h3>Create Feature</h3>
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="Feature Name" style="margin-bottom: 12px;">
+
+                <span class="flex-row" style="margin-bottom: 12px;">
+                    <i class="fa {{dynamicCtrl.faIcon}}" style="width: 150px; font-size: 94px; text-align: center;"></i>
+                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon">
+                </span>
+
+                <h4>Research Cost</h4>
+                <input type="number" ng-model="dynamicCtrl.researchPoints" placeholder="Research Cost" min="0"
+                    style="margin-bottom: 12px;">
+
+                <h4>Category</h4>
+                <div class="small" dropdown-select="dynamicCtrl.featureCategories" dropdown-model="dynamicCtrl.category"
+                    dropdown-item-label="name" style="width: 100%; margin-bottom: 12px;"></div>
+
+                <div ng-if="dynamicCtrl.category.name == 'Users' || dynamicCtrl.category.name == 'Enhancement'" class="column">
+                    <h4>Requirements</h4>
+                    <table class="medium">
+                        <tr ng-repeat="(name, item) in dynamicCtrl.requirements">
+                            <td>
+                                <component class="small" component="item.component"></component>
+                            </td>
+                            <td localize="{{ name }}"></td>
+                            <td>
+                                <input type="number" ng-model="item.count" ng-change="dynamicCtrl.onRequirementCountChange()">
+                            </td>
+                        </tr>
+                    </table>
+
+                     <ui-select ng-model="dynamicCtrl.newRequirement" theme="select2"
+                        on-select="dynamicCtrl.addNewRequirement($item, i)" append-to-body="true">
+                        <ui-select-match placeholder="Select new requirement">
+                                <div class="dropdown-component">
+                                    <component component="$select.selected.component" />
+                                    <span>{{$select.selected.label}}</span>
+                                </div>
+                            </ui-select-match>
+                        <ui-select-choices
+ repeat="item in dynamicCtrl.components | propsFilter: { label: $select.search }">
+                            <div class="dropdown-component">
+                                <component component="item.component" />
+                                <span ng-bind-html="item.label | highlight: $select.search"></span>
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div ng-if="dynamicCtrl.category.name == 'Users'" class="column">
+                    <h4>Level</h4>
+                    <div class="small" dropdown-select="dynamicCtrl.featureLevels" drowdown-model="dynamicCtrl.level"
+                        dropdown-item-label="name" style="width: 100%; margin-bottom: 12px;"></div>
+                </div>
+
+                <div ng-if="dynamicCtrl.category.name == 'Revenue'" class="column" style="margin-bottom: 12px;">
+                    <label for="dissatisfactionSlider">
+                        Dissatisfaction <b>{{dynamicCtrl.dissatisfaction}}</b>
+                    </label>
+                    <input type="range" min="0" max="100" id="dissatisfactionSlider"
+                        ng-model="dynamicCtrl.dissatisfaction">
+                </div>
+
+                <button type="button" ng-click="dynamicCtrl.submitFeature()">Create</button>
+            </div>
+
+            <!-- Products -->   
+            <div ng-switch-when="Products" class="column">
+                <h3>Create Product</h3>
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="Product Name" style="margin-bottom: 12px;">
+                <span class="flex-row" style="margin-bottom: 12px;">
+                    <i class="fa {{dynamicCtrl.faIcon}}" style="width: 150px; font-size: 94px; text-align: center;"></i>
+                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon">
+                </span>
+                <h4>Product Features</h4>
+                <ul style="max-height: 250px; overflow:auto; margin-bottom: 12px;">
+                    <li ng-repeat="(name, state) in dynamicCtrl.features" style="display: block;">
+                        <label for="feature-{{name}">
+                            <input type="checkbox" id="feature-{{name}}" ng-model="dynamicCtrl.features[name]">
+                            {{dynamicCtrl.getString(name)}}
+                        </label>
+                    </li>
+                </ul>
+                <button type="button" ng-click="dynamicCtrl.submitProduct()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .autocomplete {
+        position: relative;
+    }
+
+    .autocomplete-list {
+        text-align: left;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        border-radius: 14px;
+        outline: none;
+        max-height: 400px;
+        overflow: auto;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background: white;
+        padding: 0;
+        border: 2px solid rgba(0, 0, 0, 0.17);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-weight: normal;
+        list-style: none;
+    }
+
+    .autocomplete-item {
+        display: block;
+    }
+
+    .autocomplete-item a {
+        display: block;
+        text-decoration: none;
+        border-bottom: 2px solid #e6e8ea;
+        box-shadow: inset 0 2px 0 #fff;
+        color: #666671;
+        padding: 20px;
+    }
+
+    .autocomplete-item:hover a {
+        background: #abcee0;
+    }
+
+    .autocomplete-list .autocomplete-item:first-of-type a {
+        border-radius: 14px 14px 0 0;
+    }
+
+    .autocomplete-list .autocomplete-item:last-of-type a {
+        border-radius: 0 0 14px 14px;
+        border: none;
+    }
+</style>
