@@ -1,0 +1,106 @@
+{
+    "name": "Instant Messagers",
+    "description": "A collection of well-known instant messaging services to expand your communication abilities!",
+    "products": [{
+        "faIcon": "fa-message",
+        "name": "Instant Messenger",
+        "features": [
+            "LandingPage",
+            "ChatSystem",
+            "ImageUpload",
+            "VideoFunctionality",
+            "SharingFunctionality",
+            "ProfilePage",
+            "LiveStreaming",
+            "TextAds",
+            "BannerAds",
+            "VideoAds",
+            "Subscriptions",
+            "DdosProtection",
+            "HelpSystem",
+            "AdBlockObfuscator"
+        ]
+    }],
+    "competitors": [
+        {
+            "name": "WhatsApp",
+            "productTypeName": "InstantMessenger",
+            "users": 3000000000,
+            "stockVolume": 10000000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/12.png"
+        },
+        {
+            "name": "Telegram",
+            "productTypeName": "InstantMessenger",
+            "users": 600000000,
+            "stockVolume": 1250000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/93.png"
+        },
+        {
+            "name": "Signal",
+            "productTypeName": "InstantMessenger",
+            "users": 424242420,
+            "stockVolume": 690420,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/79.png"
+        },
+        {
+            "name": "Threema",
+            "productTypeName": "InstantMessenger",
+            "users": 69000000,
+            "stockVolume": 420000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/33.png"
+        },
+        {
+            "name": "Facebook Messenger",
+            "productTypeName": "InstantMessenger",
+            "users": 10,
+            "stockVolume": 5000000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/80.png"
+        },
+        {
+            "name": "Viber Messenger",
+            "productTypeName": "InstantMessenger",
+            "users": 500000000,
+            "stockVolume": 300000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/91.png"
+        },
+        {
+            "name": "Hangouts",
+            "productTypeName": "InstantMessenger",
+            "users": 900000000,
+            "stockVolume": 4000000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/49.png"
+        },
+        {
+            "name": "WeChat",
+            "productTypeName": "InstantMessenger",
+            "users": 1750000000,
+            "stockVolume": 3500000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/100.png"
+        },
+        {
+            "name": "Line",
+            "productTypeName": "InstantMessenger",
+            "users": 30000000,
+            "stockVolume": 87000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/56.png"
+        },
+        {
+            "name": "Kik",
+            "productTypeName": "InstantMessenger",
+            "users": 250000000,
+            "stockVolume": 1666666,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/88.png"
+        }
+    ]
+}

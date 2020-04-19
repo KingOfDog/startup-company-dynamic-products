@@ -11,13 +11,14 @@
             "VideoFunctionality",
             "ChatSystem",
             "OfflineContent",
-            "AdBlockObfuscator",
-            "Subscriptions",
+            "ContentManagementSystem",
             "TextAds",
             "BannerAds",
             "VideoAds",
+            "Subscriptions",
             "DdosProtection",
-            "HelpSystem"
+            "HelpSystem",
+            "AdBlockObfuscator"
         ],
         "audienceMatches": [
             "age_group1",

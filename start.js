@@ -2,7 +2,10 @@ let _modPath;
 
 const modName = "Dynamic Products";
 
-const searchEnginePreset = require('./presets/search-engine.json');
+const presets = [
+    require('./presets/search-engine.json'),
+    require('./presets/instant-messenger.json'),
+];
 
 /*exports.onBackgroundWorkerStart = () => {
     console.log('hier bin ich');
@@ -135,7 +138,7 @@ exports.initialize = (modPath) => {
                 interests: Object.keys(MarketingInterests),
             };
 
-            this.presets = [searchEnginePreset];
+            this.presets = presets;
 
             // Competitors Section
             this.submitCompetitor = () => {
@@ -348,17 +351,17 @@ function getInternalName(name) {
 }
 
 function registerCompetitor(competitor) {
-    const internalName = getInternalName(competitor.name);
-    const stockPrice = Helpers.CalculateStockPrice(competitor, Helpers.CalculateValuation(competitor));
-
-    if(GetRootScope().settings.competitorProducts.find(product => product.name == internalName)) {
+    if(GetRootScope().settings.competitorProducts.find(product => product.name == competitor.name)) {
         console.log('Skipping competitor', competitor, 'as it already exists');
         return;
     }
 
+    const internalName = getInternalName(competitor.name);
+    const stockPrice = Helpers.CalculateStockPrice(competitor, Helpers.CalculateValuation(competitor));
+
     GetRootScope().settings.competitorProducts.push({
         id: internalName,
-        name: internalName,
+        name: competitor.name,
         logoPath: competitor.logoPath,
         logoColorDegree: competitor.logoColorDegree,
         users: competitor.users,
@@ -376,9 +379,6 @@ function registerCompetitor(competitor) {
         dealResults: [],
         stockTransactions: [],
         priceExpectations: Math.round((Math.random() * 3 + 2) * 10) / 10,
-    });
-    Modding.addTranslation(internalName, {
-        en: competitor.name
     });
 }
 
