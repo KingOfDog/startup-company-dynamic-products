@@ -1,0 +1,31 @@
+{
+    "author": "KingOfDog",
+    "strings": {
+        "dp_create": "Erstellen",
+
+        "dp_create_competitor": "Mitbewerber erstellen",
+        "dp_create_competitor_desc": "Du kannst einen eigenen Mitbewerber erstellen, der sich genauso wie jeder andere im Spiel verhält. Du kannst Aktien kaufen, Aktienv verkaufen und natürlich auch den Mitbewerber übernehmen.",
+        "dp_competitor_name": "Mitbewerber-Name",
+        "dp_users": "Nutzer",
+        "dp_stock_volume": "Aktienvolumen",
+
+        "dp_create_feature": "Feature erstellen",
+        "dp_create_feature_desc": "Du kannst deine eigenen Features erstellen, wie du es magst. Derzeit werden standardmäßig alle Features zu allen existierenden Produkt-Typen hinzugefügt.",
+        "dp_feature_name": "Feature-Name",
+        "dp_feature_icon": "Feature-Icon",
+        "dp_research_cost": "Forschungskosten",
+        "dp_category": "Kategorie",
+        "dp_select_requirement": "Neue Anforderung hinzufügen",
+
+        "dp_create_framework": "Framework erstellen",
+        "dp_create_framework_desc": "Fang an deine eigenen Frameworks zu entwickeln - warum denn auch nicht. Warum sollte man irgendwelche von diesen umfangreichen, einfach zu bedienenden Tools von der Stange nehmen, die genau für diesen Zweck entwickelt wurden?",
+        "dp_framework_name": "Framework-Name",
+
+        "dp_create_product": "Produkt erstellen",
+        "dp_create_product_desc": "Indem du einen neuen Produkt-Typ erstellst, eröffnest du dir zahlreiche Möglichkeiten. Jeder Produkt-Typ kann für eine neue Webseite genutzt werden und es können sogar eigene Mitbewerber hinzugefügt werden.",
+        "dp_product_name": "Produktname",
+        "dp_product_icon": "Produkt-Icon",
+        "dp_product_features": "Produktfunktionen",
+        "dp_product_audience": "Produktzielgruppe"
+    }
+}

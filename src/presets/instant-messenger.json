@@ -1,5 +1,6 @@
 {
     "name": "Instant Messagers",
+    "author": "KingOfDog",
     "description": "A collection of well-known instant messaging services to expand your communication abilities!",
     "products": [{
         "faIcon": "fa-message",

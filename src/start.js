@@ -6,31 +6,27 @@ const presets = [
     require('./presets/search-engine.json'),
     require('./presets/instant-messenger.json'),
     require('./presets/language-plattform.json'),
+    require('./presets/online-forum.json'),
+    require('./presets/travel-planning.json'),
 ];
 
-/*exports.onBackgroundWorkerStart = () => {
-    console.log('hier bin ich');
-    FeatureNames.Test = 'Test';
-    Features.push({
-        name: 'Test',
-        level: Enums.EmployeeLevels.Expert,
-        requirements: {
-            ContentManagementModule: 1,
-            UiComponent: 1,
-            BlueprintComponent: 1
-        },
-        faIcon: "fa-file-video-o",
-        categoryName: Enums.FeatureCategories.Users
-    });
+const languages = {
+    en: require('./lang/en.json'),
+    de: require('./lang/de.json'),
 };
 
-ResearchItemNames.Test = 'Test';
-ResearchItems.push({
-    name: 'Test',
-    category: ResearchCategories.Features,
-    points: 30,
-    unlockType: "Feature"
-});*/
+function initLanguage() {
+    console.log('Loading languages...');
+    Object.entries(languages).forEach(entry => {
+        const [lang, data] = entry;
+        console.log('Loading', lang);
+        
+        Object.entries(data.strings).forEach(string => {
+            Modding.addTranslation(string[0], {[lang]: string[1]});
+        });
+    });
+    console.log('Loaded languages!');
+}
 
 exports.initialize = (modPath) => {
     _modPath = modPath;
@@ -42,19 +38,6 @@ exports.initialize = (modPath) => {
         faIcon: 'fa-cubes',
         badgeCount: 0,
     });
-
-    /*FeatureNames.Test = 'Test';
-    Features.push({
-        name: FeatureNames.Test,
-        level: Enums.EmployeeLevels.Expert,
-        requirements: {
-            ContentManagementModule: 1,
-            UiComponent: 1,
-            BlueprintComponent: 1
-        },
-        faIcon: "fa-file-video-o",
-        categoryName: Enums.FeatureCategories.Users
-    });*/
 
     exports.views = [{
         name: 'dynamic',
@@ -94,7 +77,7 @@ exports.initialize = (modPath) => {
                 },
                 {
                     name: 'Products',
-                    icon: 'fa-website',
+                    icon: 'fa-cubes',
                 },
             ];
 
@@ -165,12 +148,15 @@ exports.initialize = (modPath) => {
                 };
 
                 registerCompetitor(newCompetitor);
+                if (!GetRootScope().settings[modName].competitors) {
+                    GetRootScope().settings[modName].competitors = [];
+                }
+                GetRootScope().settings[modName].competitors.push(newCompetitor);
 
                 this.reset();
             };
 
             // Features Section
-            // TODO: implement features
             this.onRequirementCountChange = () => {
                 Object.entries(this.requirements).forEach(entry => {
                     if (entry[1].count <= 0) {
@@ -376,6 +362,8 @@ exports.initialize = (modPath) => {
 };
 
 exports.onLoadGame = settings => {
+    initLanguage();
+
     if (!settings[modName]) {
         settings[modName] = {
             features: [],
@@ -519,9 +507,6 @@ function registerFramework(framework) {
     // Add language strings
     Modding.addTranslation(internalName, {
         en: framework.name,
-    });
-    Modding.addTranslation(internalName + '_description', {
-        en: ''
     });
 }
 

@@ -28,6 +28,7 @@
                     <li ng-repeat="preset in dynamicCtrl.presets">
                         <a ng-click="dynamicCtrl.importPresetConfirmation(preset)">
                             <b>{{preset.name}}</b>
+                            <span><i class="fa fa-user"></i> by {{preset.author}}</span>
                             <span>{{preset.description}}</span>
                         </a>
                     </li>
@@ -36,14 +37,12 @@
 
             <!-- Competitors -->
             <div ng-switch-when="Competitors" class="flex-column">
-                <h3>Create Competitor</h3>
-                <p>You can create a custom competitor product that will behave like any other competitor in the game.
-                    You can buy stocks, sell stocks and of course, you can also aquire it and merge it into your own
-                    website.</p>
+                <h3 localize="dp_create_competitor"></h3>
+                <p localize="dp_create_competitor_desc"></p>
 
                 <div class="website-name flex-row">
                     <img ng-src="{{ dynamicCtrl.logo.url }}" class="website-logo">
-                    <input type="text" ng-model="dynamicCtrl.name" placeholder="Competitor Name" class="small margin-bottom"
+                    <input type="text" ng-model="dynamicCtrl.name" placeholder="{{dynamicCtrl.getString('dp_competitor_name')}}" class="small margin-bottom"
                         maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
                 </div>
 
@@ -56,44 +55,42 @@
 
                 <hr class="big">
 
-                <label>Product Type</label>
+                <label localize="producttype"></label>
                 <div class="small" dropdown-select="dynamicCtrl.productTypes" dropdown-model="dynamicCtrl.productType"
                     dropdown-item-label="label" style="width: 100%; margin-bottom: 12px;"></div>
 
-                <label for="usersInput">Users</label>
+                <label for="usersInput" localize="dp_users"></label>
                 <input type="number" id="usersInput" ng-model="dynamicCtrl.users" min="0" max="7500000000"
                     class="small margin-bottom">
 
-                <label for="stockVolume">Stock Volume</label>
+                <label for="stockVolume" localize="dp_stock_volume"></label>
                 <input type="number" id="stockVolume" ng-model="dynamicCtrl.stockVolume" min="0" class="small margin-bottom">
 
-                <button type="button" ng-click="dynamicCtrl.submitCompetitor()">Create</button>
+                <button type="button" ng-click="dynamicCtrl.submitCompetitor()" localize="dp_create"></button>
             </div>
 
             <!-- Features -->
             <div ng-switch-when="Features" class="column">
-                <h3>Create Feature</h3>
-                <p>You can create your own features just like you want them. Currently, they are added to all existing
-                    product types by default.</p>
+                <h3 localize="dp_create_feature"></h3>
+                <p localize="dp_create_feature_desc"></p>
 
-                <input type="text" ng-model="dynamicCtrl.name" placeholder="Feature Name" class="small margin-bottom">
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="{{dynamicCtrl.getString('dp_feature_name')}}" class="small margin-bottom">
 
                 <span class="flex-row margin-bottom">
                     <i class="fa {{dynamicCtrl.faIcon}}" style="font-size: 38px; margin: 14px;"></i>
-                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon" class="small">
+                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="{{dynamicCtrl.getString('dp_feature_icon')}}" class="small">
                 </span>
 
-                <label>Research Cost</label>
-                <input type="number" ng-model="dynamicCtrl.researchPoints" placeholder="Research Cost" min="0"
-                    class="margin-bottom small">
+                <label localize="dp_research_cost"></label>
+                <input type="number" ng-model="dynamicCtrl.researchPoints" min="0" class="margin-bottom small">
 
-                <label>Category</label>
-                <div class="small" dropdown-select="dynamicCtrl.featureCategories" dropdown-model="dynamicCtrl.category"
-                    dropdown-item-label="name" style="width: 100%; margin-bottom: 12px;"></div>
+                <label localize="dp_category"></label>
+                <div class="small margin-bottom" dropdown-select="dynamicCtrl.featureCategories" dropdown-model="dynamicCtrl.category"
+                    dropdown-item-label="name" style="width: 100%"></div>
 
                 <div ng-if="dynamicCtrl.category.name == 'Users' || dynamicCtrl.category.name == 'Enhancement'"
-                    class="column">
-                    <label>Requirements</label>
+                    class="column margin-bottom">
+                    <label localize="requirements"></label>
                     <table class="medium">
                         <tr ng-repeat="(name, item) in dynamicCtrl.requirements">
                             <td>
@@ -109,7 +106,7 @@
 
                     <ui-select ng-model="dynamicCtrl.newRequirement" theme="select2"
                         on-select="dynamicCtrl.addNewRequirement($item, i)" append-to-body="true">
-                        <ui-select-match placeholder="Select new requirement">
+                        <ui-select-match placeholder="{{dynamicCtrl.getString('dp_select_requirement')}}">
                             <div class="dropdown-component">
                                 <component component="$select.selected.component" />
                                 <span>{{$select.selected.label}}</span>
@@ -126,71 +123,68 @@
                 </div>
 
                 <div ng-if="dynamicCtrl.category.name == 'Users'" class="flex-column margin-bottom">
-                    <label>Level</label>
+                    <label localize="level"></label>
                     <div class="small" dropdown-select="dynamicCtrl.featureLevels" drowdown-model="dynamicCtrl.level"
                         dropdown-item-label="name"></div>
                 </div>
 
                 <div ng-if="dynamicCtrl.category.name == 'Revenue'" class="column" class="margin-botttom">
                     <label for="dissatisfactionSlider">
-                        Dissatisfaction <b>{{dynamicCtrl.dissatisfaction}}</b>
+                        {{dynamicCtrl.getString('dissatisfaction')}} <b>{{dynamicCtrl.dissatisfaction}}</b>
                     </label>
                     <input type="range" min="0" max="100" id="dissatisfactionSlider"
                         ng-model="dynamicCtrl.dissatisfaction" class="small">
                 </div>
 
-                <button type="button" ng-click="dynamicCtrl.submitFeature()">Create</button>
+                <button type="button" ng-click="dynamicCtrl.submitFeature()" localize='dp_create'></button>
             </div>
 
             <!-- Frameworks -->
             <div ng-switch-when="Frameworks" class="flex-column">
-                <h3>Create Framework</h3>
-                <p>Start creating your personal frameworks - because why not. Why would you use any of these pre-made, easy to use, comprehensive tools made exactly for this purpose?</p>
+                <h3 localize="dp_create_framework"></h3>
+                <p localize="dp_create_framework_desc"></p>
 
-                <input type="text" ng-model="dynamicCtrl.name" placeholder="Framework Name" class="margin-bottom small">
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="{{dynamicCtrl.getString('dp_framework_name')}}" class="margin-bottom small">
 
                 <div class="flex-row">
                     <div>
-                        <label for="researchPoints">Research Cost</label>
+                        <label for="researchPoints" localize="dp_research_cost"></label>
                         <input type="number" ng-model="dynamicCtrl.researchPoints" min="0" class="margin-bottom small">
                     </div>
 
                     <div>
-                        <label for="licenseCost">License Cost</label>
-                        <input type="number" ng-model="dynamicCtrl.licenseCost" min="0" id="licenseCost"
-                            class="margin-bottom small">
+                        <label for="licenseCost" localize="license_cost"></label>
+                        <input type="number" ng-model="dynamicCtrl.licenseCost" min="0" id="licenseCost" class="margin-bottom small">
                     </div>
 
                     <div>
-                        <label for="pricePerUser">Price per User</label>
+                        <label for="pricePerUser" localize="price_per_user"></label>
                         <input type="number" ng-model="dynamicCtrl.pricePerUser" min="0" id="pricePerUser"
                             class="margin-bottom small">
                     </div>
                 </div>
 
-                <label for="maxFeatures">Max Features</label>
+                <label for="maxFeatures" localize="max_features"></label>
                 <input type="number" ng-model="dynamicCtrl.maxFeatures" min="3" id="maxFeatures" class="margin-bottom small">
 
-                <label for="maxFeatureLevel">Max Feature Level</label>
+                <label for="maxFeatureLevel" localize="max_feature_level"></label>
                 <input type="number" ng-model="dynamicCtrl.maxFeatureLevel" min="1" id="maxFeatureLevel" class="margin-bottom small">
 
-                <button type="button" ng-click="dynamicCtrl.submitFramework()">Create</button>
+                <button type="button" ng-click="dynamicCtrl.submitFramework()" localize="dp_create"></button>
             </div>
 
             <!-- Products -->
             <div ng-switch-when="Products" class="column">
-                <h3>Create Product</h3>
-                <p>By creating a new product type, you open up plenty of options to extend your game. Every product type
-                    you add, can be used for a new website of yours and you can add custom competitors for these product
-                    types.</p>
+                <h3 localize="dp_create_product"></h3>
+                <p localize="dp_create_product_desc"></p>
 
-                <input type="text" ng-model="dynamicCtrl.name" placeholder="Product Name" class="margin-bottom small">
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="{{dynamicCtrl.getString('dp_product_name')}}" class="margin-bottom small">
                 <span class="flex-row margin-bottom">
                     <i class="fa {{dynamicCtrl.faIcon}}" style="width: 150px; font-size: 94px; text-align: center;"></i>
-                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon" class="small">
+                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="{{dynamicCtrl.getString('dp_product_icon')}}" class="small">
                 </span>
 
-                <label>Product Features</label>
+                <label localize="dp_product_features"></label>
                 <ul style="max-height: 250px; overflow:auto" class="margin-bottom">
                     <li ng-repeat="(name, state) in dynamicCtrl.features" style="display: block;">
                         <label for="feature-{{name}">
@@ -200,7 +194,7 @@
                     </li>
                 </ul>
 
-                <label>Product Audience</label>
+                <label localize="dp_product_audience"></label>
                 <div class="section">
                     <ul class="multi-toggle">
                         <li ng-click="dynamicCtrl.audienceGender = null"
@@ -229,7 +223,7 @@
                     </ul>
                 </div>
 
-                <button type="button" ng-click="dynamicCtrl.submitProduct()">Create</button>
+                <button type="button" ng-click="dynamicCtrl.submitProduct()" localize="dp_create"></button>
             </div>
         </div>
     </div>
@@ -257,7 +251,7 @@
         width: 100%;
     }
 
-    .preset-list li b {
+    .preset-list li a > * {
         display: block;
     }
 
