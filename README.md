@@ -19,6 +19,7 @@ I plan to include some of the features of my first, outdated mod More Products D
 * Improve the UX by adding validators and so on.
 * List all previously added things.
 * Edit things.
+* Add translations (help needed!)
 
 Also, you can look forward to more presets bundled with future updates :).
 
