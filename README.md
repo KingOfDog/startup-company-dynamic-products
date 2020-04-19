@@ -9,6 +9,8 @@ Currently there are the following presets:
 * Search Engine Pack
 * Instant Messengers
 * Language Learning
+* Online Forum
+* Travel Planning
 
 I plan to include some of the features of my first, outdated mod More Products Deluxe. But there is a massive number of other ideas I've got which I'll try to implement in the future. Some of these ideas are:
 
@@ -19,7 +21,8 @@ I plan to include some of the features of my first, outdated mod More Products D
 * Improve the UX by adding validators and so on.
 * List all previously added things.
 * Edit things.
-* Add translations (help needed!)
+* Add translations (help needed!) [WIP]
+  * ~German~ (by me)
 
 Also, you can look forward to more presets bundled with future updates :).
 
