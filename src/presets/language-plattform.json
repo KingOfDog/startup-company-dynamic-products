@@ -1,0 +1,92 @@
+{
+    "name": "Language Learning",
+    "description": "Languages are among the most beautiful things on earth - let's learn new ones!",
+    "features": [{
+        "faIcon": "",
+        "name": "Voice Recognition",
+        "categoryName": "Users",
+        "level": "Expert",
+        "researchPoints": 200,
+        "availableProducts": [
+            "ShoppingPlatform",
+            "SearchEngine"
+        ],
+        "requirements": {
+            "InputModule": 1,
+            "BackendModule": 1,
+            "LocalizationModule": 2
+        }
+    },
+    {
+        "faIcon": "",
+        "name": "Translation Functionality",
+        "categoryName": "Users",
+        "level": "Intermediate",
+        "researchPoints": 300,
+        "availableProducts": [
+            "SocialMedia",
+            "ShoppingPlatform",
+            "StreamingService",
+            "VideoSharingService",
+            "DatingPlatform",
+            "GamingPlatform"
+        ],
+        "requirements": {
+            "LocalizationModule": 2,
+            "SeoModule": 1,
+            "DatabaseLayer": 1
+        }
+    }
+],
+    "products": [{
+        "faIcon": "fa-language",
+        "name": "Language Learning Platform",
+        "features": [
+            "LandingPage",
+            "VoiceRecognition",
+            "OfflineContent",
+            "ContentManagementSystem",
+            "ProfilePage",
+            "TranslationFunctionality",
+            "TextAds",
+            "BannerAds",
+            "VideoAds",
+            "Subscriptions",
+            "DdosProtection",
+            "HelpSystem",
+            "AdBlockObfuscator"
+        ],
+        "audienceMatches": [
+            "Business",
+            "Entertainment",
+            "Family",
+            "Travel"
+        ]
+    }],
+    "competitors": [
+        {
+            "name": "Duolingo",
+            "productTypeName": "LanguageLearningPlatform",
+            "users": 100000000,
+            "stockVolume": 500000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/25.png"
+        },
+        {
+            "name": "Busuu",
+            "productTypeName": "LanguageLearningPlatform",
+            "users": 15000000,
+            "stockVolume": 18592,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/16.png"
+        },
+        {
+            "name": "Babbel",
+            "productTypeName": "LanguageLearningPlatform",
+            "users": 16000000,
+            "stockVolume": 35035,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/32.png"
+        }
+    ]
+}
