@@ -5,6 +5,7 @@ const modName = "Dynamic Products";
 const presets = [
     require('./presets/search-engine.json'),
     require('./presets/instant-messenger.json'),
+    require('./presets/language-plattform.json'),
 ];
 
 /*exports.onBackgroundWorkerStart = () => {
@@ -331,6 +332,12 @@ exports.initialize = (modPath) => {
             };
 
             this.importPreset = (preset) => {
+                if(preset.features) {
+                    preset.features.forEach(feature => registerFeature(feature));
+                }
+                if(preset.frameworks) {
+                    preset.frameworks.forEach(framework => registerFramework(framework));
+                }
                 if (preset.products) {
                     preset.products.forEach(product => registerProduct(product));
                 }
@@ -409,7 +416,7 @@ function getFeatures() {
 }
 
 function getInternalName(name) {
-    return _.capitalize(name).replace(/ /g, '');
+    return _.startCase(_.toLower(name)).replace(/ /g, '');
 }
 
 function registerCompetitor(competitor) {
@@ -468,7 +475,9 @@ function registerFeature(feature) {
 
     // Add feature to specified product types
     feature.availableProducts.map(name => ProductTypes.find(product => product.name == name)).forEach(product => {
-        product.features.push(internalName);
+        if(product) {
+            product.features.push(internalName);
+        }
     });
 
     // Add language strings
