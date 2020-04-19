@@ -1,0 +1,115 @@
+{
+    "name": "Search Engine Pack",
+    "description": "Adds Search Engine as a new product type. Including several competitor products!",
+    "products": [{
+        "faIcon": "fa-search",
+        "name": "Search Engine",
+        "features": [
+            "LandingPage",
+            "SharingFunctionality",
+            "ImageUpload",
+            "VideoFunctionality",
+            "ChatSystem",
+            "OfflineContent",
+            "AdBlockObfuscator",
+            "Subscriptions",
+            "TextAds",
+            "BannerAds",
+            "VideoAds",
+            "DdosProtection",
+            "HelpSystem"
+        ],
+        "audienceMatches": [
+            "age_group1",
+            "age_group2",
+            "Business",
+            "Entertainment",
+            "Fashion",
+            "Food",
+            "Shopping",
+            "Technology",
+            "Travel"
+        ]
+    }],
+    "competitors": [{
+            "name": "Google",
+            "productTypeName": "SearchEngine",
+            "users": 3000000000,
+            "stockVolume": 5000000,
+            "logoColorDegree": 15,
+            "logoPath": "images/logos/companies/6.png"
+        },
+        {
+            "name": "Bing",
+            "productTypeName": "SearchEngine",
+            "users": 999000000,
+            "stockVolume": 1500000,
+            "logoColorDegree": 60,
+            "logoPath": "images/logos/companies/10.png"
+        },
+        {
+            "name": "Yahoo!",
+            "productTypeName": "SearchEngine",
+            "users": 250000,
+            "stockVolume": 600000,
+            "logoColorDegree": 219,
+            "logoPath": "images/logos/companies/3.png"
+        },
+        {
+            "name": "DuckDuckGo",
+            "productTypeName": "SearchEngine",
+            "users": 350000,
+            "stockVolume": 750000,
+            "logoColorDegree": 150,
+            "logoPath": "images/logos/companies/5.png"
+        },
+        {
+            "name": "Ask.com",
+            "productTypeName": "SearchEngine",
+            "users": 99000,
+            "stockVolume": 15000,
+            "logoColorDegree": 90,
+            "logoPath": "images/logos/companies/4.png"
+        },
+        {
+            "name": "Baidu",
+            "productTypeName": "SearchEngine",
+            "users": 800000000,
+            "stockVolume": 250000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/17.png"
+        },
+        {
+            "name": "Yandex",
+            "productTypeName": "SearchEngine",
+            "users": 150000,
+            "stockVolume": 95000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/13.png"
+        },
+        {
+            "name": "Ecosia",
+            "productTypeName": "SearchEngine",
+            "users": 50000,
+            "stockVolume": 178000,
+            "logoColorDegree": 40,
+            "logoPath": "images/logos/companies/12.png"
+        },
+        {
+            "name": "AOL Search",
+            "productTypeName": "SearchEngine",
+            "users": 25000,
+            "stockVolume": 212000,
+            "logoColorDegree": 0,
+            "logoPath": "images/logos/companies/28.png"
+        },
+        {
+            "name": "Tor Search",
+            "productTypeName": "SearchEngine",
+            "users": 80000,
+            "stockVolume": 133700,
+            "logoColorDegree": 1000,
+            "logoPath": "images/logos/companies/30.png"
+        }
+    ]
+}

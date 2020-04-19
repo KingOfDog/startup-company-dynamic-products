@@ -18,9 +18,65 @@
     </div>
     <div class="flex4 padding" style="height: 100%; overflow: auto;">
         <div ng-switch="dynamicCtrl.tab">
+            <!-- Home -->
+            <div ng-switch-when="Home" class="flex-column">
+                <h3>Created Products</h3>
+                <p class="color-red">PLEASE! Don't hurt me :( I didn't do anything here yet.</p>
+
+                <h3>Import Preset</h3>
+                <ul class="preset-list">
+                    <li ng-repeat="preset in dynamicCtrl.presets">
+                        <a ng-click="dynamicCtrl.importPresetConfirmation(preset)">
+                            <b>{{preset.name}}</b>
+                            <span>{{preset.description}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Competitors -->
+            <div ng-switch-when="Competitors" class="flex-column">
+                <h3>Create Competitor</h3>
+                <p>You can create a custom competitor product that will behave like any other competitor in the game.
+                    You can buy stocks, sell stocks and of course, you can also aquire it and merge it into your own
+                    website.</p>
+
+                <div class="website-name">
+                    <img ng-src="{{ dynamicCtrl.logo.url }}" class="website-logo">
+                    <input type="text" ng-model="dynamicCtrl.name" placeholder="Competitor Name" class="margin"
+                        maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
+                </div>
+
+                <hr class="big">
+
+                <div class="logo-picker">
+                    <img ng-repeat="logo in dynamicCtrl.logos" ng-src="{{logo.url}}" class="website-logo"
+                        ng-mousedown="dynamicCtrl.logo = logo">
+                </div>
+
+                <hr class="big">
+
+                <h4>Product Type</h4>
+                <div class="small" dropdown-select="dynamicCtrl.productTypes" dropdown-model="dynamicCtrl.productType"
+                    dropdown-item-label="label" style="width: 100%; margin-bottom: 12px;"></div>
+
+                <label for="usersInput">Users</label>
+                <input type="number" id="usersInput" ng-model="dynamicCtrl.users" min="0" max="7500000000"
+                    class="margin">
+
+                <label for="stockVolume">Stock Volume</label>
+                <input type="number" id="stockVolume" ng-model="dynamicCtrl.stockVolume" min="0" class="margin">
+
+                <button type="button" ng-click="dynamicCtrl.submitCompetitor()">Create</button>
+            </div>
+
             <!-- Features -->
             <div ng-switch-when="Features" class="column">
                 <h3>Create Feature</h3>
+
+                <p class="color-red">Sadly, it is currently not possible to add features dynamically. I am working on
+                    it, I promise! :(</p>
+
                 <input type="text" ng-model="dynamicCtrl.name" placeholder="Feature Name" style="margin-bottom: 12px;">
 
                 <span class="flex-row" style="margin-bottom: 12px;">
@@ -36,7 +92,8 @@
                 <div class="small" dropdown-select="dynamicCtrl.featureCategories" dropdown-model="dynamicCtrl.category"
                     dropdown-item-label="name" style="width: 100%; margin-bottom: 12px;"></div>
 
-                <div ng-if="dynamicCtrl.category.name == 'Users' || dynamicCtrl.category.name == 'Enhancement'" class="column">
+                <div ng-if="dynamicCtrl.category.name == 'Users' || dynamicCtrl.category.name == 'Enhancement'"
+                    class="column">
                     <h4>Requirements</h4>
                     <table class="medium">
                         <tr ng-repeat="(name, item) in dynamicCtrl.requirements">
@@ -45,21 +102,22 @@
                             </td>
                             <td localize="{{ name }}"></td>
                             <td>
-                                <input type="number" ng-model="item.count" ng-change="dynamicCtrl.onRequirementCountChange()">
+                                <input type="number" ng-model="item.count"
+                                    ng-change="dynamicCtrl.onRequirementCountChange()">
                             </td>
                         </tr>
                     </table>
 
-                     <ui-select ng-model="dynamicCtrl.newRequirement" theme="select2"
+                    <ui-select ng-model="dynamicCtrl.newRequirement" theme="select2"
                         on-select="dynamicCtrl.addNewRequirement($item, i)" append-to-body="true">
                         <ui-select-match placeholder="Select new requirement">
-                                <div class="dropdown-component">
-                                    <component component="$select.selected.component" />
-                                    <span>{{$select.selected.label}}</span>
-                                </div>
-                            </ui-select-match>
+                            <div class="dropdown-component">
+                                <component component="$select.selected.component" />
+                                <span>{{$select.selected.label}}</span>
+                            </div>
+                        </ui-select-match>
                         <ui-select-choices
- repeat="item in dynamicCtrl.components | propsFilter: { label: $select.search }">
+                            repeat="item in dynamicCtrl.components | propsFilter: { label: $select.search }">
                             <div class="dropdown-component">
                                 <component component="item.component" />
                                 <span ng-bind-html="item.label | highlight: $select.search"></span>
@@ -85,14 +143,19 @@
                 <button type="button" ng-click="dynamicCtrl.submitFeature()">Create</button>
             </div>
 
-            <!-- Products -->   
+            <!-- Products -->
             <div ng-switch-when="Products" class="column">
                 <h3>Create Product</h3>
+                <p>By creating a new product type, you open up plenty of options to extend your game. Every product type
+                    you add, can be used for a new website of yours and you can add custom competitors for these product
+                    types.</p>
+
                 <input type="text" ng-model="dynamicCtrl.name" placeholder="Product Name" style="margin-bottom: 12px;">
                 <span class="flex-row" style="margin-bottom: 12px;">
                     <i class="fa {{dynamicCtrl.faIcon}}" style="width: 150px; font-size: 94px; text-align: center;"></i>
                     <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon">
                 </span>
+
                 <h4>Product Features</h4>
                 <ul style="max-height: 250px; overflow:auto; margin-bottom: 12px;">
                     <li ng-repeat="(name, state) in dynamicCtrl.features" style="display: block;">
@@ -102,6 +165,36 @@
                         </label>
                     </li>
                 </ul>
+
+                <h4>Product Audience</h4>
+                <div class="section">
+                    <ul class="multi-toggle">
+                        <li ng-click="dynamicCtrl.audienceGender = null"
+                            ng-class="{ active: dynamicCtrl.audienceGender == null }" localize="all"></li>
+                        <li ng-repeat="gender in dynamicCtrl.audiences.genders"
+                            ng-click="dynamicCtrl.audienceGender = gender"
+                            ng-class="{ active: dynamicCtrl.audienceGender == gender }" localize="{{gender}}"></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <ul class="multi-toggle">
+                        <li ng-click="dynamicCtrl.clickAudienceAge(null)"
+                            ng-class="{ active: dynamicCtrl.audienceAges.length == 0 }" localize="all"></li>
+                        <li ng-repeat="age in dynamicCtrl.audiences.ages" ng-click="dynamicCtrl.clickAudienceAge(age)"
+                            ng-class="{ active: dynamicCtrl.audienceAges.includes(age) }" localize="{{age}}"></li>
+                    </ul>
+                </div>
+                <div class="section margin-bottom">
+                    <ul class="multi-toggle-grid">
+                        <li ng-click="dynamicCtrl.clicAudienceInterest(null)"
+                            ng-class="{ active: dynamicCtrl.audienceInterests.length == 0 }" localize="all"></li>
+                        <li ng-repeat="interest in dynamicCtrl.audiences.interests"
+                            ng-click="dynamicCtrl.clickAudienceInterest(interest)"
+                            ng-class="{ active: dynamicCtrl.audienceInterests.includes(interest) }"
+                            localize="{{interest}}"></li>
+                    </ul>
+                </div>
+
                 <button type="button" ng-click="dynamicCtrl.submitProduct()">Create</button>
             </div>
         </div>
@@ -114,55 +207,27 @@
         flex-direction: column;
     }
 
-    .autocomplete {
-        position: relative;
+    .margin {
+        margin-bottom: 12px;
     }
 
-    .autocomplete-list {
-        text-align: left;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-        border-radius: 14px;
-        outline: none;
-        max-height: 400px;
-        overflow: auto;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 10;
-        background: white;
-        padding: 0;
-        border: 2px solid rgba(0, 0, 0, 0.17);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        font-weight: normal;
-        list-style: none;
+    .preset-list li {
+        display: block;
+        margin-bottom: 16px;
+        border-radius: 10px;
     }
 
-    .autocomplete-item {
+    .preset-list li a {
+        display: block;
+        padding: 16px;
+        width: 100%;
+    }
+
+    .preset-list li b {
         display: block;
     }
 
-    .autocomplete-item a {
-        display: block;
-        text-decoration: none;
-        border-bottom: 2px solid #e6e8ea;
-        box-shadow: inset 0 2px 0 #fff;
-        color: #666671;
-        padding: 20px;
-    }
-
-    .autocomplete-item:hover a {
-        background: #abcee0;
-    }
-
-    .autocomplete-list .autocomplete-item:first-of-type a {
-        border-radius: 14px 14px 0 0;
-    }
-
-    .autocomplete-list .autocomplete-item:last-of-type a {
-        border-radius: 0 0 14px 14px;
-        border: none;
+    .preset-list li:hover {
+        background-color: #abcee0;
     }
 </style>
