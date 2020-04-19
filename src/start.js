@@ -81,15 +81,19 @@ exports.initialize = (modPath) => {
                 },
                 {
                     name: 'Competitors',
-                    icon: 'fa-building',
+                    icon: 'fa-industry',
                 },
                 {
                     name: 'Features',
-                    icon: 'fa-cubes',
+                    icon: 'fa-gear',
+                },
+                {
+                    name: 'Frameworks',
+                    icon: 'fa-microchip',
                 },
                 {
                     name: 'Products',
-                    icon: 'fa-cube',
+                    icon: 'fa-website',
                 },
             ];
 
@@ -97,18 +101,24 @@ exports.initialize = (modPath) => {
             this.faIcon = '';
             this.features = getFeatures();
             this.productType = '';
-            this.researchPoints = 0;
             this.category = '';
             this.requirements = {};
             this.newRequirement = '';
             this.level = '';
-            this.dissatisfaction = 0;
-            this.users = 0;
-            this.stockVolume = 0;
             this.logo = '';
             this.audienceGender = null;
             this.audienceAges = [];
             this.audienceInterests = [];
+
+            this.researchPoints = 0;
+            this.dissatisfaction = 0;
+            this.users = 0;
+            this.stockVolume = 0;
+            this.cuPerMs = 0;
+            this.maxFeatureLevel = 1;
+            this.maxFeatures = 3;
+            this.pricePerUser = 0;
+            this.licenseCost = 0;
 
             this.components = Components.map(component => {
                 return {
@@ -199,18 +209,26 @@ exports.initialize = (modPath) => {
             }
 
             this.submitFeature = () => {
-                if (!this.isFeatureValid() || true) {
+                /*if (!this.isFeatureValid()) {
                     return;
-                }
+                }*/
+
+                const requirements = {};
+                Object.entries(this.requirements).forEach(entry => {
+                    if(entry[1].count > 0) {
+                        requirements[entry[0]] = entry[1].count;
+                    }
+                });
 
                 const newFeature = {
                     name: this.name,
                     faIcon: this.faIcon,
                     categoryName: this.category.name,
                     level: this.level.name,
-                    requirements: this.requirements,
+                    requirements: requirements,
                     dissatisfaction: this.dissatisfaction,
                     researchPoints: this.researchPoints,
+                    availableProducts: Object.keys(ProductTypeNames), // TODO: allow user to specify
                 };
                 console.log(newFeature);
 
@@ -223,6 +241,31 @@ exports.initialize = (modPath) => {
                 // Reset inputs
                 this.reset();
             };
+
+            // Frameworks Section
+            this.submitFramework = () => {
+                // TODO: Validate
+
+                const newFramework = {
+                    name: this.name,
+                    researchPoints: this.researchPoints,
+                    pricePerUser: this.pricePerUser,
+                    maxFeatures: this.maxFeatures,
+                    maxFeatureLevel: this.maxFeatureLevel,
+                    licenseCost: this.licenseCost,
+                    cuPerMs: this.cuPerMs,
+                };
+                console.log('New Framework', newFramework);
+
+                registerFramework(newFramework);
+                if(!GetRootScope().settings[modName].frameworks) {
+                    GetRootScope().settings[modName].frameworks = [];
+                }
+                GetRootScope().settings[modName].frameworks.push(newFramework);
+
+                // Reset input fields
+                this.reset();
+            }
 
             // Products Section
             this.clickAudienceAge = (age) => {
@@ -329,11 +372,30 @@ exports.onLoadGame = settings => {
     if (!settings[modName]) {
         settings[modName] = {
             features: [],
+            frameworks: [],
             products: [],
         };
     }
+    if(!settings[modName].features) {
+        settings[modName].features = [];
+    }
+    if(!settings[modName].frameworks) {
+        settings[modName].frameworks = [];
+    }
+    if(!settings[modName].products) {
+        settings[modName].products = [];
+    }
+
+    settings[modName].features.forEach(feature => {
+        console.log('Registering feature', feature);
+        registerFeature(feature);
+    });
+    settings[modName].frameworks.forEach(framework => {
+        console.log('Registering framework', framework);
+        registerFramework(framework);
+    });
     settings[modName].products.forEach(product => {
-        console.log(product);
+        console.log('Registering product', product);
         registerProduct(product);
     });
 };
@@ -347,7 +409,7 @@ function getFeatures() {
 }
 
 function getInternalName(name) {
-    return name.replace(/ /g, '');
+    return _.capitalize(name).replace(/ /g, '');
 }
 
 function registerCompetitor(competitor) {
@@ -383,14 +445,19 @@ function registerCompetitor(competitor) {
 }
 
 function registerFeature(feature) {
-    return;
     const internalName = getInternalName(feature.name);
 
-    FeatureNames[internalName] = internalName;
-    const featureCopy = JSON.parse(JSON.stringify(feature));
-    featureCopy.name = internalName;
-    Features.push(featureCopy);
+    if(FeatureNames[internalName]) {
+        return;
+    }
 
+    // Add feature
+    FeatureNames[internalName] = internalName;
+    const clone = Helpers.Clone(feature);
+    clone.name = internalName;
+    Features.push(clone);
+
+    // Add research items
     ResearchItemNames[internalName] = internalName;
     ResearchItems.push({
         name: internalName,
@@ -399,17 +466,54 @@ function registerFeature(feature) {
         points: feature.researchPoints,
     });
 
+    // Add feature to specified product types
+    feature.availableProducts.map(name => ProductTypes.find(product => product.name == name)).forEach(product => {
+        product.features.push(internalName);
+    });
+
+    // Add language strings
     Modding.addTranslation(internalName, {
         en: feature.name
     });
     // TODO: Add option for description
     Modding.addTranslation(internalName + '_description', {
-        en: ''
+        en: 'The multipurpose feature ' + feature.name + ' enables every animal, human, robot and plant to live together in harmony. <3'
     });
 }
 
 function registerFramework(framework) {
+    const internalName = getInternalName(framework.name);
 
+    if(FrameworkNames[internalName]) {
+        return;
+    }
+
+    // Add framework
+    FrameworkNames[internalName] = internalName;
+
+    const clone = Helpers.Clone(framework);
+    clone.name = internalName;
+    clone.logoPath = _modPath + 'thumbnail.png';
+    clone.order = _.maxBy(Frameworks, e => e.order).order + 1;
+    delete clone.researchPoints;
+    Frameworks.push(clone);
+
+    // Add research items
+    ResearchItemNames[internalName] = internalName;
+    ResearchItems.push({
+        name: internalName,
+        category: 'Frameworks',
+        unlockType: 'Framework',
+        points: framework.researchPoints,
+    });
+
+    // Add language strings
+    Modding.addTranslation(internalName, {
+        en: framework.name,
+    });
+    Modding.addTranslation(internalName + '_description', {
+        en: ''
+    });
 }
 
 function registerProduct(product) {

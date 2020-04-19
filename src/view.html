@@ -5,7 +5,7 @@
 </h1>
 
 <div class="flex-row" style="height: 100%">
-    <div class="flex2" style="height: 100%; overflow: auto;">
+    <div class="flex2">
         <ul class="left-tabs">
             <li ng-repeat="tab in dynamicCtrl.tabs" ng-click="dynamicCtrl.tab = tab.name"
                 ng-class="{ active: tab.name == dynamicCtrl.tab }">
@@ -41,31 +41,31 @@
                     You can buy stocks, sell stocks and of course, you can also aquire it and merge it into your own
                     website.</p>
 
-                <div class="website-name">
+                <div class="website-name flex-row">
                     <img ng-src="{{ dynamicCtrl.logo.url }}" class="website-logo">
-                    <input type="text" ng-model="dynamicCtrl.name" placeholder="Competitor Name" class="margin"
+                    <input type="text" ng-model="dynamicCtrl.name" placeholder="Competitor Name" class="small margin-bottom"
                         maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
                 </div>
 
                 <hr class="big">
 
-                <div class="logo-picker">
+                <div class="logo-picker" style="max-height: 400px; overflow: auto;">
                     <img ng-repeat="logo in dynamicCtrl.logos" ng-src="{{logo.url}}" class="website-logo"
                         ng-mousedown="dynamicCtrl.logo = logo">
                 </div>
 
                 <hr class="big">
 
-                <h4>Product Type</h4>
+                <label>Product Type</label>
                 <div class="small" dropdown-select="dynamicCtrl.productTypes" dropdown-model="dynamicCtrl.productType"
                     dropdown-item-label="label" style="width: 100%; margin-bottom: 12px;"></div>
 
                 <label for="usersInput">Users</label>
                 <input type="number" id="usersInput" ng-model="dynamicCtrl.users" min="0" max="7500000000"
-                    class="margin">
+                    class="small margin-bottom">
 
                 <label for="stockVolume">Stock Volume</label>
-                <input type="number" id="stockVolume" ng-model="dynamicCtrl.stockVolume" min="0" class="margin">
+                <input type="number" id="stockVolume" ng-model="dynamicCtrl.stockVolume" min="0" class="small margin-bottom">
 
                 <button type="button" ng-click="dynamicCtrl.submitCompetitor()">Create</button>
             </div>
@@ -73,28 +73,27 @@
             <!-- Features -->
             <div ng-switch-when="Features" class="column">
                 <h3>Create Feature</h3>
+                <p>You can create your own features just like you want them. Currently, they are added to all existing
+                    product types by default.</p>
 
-                <p class="color-red">Sadly, it is currently not possible to add features dynamically. I am working on
-                    it, I promise! :(</p>
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="Feature Name" class="small margin-bottom">
 
-                <input type="text" ng-model="dynamicCtrl.name" placeholder="Feature Name" style="margin-bottom: 12px;">
-
-                <span class="flex-row" style="margin-bottom: 12px;">
-                    <i class="fa {{dynamicCtrl.faIcon}}" style="width: 150px; font-size: 94px; text-align: center;"></i>
-                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon">
+                <span class="flex-row margin-bottom">
+                    <i class="fa {{dynamicCtrl.faIcon}}" style="font-size: 38px; margin: 14px;"></i>
+                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon" class="small">
                 </span>
 
-                <h4>Research Cost</h4>
+                <label>Research Cost</label>
                 <input type="number" ng-model="dynamicCtrl.researchPoints" placeholder="Research Cost" min="0"
-                    style="margin-bottom: 12px;">
+                    class="margin-bottom small">
 
-                <h4>Category</h4>
+                <label>Category</label>
                 <div class="small" dropdown-select="dynamicCtrl.featureCategories" dropdown-model="dynamicCtrl.category"
                     dropdown-item-label="name" style="width: 100%; margin-bottom: 12px;"></div>
 
                 <div ng-if="dynamicCtrl.category.name == 'Users' || dynamicCtrl.category.name == 'Enhancement'"
                     class="column">
-                    <h4>Requirements</h4>
+                    <label>Requirements</label>
                     <table class="medium">
                         <tr ng-repeat="(name, item) in dynamicCtrl.requirements">
                             <td>
@@ -102,7 +101,7 @@
                             </td>
                             <td localize="{{ name }}"></td>
                             <td>
-                                <input type="number" ng-model="item.count"
+                                <input type="number" ng-model="item.count" class="small"
                                     ng-change="dynamicCtrl.onRequirementCountChange()">
                             </td>
                         </tr>
@@ -126,21 +125,56 @@
                     </ui-select>
                 </div>
 
-                <div ng-if="dynamicCtrl.category.name == 'Users'" class="column">
-                    <h4>Level</h4>
+                <div ng-if="dynamicCtrl.category.name == 'Users'" class="flex-column margin-bottom">
+                    <label>Level</label>
                     <div class="small" dropdown-select="dynamicCtrl.featureLevels" drowdown-model="dynamicCtrl.level"
-                        dropdown-item-label="name" style="width: 100%; margin-bottom: 12px;"></div>
+                        dropdown-item-label="name"></div>
                 </div>
 
-                <div ng-if="dynamicCtrl.category.name == 'Revenue'" class="column" style="margin-bottom: 12px;">
+                <div ng-if="dynamicCtrl.category.name == 'Revenue'" class="column" class="margin-botttom">
                     <label for="dissatisfactionSlider">
                         Dissatisfaction <b>{{dynamicCtrl.dissatisfaction}}</b>
                     </label>
                     <input type="range" min="0" max="100" id="dissatisfactionSlider"
-                        ng-model="dynamicCtrl.dissatisfaction">
+                        ng-model="dynamicCtrl.dissatisfaction" class="small">
                 </div>
 
                 <button type="button" ng-click="dynamicCtrl.submitFeature()">Create</button>
+            </div>
+
+            <!-- Frameworks -->
+            <div ng-switch-when="Frameworks" class="flex-column">
+                <h3>Create Framework</h3>
+                <p>Start creating your personal frameworks - because why not. Why would you use any of these pre-made, easy to use, comprehensive tools made exactly for this purpose?</p>
+
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="Framework Name" class="margin-bottom small">
+
+                <div class="flex-row">
+                    <div>
+                        <label for="researchPoints">Research Cost</label>
+                        <input type="number" ng-model="dynamicCtrl.researchPoints" min="0" class="margin-bottom small">
+                    </div>
+
+                    <div>
+                        <label for="licenseCost">License Cost</label>
+                        <input type="number" ng-model="dynamicCtrl.licenseCost" min="0" id="licenseCost"
+                            class="margin-bottom small">
+                    </div>
+
+                    <div>
+                        <label for="pricePerUser">Price per User</label>
+                        <input type="number" ng-model="dynamicCtrl.pricePerUser" min="0" id="pricePerUser"
+                            class="margin-bottom small">
+                    </div>
+                </div>
+
+                <label for="maxFeatures">Max Features</label>
+                <input type="number" ng-model="dynamicCtrl.maxFeatures" min="3" id="maxFeatures" class="margin-bottom small">
+
+                <label for="maxFeatureLevel">Max Feature Level</label>
+                <input type="number" ng-model="dynamicCtrl.maxFeatureLevel" min="1" id="maxFeatureLevel" class="margin-bottom small">
+
+                <button type="button" ng-click="dynamicCtrl.submitFramework()">Create</button>
             </div>
 
             <!-- Products -->
@@ -150,14 +184,14 @@
                     you add, can be used for a new website of yours and you can add custom competitors for these product
                     types.</p>
 
-                <input type="text" ng-model="dynamicCtrl.name" placeholder="Product Name" style="margin-bottom: 12px;">
-                <span class="flex-row" style="margin-bottom: 12px;">
+                <input type="text" ng-model="dynamicCtrl.name" placeholder="Product Name" class="margin-bottom small">
+                <span class="flex-row margin-bottom">
                     <i class="fa {{dynamicCtrl.faIcon}}" style="width: 150px; font-size: 94px; text-align: center;"></i>
-                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon">
+                    <input type="text" ng-model="dynamicCtrl.faIcon" placeholder="Product Icon" class="small">
                 </span>
 
-                <h4>Product Features</h4>
-                <ul style="max-height: 250px; overflow:auto; margin-bottom: 12px;">
+                <label>Product Features</label>
+                <ul style="max-height: 250px; overflow:auto" class="margin-bottom">
                     <li ng-repeat="(name, state) in dynamicCtrl.features" style="display: block;">
                         <label for="feature-{{name}">
                             <input type="checkbox" id="feature-{{name}}" ng-model="dynamicCtrl.features[name]">
@@ -166,7 +200,7 @@
                     </li>
                 </ul>
 
-                <h4>Product Audience</h4>
+                <label>Product Audience</label>
                 <div class="section">
                     <ul class="multi-toggle">
                         <li ng-click="dynamicCtrl.audienceGender = null"
