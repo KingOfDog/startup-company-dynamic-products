@@ -1,0 +1,63 @@
+{
+  "name": "Online Forum",
+  "author": "GoNutsDonuts",
+  "description": "A collection of forum services!",
+  "products": [{
+    "faIcon": "fa-comments",
+    "name": "Online Forum",
+    "features": [
+      "LandingPage",
+      "LoginSystem",
+      "CommentFunctionality",
+      "SharingFunctionality",
+      "ImageUpload",
+      "ContentManagementSystem",
+      "ChatSystem",
+      "VideoFunctionality",
+      "VideoEditor",
+      "TextAds",
+      "BannerAds",
+      "VideoAds",
+      "Subscriptions",
+      "ItemListing",
+      "OfflineContent",
+      "LiveStreaming",
+      "AdBlockObfuscator",
+      "DdosProtection",
+      "HelpSystem",
+      "ProfilePage"
+    ],
+    "audienceMatches": [
+      "age_group1",
+      "age_group2",
+      "male",
+      "Entertainment",
+      "Technology"
+    ]
+  }],
+  "competitors": [{
+      "name": "Readdit",
+      "productTypeName": "OnlineForum",
+      "users": 3148671945,
+      "stockVolume": 500000,
+      "logoColorDegree": 0,
+      "logoPath": "images/logos/companies/11.png"
+    },
+    {
+      "name": "Printerest",
+      "productTypeName": "OnlineForum",
+      "users": 23794623,
+      "stockVolume": 905125,
+      "logoColorDegree": 0,
+      "logoPath": "images/logos/companies/15.png"
+    },
+    {
+      "name": "Plexus Mods",
+      "productTypeName": "OnlineForum",
+      "users": 19454161,
+      "stockVolume": 325134,
+      "logoColorDegree": 0,
+      "logoPath": "images/logos/companies/19.png"
+    }
+  ]
+}

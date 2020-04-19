@@ -1,60 +1,37 @@
 let _modPath;
 
-const modName = "Dynamic Products";
+const config = require('./config.json');
+
+const {
+    registerCompetitor,
+    registerFeature,
+    registerFramework,
+    registerProduct,
+} = require('./registration');
+
+const {
+    getFeatures,
+    initLanguage,
+} = require('./helpers');
 
 const presets = [
     require('./presets/search-engine.json'),
     require('./presets/instant-messenger.json'),
     require('./presets/language-plattform.json'),
+    require('./presets/online-forum.json'),
+    require('./presets/travel-planning.json'),
 ];
-
-/*exports.onBackgroundWorkerStart = () => {
-    console.log('hier bin ich');
-    FeatureNames.Test = 'Test';
-    Features.push({
-        name: 'Test',
-        level: Enums.EmployeeLevels.Expert,
-        requirements: {
-            ContentManagementModule: 1,
-            UiComponent: 1,
-            BlueprintComponent: 1
-        },
-        faIcon: "fa-file-video-o",
-        categoryName: Enums.FeatureCategories.Users
-    });
-};
-
-ResearchItemNames.Test = 'Test';
-ResearchItems.push({
-    name: 'Test',
-    category: ResearchCategories.Features,
-    points: 30,
-    unlockType: "Feature"
-});*/
 
 exports.initialize = (modPath) => {
     _modPath = modPath;
 
     Modding.setMenuItem({
         name: 'dynamic',
-        tooltip: modName,
+        tooltip: config.name,
         tooltipPosition: 'top',
         faIcon: 'fa-cubes',
         badgeCount: 0,
     });
-
-    /*FeatureNames.Test = 'Test';
-    Features.push({
-        name: FeatureNames.Test,
-        level: Enums.EmployeeLevels.Expert,
-        requirements: {
-            ContentManagementModule: 1,
-            UiComponent: 1,
-            BlueprintComponent: 1
-        },
-        faIcon: "fa-file-video-o",
-        categoryName: Enums.FeatureCategories.Users
-    });*/
 
     exports.views = [{
         name: 'dynamic',
@@ -94,7 +71,7 @@ exports.initialize = (modPath) => {
                 },
                 {
                     name: 'Products',
-                    icon: 'fa-website',
+                    icon: 'fa-cubes',
                 },
             ];
 
@@ -170,7 +147,6 @@ exports.initialize = (modPath) => {
             };
 
             // Features Section
-            // TODO: implement features
             this.onRequirementCountChange = () => {
                 Object.entries(this.requirements).forEach(entry => {
                     if (entry[1].count <= 0) {
@@ -234,10 +210,6 @@ exports.initialize = (modPath) => {
                 console.log(newFeature);
 
                 registerFeature(newFeature);
-                if (!GetRootScope().settings[modName].features) {
-                    GetRootScope().settings[modName].features = [];
-                }
-                GetRootScope().settings[modName].features.push(newFeature);
 
                 // Reset inputs
                 this.reset();
@@ -258,11 +230,7 @@ exports.initialize = (modPath) => {
                 };
                 console.log('New Framework', newFramework);
 
-                registerFramework(newFramework);
-                if(!GetRootScope().settings[modName].frameworks) {
-                    GetRootScope().settings[modName].frameworks = [];
-                }
-                GetRootScope().settings[modName].frameworks.push(newFramework);
+                registerFramework(newFramework, _modPath);
 
                 // Reset input fields
                 this.reset();
@@ -315,10 +283,6 @@ exports.initialize = (modPath) => {
                 console.log(newProduct);
 
                 registerProduct(newProduct);
-                if (!GetRootScope().settings[modName].products) {
-                    GetRootScope().settings[modName].products = [];
-                }
-                GetRootScope().settings[modName].products.push(newProduct);
 
                 // Reset inputs
                 this.reset();
@@ -336,7 +300,7 @@ exports.initialize = (modPath) => {
                     preset.features.forEach(feature => registerFeature(feature));
                 }
                 if(preset.frameworks) {
-                    preset.frameworks.forEach(framework => registerFramework(framework));
+                    preset.frameworks.forEach(framework => registerFramework(framework, _modPath));
                 }
                 if (preset.products) {
                     preset.products.forEach(product => registerProduct(product));
@@ -376,168 +340,32 @@ exports.initialize = (modPath) => {
 };
 
 exports.onLoadGame = settings => {
-    if (!settings[modName]) {
-        settings[modName] = {
+    initLanguage();
+
+    if (!settings[config.name]) {
+        settings[config.name] = {
             features: [],
             frameworks: [],
             products: [],
         };
     }
-    if(!settings[modName].features) {
-        settings[modName].features = [];
+    if(!settings[config.name].features) {
+        settings[config.name].features = [];
     }
-    if(!settings[modName].frameworks) {
-        settings[modName].frameworks = [];
+    if(!settings[config.name].frameworks) {
+        settings[config.name].frameworks = [];
     }
-    if(!settings[modName].products) {
-        settings[modName].products = [];
+    if(!settings[config.name].products) {
+        settings[config.name].products = [];
     }
 
-    settings[modName].features.forEach(feature => {
-        console.log('Registering feature', feature);
-        registerFeature(feature);
+    settings[config.name].features.forEach(feature => {
+        registerFeature(feature, false);
     });
-    settings[modName].frameworks.forEach(framework => {
-        console.log('Registering framework', framework);
-        registerFramework(framework);
+    settings[config.name].frameworks.forEach(framework => {
+        registerFramework(framework, _modPath, false);
     });
-    settings[modName].products.forEach(product => {
-        console.log('Registering product', product);
-        registerProduct(product);
+    settings[config.name].products.forEach(product => {
+        registerProduct(product, false);
     });
 };
-
-function getFeatures() {
-    const features = {};
-    Object.keys(FeatureNames).forEach(name => {
-        features[name] = false;
-    });
-    return features;
-}
-
-function getInternalName(name) {
-    return _.startCase(_.toLower(name)).replace(/ /g, '');
-}
-
-function registerCompetitor(competitor) {
-    if(GetRootScope().settings.competitorProducts.find(product => product.name == competitor.name)) {
-        console.log('Skipping competitor', competitor, 'as it already exists');
-        return;
-    }
-
-    const internalName = getInternalName(competitor.name);
-    const stockPrice = Helpers.CalculateStockPrice(competitor, Helpers.CalculateValuation(competitor));
-
-    GetRootScope().settings.competitorProducts.push({
-        id: internalName,
-        name: competitor.name,
-        logoPath: competitor.logoPath,
-        logoColorDegree: competitor.logoColorDegree,
-        users: competitor.users,
-        productTypeName: competitor.productTypeName,
-        version: 100,
-        controlled: false,
-        history: [{
-            day: 1,
-            stockPrice: stockPrice,
-            users: competitor.users,
-            week: 1,
-        }],
-        stockVolume: competitor.stockVolume,
-        ownedStocks: 0,
-        dealResults: [],
-        stockTransactions: [],
-        priceExpectations: Math.round((Math.random() * 3 + 2) * 10) / 10,
-    });
-}
-
-function registerFeature(feature) {
-    const internalName = getInternalName(feature.name);
-
-    if(FeatureNames[internalName]) {
-        return;
-    }
-
-    // Add feature
-    FeatureNames[internalName] = internalName;
-    const clone = Helpers.Clone(feature);
-    clone.name = internalName;
-    Features.push(clone);
-
-    // Add research items
-    ResearchItemNames[internalName] = internalName;
-    ResearchItems.push({
-        name: internalName,
-        category: 'Features',
-        unlockType: 'Feature',
-        points: feature.researchPoints,
-    });
-
-    // Add feature to specified product types
-    feature.availableProducts.map(name => ProductTypes.find(product => product.name == name)).forEach(product => {
-        if(product) {
-            product.features.push(internalName);
-        }
-    });
-
-    // Add language strings
-    Modding.addTranslation(internalName, {
-        en: feature.name
-    });
-    // TODO: Add option for description
-    Modding.addTranslation(internalName + '_description', {
-        en: 'The multipurpose feature ' + feature.name + ' enables every animal, human, robot and plant to live together in harmony. <3'
-    });
-}
-
-function registerFramework(framework) {
-    const internalName = getInternalName(framework.name);
-
-    if(FrameworkNames[internalName]) {
-        return;
-    }
-
-    // Add framework
-    FrameworkNames[internalName] = internalName;
-
-    const clone = Helpers.Clone(framework);
-    clone.name = internalName;
-    clone.logoPath = _modPath + 'thumbnail.png';
-    clone.order = _.maxBy(Frameworks, e => e.order).order + 1;
-    delete clone.researchPoints;
-    Frameworks.push(clone);
-
-    // Add research items
-    ResearchItemNames[internalName] = internalName;
-    ResearchItems.push({
-        name: internalName,
-        category: 'Frameworks',
-        unlockType: 'Framework',
-        points: framework.researchPoints,
-    });
-
-    // Add language strings
-    Modding.addTranslation(internalName, {
-        en: framework.name,
-    });
-    Modding.addTranslation(internalName + '_description', {
-        en: ''
-    });
-}
-
-function registerProduct(product) {
-    const internalName = getInternalName(product.name);
-
-    if(ProductTypeNames[internalName]) {
-        console.log('Skipping product', product, 'because it already exists');
-        return;
-    }
-
-    ProductTypeNames[internalName] = internalName;
-    const productCopy = JSON.parse(JSON.stringify(product));
-    productCopy.name = internalName
-    ProductTypes.push(productCopy);
-    Modding.addTranslation(internalName, {
-        en: product.name
-    });
-}

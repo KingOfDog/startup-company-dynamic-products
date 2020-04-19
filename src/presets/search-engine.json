@@ -1,5 +1,6 @@
 {
     "name": "Search Engine Pack",
+    "author": "KingOfDog",
     "description": "Adds Search Engine as a new product type. Including several competitor products!",
     "products": [{
         "faIcon": "fa-search",

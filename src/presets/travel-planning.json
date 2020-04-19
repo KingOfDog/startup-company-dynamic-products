@@ -1,0 +1,68 @@
+{
+  "name": "Travel Planning",
+  "author": "GoNutsDonuts",
+  "description": "New services for your holidays!",
+  "products": [
+    {
+      "faIcon": "fa-plane",
+      "name": "Travel Planning",
+      "features": [
+        "LandingPage",
+        "LoginSystem",
+        "CommentFunctionality",
+        "SharingFunctionality",
+        "PaymentSystem",
+        "ImageUpload",
+        "ContentManagementSystem",
+        "ChatSystem",
+        "VideoFunctionality",
+        "ImapService",
+        "VideoEditor",
+        "TextAds",
+        "BannerAds",
+        "VideoAds",
+        "Subscriptions",
+        "ItemListing",
+        "OfflineContent",
+        "LiveStreaming",
+        "AdBlockObfuscator",
+        "DdosProtection",
+        "HelpSystem",
+        "ProfilePage"
+      ],
+      "audienceMatches": [
+        "Entertainment",
+        "Travel",
+        "Fashion",
+        "Food",
+        "Shopping"
+      ]
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Trapadvisor",
+      "productTypeName": "TravelPlanning",
+      "users": 318751133,
+      "stockVolume": 1,
+      "logoColorDegree": 0,
+      "logoPath": "images/logos/companies/11.png"
+    },
+    {
+      "name": "Roadtippers",
+      "productTypeName": "TravelPlanning",
+      "users": 76514898,
+      "stockVolume": 1,
+      "logoColorDegree": 0,
+      "logoPath": "images/logos/companies/15.png"
+    },
+    {
+      "name": "Triphabo",
+      "productTypeName": "TravelPlanning",
+      "users": 1944891,
+      "stockVolume": 1,
+      "logoColorDegree": 0,
+      "logoPath": "images/logos/companies/19.png"
+    }
+  ]
+}
