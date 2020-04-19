@@ -93,7 +93,7 @@ module.exports.registerFeature = function (feature, addToSettings = true) {
 }
 
 module.exports.registerFramework = function (framework, modPath, addToSettings = true) {
-        console.log('Registering framework', framework);
+    console.log('Registering framework', framework);
     const internalName = getInternalName(framework.name);
 
     if (FrameworkNames[internalName]) {
@@ -134,7 +134,7 @@ module.exports.registerFramework = function (framework, modPath, addToSettings =
 }
 
 module.exports.registerProduct = function (product, addToSettings = true) {
-        console.log('Registering product', product);
+    console.log('Registering product', product);
     const internalName = getInternalName(product.name);
 
     if (ProductTypeNames[internalName]) {

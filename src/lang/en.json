@@ -1,6 +1,12 @@
 {
     "author": "KingOfDog",
     "strings": {
+        "dp_home": "Home",
+        "dp_competitors": "Competitors",
+        "dp_features": "Features",
+        "dp_frameworks": "Frameworks",
+        "dp_products": "Products",
+        
         "dp_create": "Create",
 
         "dp_create_competitor": "Create Competitor",
@@ -26,6 +32,10 @@
         "dp_product_name": "Product Name",
         "dp_product_icon": "Product Icon",
         "dp_product_features": "Product Features",
-        "dp_product_audience": "Product Audience"
+        "dp_product_audience": "Product Audience",
+
+        "dp_preset_confirm": "Are you sure that you want to import this pack? This action can currently not be undone.",
+        "dp_preset_success": "Successfully imported preset",
+        "dp_preset_success_sub": "Have fun playing with the additions"
     }
 }
