@@ -3,7 +3,7 @@
     "author": "KingOfDog",
     "description": "A collection of well-known instant messaging services to expand your communication abilities!",
     "products": [{
-        "faIcon": "fa-message",
+        "faIcon": "fa-paper-plane",
         "name": "Instant Messenger",
         "features": [
             "LandingPage",

@@ -1,11 +1,11 @@
 {
-  "name": "TravelPlanning",
+  "name": "Travel Planning",
   "author": "GoNutsDonuts",
   "description": "New services for your holidays!",
   "products": [
     {
       "faIcon": "fa-plane",
-      "name": "TravelPlanning",
+      "name": "Travel Planning",
       "features": [
         "LandingPage",
         "LoginSystem",
@@ -29,7 +29,13 @@
         "DdosProtection",
         "HelpSystem",
         "ProfilePage"
-
+      ],
+      "audienceMatches": [
+        "Entertainment",
+        "Travel",
+        "Fashion",
+        "Food",
+        "Shopping"
       ]
     }
   ],

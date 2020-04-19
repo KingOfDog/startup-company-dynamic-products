@@ -3,7 +3,7 @@
     "author": "KingOfDog",
     "description": "Languages are among the most beautiful things on earth - let's learn new ones!",
     "features": [{
-        "faIcon": "",
+        "faIcon": "fa-microphone",
         "name": "Voice Recognition",
         "categoryName": "Users",
         "level": "Expert",
@@ -19,7 +19,7 @@
         }
     },
     {
-        "faIcon": "",
+        "faIcon": "fa-language",
         "name": "Translation Functionality",
         "categoryName": "Users",
         "level": "Intermediate",
