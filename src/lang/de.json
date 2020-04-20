@@ -1,6 +1,12 @@
 {
     "author": "KingOfDog",
     "strings": {
+        "dp_home": "Home",
+        "dp_competitors": "Mitbewerber",
+        "dp_features": "Features",
+        "dp_frameworks": "Frameworks",
+        "dp_products": "Produkte",
+
         "dp_create": "Erstellen",
 
         "dp_create_competitor": "Mitbewerber erstellen",
@@ -26,6 +32,15 @@
         "dp_product_name": "Produktname",
         "dp_product_icon": "Produkt-Icon",
         "dp_product_features": "Produktfunktionen",
-        "dp_product_audience": "Produktzielgruppe"
+        "dp_product_audience": "Produktzielgruppe",
+
+        "dp_import_preset": "Preset importieren",
+        "dp_preset_includes": "Beinhaltet",
+        "dp_preset_confirm": "Bist du dir sicher, dass du dieses Paket importieren möchtest? Derzeit kann diese Aktion nicht rückgängig gemacht werden.",
+        "dp_preset_success": "Prest erfolgreich importiert",
+        "dp_preset_success_sub": "Viel Spaß mit dem neuen Zeug",
+
+        "dp_create_new": "Neues erstellen",
+        "dp_import": "Importieren"
     }
 }

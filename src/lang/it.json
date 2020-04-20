@@ -34,8 +34,13 @@
         "dp_product_features": "Funzionalità Prodotto",
         "dp_product_audience": "Pubblico del Prodotto",
 
+        "dp_import_preset": "Import Preset",
+        "dp_preset_includes": "Includes",
         "dp_preset_confirm": "Sei sicuro di voler importare questo pacchetto? L'operazione non può essere annullata",
         "dp_preset_success": "Preset importati correttamente",
-        "dp_preset_success_sub": "Divertiti a giocare con le i componenti aggiuntivi!"
+        "dp_preset_success_sub": "Divertiti a giocare con le i componenti aggiuntivi!",
+
+        "dp_create_new": "Create New",
+        "dp_import": "Import"
     }
 }

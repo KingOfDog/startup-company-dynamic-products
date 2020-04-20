@@ -34,8 +34,13 @@
         "dp_product_features": "Product Features",
         "dp_product_audience": "Product Audience",
 
+        "dp_import_preset": "Import Preset",
+        "dp_preset_includes": "Includes",
         "dp_preset_confirm": "Are you sure that you want to import this pack? This action can currently not be undone.",
         "dp_preset_success": "Successfully imported preset",
-        "dp_preset_success_sub": "Have fun playing with the additions"
+        "dp_preset_success_sub": "Have fun playing with the additions",
+
+        "dp_create_new": "Create New",
+        "dp_import": "Import"
     }
 }

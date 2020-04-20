@@ -39,32 +39,69 @@ exports.initialize = (modPath) => {
             name: 'dynamichome',
             viewPath: _modPath + 'templates/home.html',
             controller: ['$scope', function ($scope) {
-                console.log('hallo');
-                this.presets = presets;
+                this.tab = 'home';
 
-                this.importPresetConfirmation = (preset) => {
-                    GetRootScope().confirm("", "Are you sure that you want to import this pack? This action can currently not be undone.", () => {
-                        this.importPreset(preset);
+                this.presets = presets;
+                this.preset = null;
+
+                this.showPreset = (preset) => {
+                    this.preset = preset;
+                    this.tab = 'preset';
+                };
+            }]
+        },
+        {
+            name: 'dynamicpreset',
+            viewPath: _modPath + 'templates/preset.html',
+            controller: ['$scope', function($scope) {
+                // Get Language String
+                this.getString = (key) => {
+                    return Helpers.GetLocalized(key)
+                };
+
+                this.preset = $scope.$parent.dynamichomeCtrl.preset;
+
+                this.getCount = (name) => {
+                    if(!this.preset[name]) {
+                        return 0;
+                    }
+                    return this.preset[name].length;
+                };
+
+                this.includes = {
+                    competitors: this.getCount('competitors'),
+                    features: this.getCount('features'),
+                    frameworks: this.getCount('frameworks'),
+                    products: this.getCount('products'),
+                };
+
+                this.importPresetConfirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_preset_confirm'), () => {
+                        this.importPreset();
                     });
                 };
 
-                this.importPreset = (preset) => {
-                    if (preset.features) {
-                        preset.features.forEach(feature => registerFeature(feature));
+                this.importPreset = () => {
+                    if (this.preset.features) {
+                        this.preset.features.forEach(feature => registerFeature(feature));
                     }
-                    if (preset.frameworks) {
-                        preset.frameworks.forEach(framework => registerFramework(framework, _modPath));
+                    if (this.preset.frameworks) {
+                        this.preset.frameworks.forEach(framework => registerFramework(framework, _modPath));
                     }
-                    if (preset.products) {
-                        preset.products.forEach(product => registerProduct(product));
+                    if (this.preset.products) {
+                        this.preset.products.forEach(product => registerProduct(product));
                     }
-                    if (preset.competitors) {
-                        preset.competitors.forEach(competitor => registerCompetitor(competitor));
+                    if (this.preset.competitors) {
+                        this.preset.competitors.forEach(competitor => registerCompetitor(competitor));
                     }
 
-                    Helpers.ShowSuccessMessage("Successfully imported preset", "Have fun playing with the additions")
+                    Helpers.ShowSuccessMessage(this.getString('dp_preset_success'), this.getString('dp_preset_sub'))
                 };
-            }]
+
+                this.quitScreen = () => {
+                    $scope.$parent.dynamichomeCtrl.tab = 'home';
+                };
+            }],
         },
         {
             name: 'dynamiccompetitors',
@@ -72,7 +109,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.competitors = GetRootScope().settings[config.name].competitors;
@@ -95,7 +132,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.name = '';
@@ -142,7 +179,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.tab = 'list';
@@ -160,7 +197,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
                 
                 this.name = '';
@@ -264,7 +301,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.tab = 'list';
@@ -282,7 +319,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.name = '';
@@ -323,7 +360,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.tab = 'list';
@@ -341,7 +378,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
                 this.name = '';
@@ -419,123 +456,42 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Language[key.toLowerCase()]
+                    return Helpers.GetLocalized(key)
                 };
 
-
-
+                // TODO: Continue with file upload
                 this.uploadFile = (files) => {
                     console.log(files);
 
                 };
 
-
-
-
                 this.tab = 'Home';
                 this.tabs = [{
-                        name: 'Home',
+                        label: this.getString('dp_home'),
+                        tab: 'Home',
                         icon: 'fa-home',
                     },
                     {
-                        name: 'Competitors',
+                        label: this.getString('dp_competitors'),
+                        tab: 'Competitors',
                         icon: 'fa-industry',
                     },
                     {
-                        name: 'Features',
+                        label: this.getString('dp_features'),
+                        tab: 'Features',
                         icon: 'fa-gear',
                     },
                     {
-                        name: 'Frameworks',
+                        label: this.getString('dp_frameworks'),
+                        tab: 'Frameworks',
                         icon: 'fa-microchip',
                     },
                     {
-                        name: 'Products',
+                        label: this.getString('dp_products'),
+                        tab: 'Products',
                         icon: 'fa-cubes',
                     },
                 ];
-
-                this.name = '';
-                this.faIcon = '';
-                this.features = getFeatures();
-                this.productType = '';
-                this.category = '';
-                this.requirements = {};
-                this.newRequirement = '';
-                this.level = '';
-                this.logo = '';
-                this.audienceGender = null;
-                this.audienceAges = [];
-                this.audienceInterests = [];
-
-                this.researchPoints = 0;
-                this.dissatisfaction = 0;
-                this.users = 0;
-                this.stockVolume = 0;
-                this.cuPerMs = 0;
-                this.maxFeatureLevel = 1;
-                this.maxFeatures = 3;
-                this.pricePerUser = 0;
-                this.licenseCost = 0;
-
-                this.components = Components.map(component => {
-                    return {
-                        label: this.getString(component.name),
-                        component: component
-                    }
-                });
-                this.productTypes = ProductTypes.map(productType => {
-                    return {
-                        label: this.getString(productType.name),
-                        productType: productType,
-                    };
-                });
-                this.featureCategories = FeatureCategories;
-                this.featureLevels = Object.keys(EmployeeLevels).map(level => {
-                    return {
-                        name: level
-                    }
-                });
-                this.audiences = {
-                    genders: ['male', 'female'],
-                    ages: ['age_group1', 'age_group2', 'age_group3'],
-                    interests: Object.keys(MarketingInterests),
-                };
-
-
-                // Competitors Section
-
-                // Features Section
-
-                // Frameworks Section
-
-                // Products Section
-
-                // Preset import
-
-                this.reset = () => {
-                    this.name = '';
-                    this.faIcon = '';
-                    this.features = getFeatures();
-                    this.researchPoints = 0;
-                    this.category = '';
-                    this.requirements = {};
-                    this.newRequirement = '';
-                    this.dissatisfaction = 0;
-                    this.productType = '';
-                    this.level = '';
-                    this.users = 0;
-                    this.stockVolume = 0;
-                    this.logo = '';
-                    this.audienceGender = null;
-
-                    this.productTypes = ProductTypes.map(productType => {
-                        return {
-                            label: this.getString(productType.name),
-                            productType: productType,
-                        };
-                    });
-                };
             }]
         }
     ];

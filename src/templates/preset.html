@@ -1,0 +1,16 @@
+<div class="column">
+    <div class="flex-row">
+        <button ng-click="dynamicpresetCtrl.quitScreen()" class="small" localize="back"></button>
+    </div>
+
+    <h2>{{dynamicpresetCtrl.preset.name}}</h2>
+    <p><i class="fa fa-user"></i> <b>{{dynamicpresetCtrl.preset.author}}</b></p>
+    <p>{{dynamicpresetCtrl.preset.description}}</p>
+
+    <h3 localize="dp_prese_includes"></h3>
+    <p ng-repeat="(name, count) in dynamicpresetCtrl.includes"><b>{{count}}x</b> {{name}}</p>
+
+    <div class="text-center">
+        <button ng-click="dynamicpresetCtrl.importPresetConfirm()" localize="dp_import"></button>
+    </div>
+</div>

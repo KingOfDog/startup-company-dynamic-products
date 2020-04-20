@@ -7,11 +7,11 @@
 <div class="flex-row" style="height: 100%">
     <div class="flex2">
         <ul class="left-tabs">
-            <li ng-repeat="tab in dynamicCtrl.tabs" ng-click="dynamicCtrl.tab = tab.name"
-                ng-class="{ active: tab.name == dynamicCtrl.tab }">
+            <li ng-repeat="tab in dynamicCtrl.tabs" ng-click="dynamicCtrl.tab = tab.tab"
+                ng-class="{ active: tab.tab == dynamicCtrl.tab }">
                 <span>
                     <i class="fa {{tab.icon}}"></i>
-                    {{tab.name}}
+                    {{tab.label}}
                 </span>
             </li>
         </ul>
@@ -24,8 +24,6 @@
         <dynamicproducts ng-if="dynamicCtrl.tab == 'Products'" />
     </div>
 </div>
-
-<dynamic-test></dynamic-test>
 
 <style>
     .column {
