@@ -1,0 +1,24 @@
+<div ng-if="dynamiccompetitorsCtrl.tab == 'list'">
+    <h3>Competitors</h3>
+    <button class="small" ng-click="dynamiccompetitorsCtrl.tab = 'edit'">Create new</button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="total_users"></th>
+            </tr>
+        </thead>
+        <tr ng-repeat="competitor in dynamiccompetitorsCtrl.competitors">
+            <td>
+                <img ng-src="{{competitor.logoPath}}" class="companyLogo small">
+                {{competitor.name}}
+            </td>
+            <td>
+                <b>{{dynamiccompetitorsCtrl.getRealUsers(competitor)}}</b> ({{dynamiccompetitorsCtrl.format(competitor.users)}})
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamiccompetitorsedit ng-if="dynamiccompetitorsCtrl.tab == 'edit'"></dynamiccompetitorsedit>

@@ -1,0 +1,23 @@
+<div ng-if="dynamicframeworksCtrl.tab == 'list'">
+    <h3>Frameworks</h3>
+    <button class="small" ng-click="dynamicframeworksCtrl.tab = 'edit'">Create new</button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="dp_research_cost"></th>
+            </tr>
+        </thead>
+        <tr ng-repeat="framework in dynamicframeworksCtrl.frameworks">
+            <td>
+                {{framework.name}}
+            </td>
+            <td>
+                {{dynamicframeworksCtrl.format(framework.researchPoints)}}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamicframeworksedit ng-if="dynamicframeworksCtrl.tab == 'edit'"></dynamicframeworksedit>

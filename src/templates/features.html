@@ -1,0 +1,28 @@
+<div ng-if="dynamicfeaturesCtrl.tab == 'list'">
+    <h3>Features</h3>
+    <button class="small" ng-click="dynamicfeaturesCtrl.tab = 'edit'">Create new</button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="dp_research_cost"></th>
+                <th localize="dp_category"></th>
+            </tr>
+        </thead>
+        <tr ng-repeat="feature in dynamicfeaturesCtrl.features">
+            <td>
+                <i class="fa {{feature.faIcon}}"></i>
+                {{feature.name}}
+            </td>
+            <td>
+                {{dynamicfeaturesCtrl.format(feature.researchPoints)}}
+            </td>
+            <td>
+                {{feature.categoryName}}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamicfeaturesedit ng-if="dynamicfeaturesCtrl.tab == 'edit'"></dynamicfeaturesedit>

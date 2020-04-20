@@ -1,0 +1,38 @@
+<div class="flex-column">
+    <div class="flex-row">
+        <button ng-click="dynamicframeworkseditCtrl.quitScreen()" class="small" localize="back"></button>
+    </div>
+    <h3 localize="dp_create_framework"></h3>
+    <p localize="dp_create_framework_desc"></p>
+
+    <input type="text" ng-model="dynamicframeworkseditCtrl.name" placeholder="{{dynamicframeworkseditCtrl.getString('dp_framework_name')}}"
+        class="margin-bottom small">
+
+    <div class="flex-row">
+        <div>
+            <label for="researchPoints" localize="dp_research_cost"></label>
+            <input type="number" ng-model="dynamicframeworkseditCtrl.researchPoints" min="0" class="margin-bottom small">
+        </div>
+
+        <div>
+            <label for="licenseCost" localize="license_cost"></label>
+            <input type="number" ng-model="dynamicframeworkseditCtrl.licenseCost" min="0" id="licenseCost"
+                class="margin-bottom small">
+        </div>
+
+        <div>
+            <label for="pricePerUser" localize="price_per_user"></label>
+            <input type="number" ng-model="dynamicframeworkseditCtrl.pricePerUser" min="0" id="pricePerUser"
+                class="margin-bottom small">
+        </div>
+    </div>
+
+    <label for="maxFeatures" localize="max_features"></label>
+    <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatures" min="3" id="maxFeatures" class="margin-bottom small">
+
+    <label for="maxFeatureLevel" localize="max_feature_level"></label>
+    <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatureLevel" min="1" id="maxFeatureLevel"
+        class="margin-bottom small">
+
+    <button type="button" ng-click="dynamicframeworkseditCtrl.submitFramework()" localize="dp_create"></button>
+</div>
