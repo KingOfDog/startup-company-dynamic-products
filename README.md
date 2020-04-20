@@ -11,6 +11,7 @@ Currently there are the following presets:
 * Language Learning
 * Online Forum
 * Travel Planning
+* Music Streaming Service
 
 I plan to include some of the features of my first, outdated mod More Products Deluxe. But there is a massive number of other ideas I've got which I'll try to implement in the future. Some of these ideas are:
 
@@ -18,11 +19,12 @@ I plan to include some of the features of my first, outdated mod More Products D
 * Add a way to export and share custom products and so on.
 * ~Implement custom features (I already started that one but I'm a little bit stuck :/)~
 * Implement a feature to add components, modules and ~frameworks~.
-* Improve the UX by adding validators and so on.
-* List all previously added things.
+* ~Improve the UX by adding validators and so on.~
+* ~List all previously added things.~
 * Edit things.
 * Add translations (help needed!) [WIP]
   * ~German~ (by me)
+  * ~Italian~ (by Mario)
 
 Also, you can look forward to more presets bundled with future updates :).
 
