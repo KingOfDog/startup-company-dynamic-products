@@ -1,0 +1,49 @@
+{
+    "name": "Music Streaming",
+    "description": "Experience the world of music for a low price - no matter how much you listen",
+    "author": "KingOfDog",
+    "competitors": [{
+            "name": "Spotify",
+            "logoPath": "images/logos/companies/65.png",
+            "logoColorDegree": 300,
+            "users": 950000000,
+            "stockVolume": 3500000,
+            "productTypeName": "MusicStreamingService"
+        },
+        {
+            "name": "Napster",
+            "logoPath": "images/logos/companies/57.png",
+            "logoColorDegree": 300,
+            "users": 500576015,
+            "stockVolume": 1376121,
+            "productTypeName": "MusicStreamingService"
+        },
+        {
+            "name": "SoundCloud",
+            "logoPath": "images/logos/companies/10.png",
+            "logoColorDegree": 300,
+            "users": 758613429,
+            "stockVolume": 2431501,
+            "productTypeName": "MusicStreamingService"
+        }
+    ],
+    "features": [{
+        "name": "Content Recommendation",
+        "faIcon": "fa-thumbs-up",
+        "categoryName": "Users",
+        "level": "Expert",
+        "requirements": {
+            "BackendModule": 3,
+            "SearchModule": 1,
+            "AuthenticationModule": 1
+        },
+        "researchPoints": 350,
+        "availableProducts": ["VideoSharingService", "SocialMedia", "StreamingService", "ShoppingPlatform", "DatingPlatform", "GamingPlatform", "OnlineForum", "SearchEngine", "InstantMessenger", "LanguageLearningPlatform", "TravelPlanning"]
+    }],
+    "products": [{
+        "name": "Music Streaming Service",
+        "features": ["LandingPage", "LoginSystem", "SharingFunctionality", "PaymentSystem", "ContentManagementSystem", "TextAds", "BannerAds", "VideoAds", "Subscriptions", "OfflineContent", "AdBlockObfuscator", "DdosProtection", "HelpSystem", "ProfilePage", "ContentRecommendation"],
+        "audienceMatches": ["age_group1", "Entertainment", "Technology", "Sports", "Travel"],
+        "faIcon": "fa-music"
+    }]
+}

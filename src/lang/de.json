@@ -45,6 +45,8 @@
         "dp_preset_success_sub": "Viel Spaß mit dem neuen Zeug",
 
         "dp_create_new": "Neues erstellen",
-        "dp_import": "Importieren"
+        "dp_import": "Importieren",
+        "dp_actions": "Aktionen",
+        "dp_copy_clipboard": "Kopieren"
     }
 }

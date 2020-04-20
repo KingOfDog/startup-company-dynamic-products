@@ -21,6 +21,7 @@ const presets = [
     require('./presets/language-plattform.json'),
     require('./presets/online-forum.json'),
     require('./presets/travel-planning.json'),
+    require('./presets/music-streaming.json'),
 ];
 
 exports.initialize = (modPath) => {
@@ -96,7 +97,7 @@ exports.initialize = (modPath) => {
                         this.preset.competitors.forEach(competitor => registerCompetitor(competitor));
                     }
 
-                    Helpers.ShowSuccessMessage(this.getString('dp_preset_success'), this.getString('dp_preset_sub'))
+                    Helpers.ShowSuccessMessage(this.getString('dp_preset_success'), this.getString('dp_preset_success_sub'))
                 };
 
                 this.quitScreen = () => {
