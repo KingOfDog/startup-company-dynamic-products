@@ -151,8 +151,13 @@ exports.initialize = (modPath) => {
                     };
                 });
 
-                this.submitCompetitor = () => {
+                this.confirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_competitor_confirm'), () => {
+                        this.submit();
+                    });
+                };
 
+                this.submit = () => {
                     const newCompetitor = {
                         name: this.name,
                         logoPath: this.logo.url,
@@ -260,7 +265,13 @@ exports.initialize = (modPath) => {
                     return true;
                 }
 
-                this.submitFeature = () => {
+                this.confirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_feature_confirm'), () => {
+                        this.submit();
+                    });
+                };
+
+                this.submit = () => {
                     /*if (!this.isFeatureValid()) {
                         return;
                     }*/
@@ -329,7 +340,13 @@ exports.initialize = (modPath) => {
                 this.maxFeatures = 3;
                 this.maxFeatureLevel = 1;
 
-                this.submitFramework = () => {
+                this.confirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_framework_confirm'), () => {
+                        this.submit();
+                    });
+                };
+
+                this.submit = () => {
                     // TODO: Validate
 
                     const newFramework = {
@@ -423,7 +440,13 @@ exports.initialize = (modPath) => {
                     }
                 };
 
-                this.submitProduct = () => {
+                this.confirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_product_confirm'), () => {
+                        this.submit();
+                    });
+                };
+
+                this.submit = () => {
                     const audienceMatches = [];
                     if (this.audienceGender) {
                         audienceMatches.push(this.audienceGender);
