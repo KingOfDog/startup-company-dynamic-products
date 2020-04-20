@@ -136,8 +136,8 @@ exports.initialize = (modPath) => {
                 };
 
                 this.name = '';
-                this.logo = {};
-                this.productType = {};
+                this.logo = null;
+                this.productType = null;
                 this.users = 0;
 
                 this.logos = _.range(1, 100).map(n => ({
@@ -157,7 +157,24 @@ exports.initialize = (modPath) => {
                     });
                 };
 
+                this.isValid = () => {
+                    if(
+                        this.name.length == 0 ||
+                        this.logo == null || 
+                        this.productType == null
+                    ) {
+                        return false;
+                    }
+
+                    return true;
+                };
+
                 this.submit = () => {
+                    if(!this.isValid()) {
+                        console.log('Invalid competitor');
+                        return;
+                    }
+
                     const newCompetitor = {
                         name: this.name,
                         logoPath: this.logo.url,
@@ -208,15 +225,16 @@ exports.initialize = (modPath) => {
                 this.name = '';
                 this.faIcon = '';
                 this.researchPoints = 0;
-                this.category = null;
+                this.category = {name: 'Users'};
                 this.requirements = {};
                 this.newRequirement = null;
-                this.level = null;
-                this.dissatisfaction = 0;
+                this.level = '';
+               // this.dissatisfaction = 0;
 
                 this.featureCategories = FeatureCategories;
                 this.featureLevels = Object.keys(EmployeeLevels).map(level => {
                     return {
+                        label: this.getString(level),
                         name: level
                     }
                 });
@@ -254,11 +272,15 @@ exports.initialize = (modPath) => {
                 };
 
                 this.isFeatureValid = () => {
-                    if (this.name == '' || this.faIcon == '' || this.category == '') {
-                        return false;
-                    }
-
-                    if (this.category.name == 'Users' && this.level == '') {
+                    console.log(this.name, this.faIcon, this.category, this.level, this.requirements);
+                    
+                    if (
+                        this.name.length == 0 || 
+                        this.faIcon.length == 0 || 
+                        this.category == null ||
+                        this.level == null || 
+                        Object.keys(this.requirements).length == 0
+                        ) {
                         return false;
                     }
 
@@ -272,9 +294,10 @@ exports.initialize = (modPath) => {
                 };
 
                 this.submit = () => {
-                    /*if (!this.isFeatureValid()) {
+                    if (!this.isFeatureValid()) {
+                        console.log('Invalid feature');
                         return;
-                    }*/
+                    }
 
                     const requirements = {};
                     Object.entries(this.requirements).forEach(entry => {
@@ -286,7 +309,7 @@ exports.initialize = (modPath) => {
                     const newFeature = {
                         name: this.name,
                         faIcon: this.faIcon,
-                        categoryName: this.category.name,
+                        categoryName: 'Users',
                         level: this.level.name,
                         requirements: requirements,
                         dissatisfaction: this.dissatisfaction,
@@ -346,8 +369,19 @@ exports.initialize = (modPath) => {
                     });
                 };
 
+                this.isValid = () => {
+                    if(this.name.length == 0) {
+                     return false;   
+                    }
+
+                    return true;
+                };
+
                 this.submit = () => {
-                    // TODO: Validate
+                    if(!this.isValid) {
+                        console.log('Invalid framework');
+                        return;
+                    }
 
                     const newFramework = {
                         name: this.name,
@@ -444,6 +478,11 @@ exports.initialize = (modPath) => {
                     GetRootScope().confirm('', this.getString('dp_product_confirm'), () => {
                         this.submit();
                     });
+                };
+
+                this.isValid = () => {
+                    return this.name.length > 0 &&
+                        this.faIcon.length > 0;
                 };
 
                 this.submit = () => {

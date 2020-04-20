@@ -9,10 +9,8 @@
         <ul class="left-tabs">
             <li ng-repeat="tab in dynamicCtrl.tabs" ng-click="dynamicCtrl.tab = tab.tab"
                 ng-class="{ active: tab.tab == dynamicCtrl.tab }">
-                <span>
-                    <i class="fa {{tab.icon}}"></i>
-                    {{tab.label}}
-                </span>
+                <i class="fa {{tab.icon}}"></i>
+                <span class="text-center">{{tab.label}}</span>
             </li>
         </ul>
     </div>
