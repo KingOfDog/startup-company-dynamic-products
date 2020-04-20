@@ -12,6 +12,7 @@ const {
 const {
     getFeatures,
     initLanguage,
+    copyToClipboard,
 } = require('./helpers');
 
 const presets = [
@@ -121,6 +122,10 @@ exports.initialize = (modPath) => {
                     return Helpers.SmartNumber(realCompetitor.users, 0);
                 };
 
+                this.copyToClipboard = (competitor) => {
+                    copyToClipboard(JSON.stringify(competitor));
+                };
+
                 this.format = (number, a = 0) => {
                     return Helpers.SmartNumber(number, a);
                 };
@@ -207,6 +212,10 @@ exports.initialize = (modPath) => {
                 this.tab = 'list';
                 
                 this.features = GetRootScope().settings[config.name].features;
+
+                this.copyToClipboard = (feature) => {
+                    copyToClipboard(JSON.stringify(feature));
+                };
 
                 this.format = (number, a = 0) => {
                     return Helpers.SmartNumber(number, a);
@@ -342,6 +351,10 @@ exports.initialize = (modPath) => {
                 
                 this.frameworks = GetRootScope().settings[config.name].frameworks;
 
+                this.copyToClipboard = (framework) => {
+                    copyToClipboard(JSON.stringify(framework));
+                };
+
                 this.format = (number, a = 0) => {
                     return Helpers.SmartNumber(number, a);
                 };
@@ -417,6 +430,10 @@ exports.initialize = (modPath) => {
                 this.tab = 'list';
 
                 this.products = GetRootScope().settings[config.name].products;
+
+                this.copyToClipboard = (product) => {
+                    copyToClipboard(JSON.stringify(product));
+                };
 
                 this.format = (number, a = 0) => {
                     return Helpers.SmartNumber(number, a);

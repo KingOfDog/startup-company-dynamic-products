@@ -6,12 +6,18 @@
         <thead>
             <tr>
                 <th localize="name"></th>
+                <th localize="dp_actions"></th>
             </tr>
         </thead>
         <tr ng-repeat="product in dynamicproductsCtrl.products">
             <td>
                 <i class="fa {{product.faIcon}}"></i>
                 {{product.name}}
+            </td>
+            <td>
+                <button class="small cancel" ng-click="dynamicproductsCtrl.copyToClipboard(product)" uib-tooltip="{{dynamiccompetitorsCtrl.getString('dp_copy_clipboard')}}" tooltip-append-to-body="true" tooltip-placement="top">
+                    <i class="fa fa-clipboard"></i>
+                </button>
             </td>
         </tr>
     </table>

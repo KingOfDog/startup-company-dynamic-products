@@ -35,3 +35,12 @@ module.exports.initLanguage = async function() {
     });
     console.log('Loaded languages!');
 }
+
+module.exports.copyToClipboard = function(string) {
+    const el = document.createElement('textarea');
+    el.value = string;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+};

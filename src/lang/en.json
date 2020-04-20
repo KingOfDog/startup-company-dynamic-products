@@ -45,6 +45,8 @@
         "dp_preset_success_sub": "Have fun playing with the additions",
 
         "dp_create_new": "Create New",
-        "dp_import": "Import"
+        "dp_import": "Import",
+        "dp_actions": "Actions",
+        "dp_copy_clipboard": "Copy to clipboard"
     }
 }
