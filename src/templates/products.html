@@ -1,0 +1,26 @@
+<div ng-if="dynamicproductsCtrl.tab == 'list'">
+    <h3 localize="dp_products"></h3>
+    <button class="small margin-bottom" ng-click="dynamicproductsCtrl.tab = 'edit'" localize="dp_create_new"></button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="dp_actions"></th>
+            </tr>
+        </thead>
+        <tr ng-repeat="product in dynamicproductsCtrl.products">
+            <td>
+                <i class="fa {{product.faIcon}}"></i>
+                {{product.name}}
+            </td>
+            <td>
+                <button class="small cancel" ng-click="dynamicproductsCtrl.copyToClipboard(product)" uib-tooltip="{{dynamiccompetitorsCtrl.getString('dp_copy_clipboard')}}" tooltip-append-to-body="true" tooltip-placement="top">
+                    <i class="fa fa-clipboard"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamicproductsedit ng-if="dynamicproductsCtrl.tab == 'edit'"></dynamicproductsedit>

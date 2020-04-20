@@ -14,6 +14,7 @@
         "dp_competitor_name": "Competitor Name",
         "dp_users": "Users",
         "dp_stock_volume": "Stock Volume",
+        "dp_competitor_confirm": "Are you sure that you want to create this competitor?",
 
         "dp_create_feature": "Create Feature",
         "dp_create_feature_desc": "You can create your own features just like you want them. Currently, they are added to all existing product types by default.",
@@ -22,10 +23,12 @@
         "dp_research_cost": "Research Cost",
         "dp_category": "Category",
         "dp_select_requirement": "Select new requirement",
+        "dp_feature_confirm": "Are you sure that you want to create this feature?",
 
         "dp_create_framework": "Create Framework",
         "dp_create_framework_desc": "Start creating your personal frameworks - because why not. Why would you use any of these pre-made, easy to use, comprehensive tools made exactly for this purpose?",
         "dp_framework_name": "Framework Name",
+        "dp_framework_confirm": "Are you sure that you want to create this framework?",
 
         "dp_create_product": "Create Product",
         "dp_create_product_desc": "By creating a new product type, you open up plenty of options to extend your game. Every product type you add, can be used for a new website of yours and you can add custom competitors for these product types.",
@@ -33,9 +36,17 @@
         "dp_product_icon": "Product Icon",
         "dp_product_features": "Product Features",
         "dp_product_audience": "Product Audience",
+        "dp_product_confirm": "Are you sure that you want to create this product?",
 
+        "dp_import_preset": "Import Preset",
+        "dp_preset_includes": "Includes",
         "dp_preset_confirm": "Are you sure that you want to import this pack? This action can currently not be undone.",
         "dp_preset_success": "Successfully imported preset",
-        "dp_preset_success_sub": "Have fun playing with the additions"
+        "dp_preset_success_sub": "Have fun playing with the additions",
+
+        "dp_create_new": "Create New",
+        "dp_import": "Import",
+        "dp_actions": "Actions",
+        "dp_copy_clipboard": "Copy to clipboard"
     }
 }

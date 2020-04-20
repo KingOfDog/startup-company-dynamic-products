@@ -14,6 +14,7 @@
         "dp_competitor_name": "Nome Competitore",
         "dp_users": "Utenti",
         "dp_stock_volume": "Capacità Azioni",
+        "dp_competitor_confirm": "Are you sure that you want to create this competitor?",
 
         "dp_create_feature": "Crea Funzionalità",
         "dp_create_feature_desc": "Puoi creare le tue funzionalità così come le vuoi. Attualmente vengono aggiunge di default ai tipi di siti esistenti.",
@@ -22,10 +23,12 @@
         "dp_research_cost": "Costo Ricerca",
         "dp_category": "Categoria",
         "dp_select_requirement": "Seleziona un nuovo requisito",
+        "dp_feature_confirm": "Are you sure that you want to create this feature?",
 
         "dp_create_framework": "Crea Framework",
         "dp_create_framework_desc": "Inizia a creare i tuoi framework personali - perchè no. Perché non dovresti usare uno di questi strumenti, facili da usare e completi realizzati esattamente per questo scopo?",
         "dp_framework_name": "Nome Framework",
+        "dp_framework_confirm": "Are you sure that you want to create this framework?",
 
         "dp_create_product": "Crea Prodotto",
         "dp_create_product_desc": "Creando un nuovo tipo di prodotto, apri molte opzioni per estendere il tuo gioco. Ogni tipo di prodotto che aggiungi, può essere utilizzato per un tuo nuovo sito e puoi aggiungere competitori personalizzati per questi tipi di prodotto.",
@@ -33,9 +36,15 @@
         "dp_product_icon": "Icona Prodotto",
         "dp_product_features": "Funzionalità Prodotto",
         "dp_product_audience": "Pubblico del Prodotto",
+        "dp_product_confirm": "Are you sure that you want to create this product?",
 
+        "dp_import_preset": "Import Preset",
+        "dp_preset_includes": "Includes",
         "dp_preset_confirm": "Sei sicuro di voler importare questo pacchetto? L'operazione non può essere annullata",
         "dp_preset_success": "Preset importati correttamente",
-        "dp_preset_success_sub": "Divertiti a giocare con le i componenti aggiuntivi!"
+        "dp_preset_success_sub": "Divertiti a giocare con le i componenti aggiuntivi!",
+
+        "dp_create_new": "Create New",
+        "dp_import": "Import"
     }
 }

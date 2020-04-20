@@ -1,0 +1,35 @@
+<div class="flex-column">
+    <div class="flex-row">
+        <button ng-click="dynamiccompetitorseditCtrl.quitScreen()" class="small" localize="back"></button>
+    </div>
+    <h3 localize="dp_create_competitor"></h3>
+    <p localize="dp_create_competitor_desc"></p>
+
+    <div class="website-name flex-row">
+        <img ng-src="{{ dynamiccompetitorseditCtrl.logo.url }}" class="website-logo">
+        <input type="text" ng-model="dynamiccompetitorseditCtrl.name" placeholder="{{dynamiccompetitorseditCtrl.getString('dp_competitor_name')}}"
+            class="small margin-bottom" maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
+    </div>
+
+    <hr class="big">
+
+    <div class="logo-picker" style="max-height: 400px; overflow: auto;">
+        <img ng-repeat="logo in dynamiccompetitorseditCtrl.logos" ng-src="{{logo.url}}" class="website-logo"
+            ng-mousedown="dynamiccompetitorseditCtrl.logo = logo">
+    </div>
+
+    <hr class="big">
+
+    <label localize="producttype"></label>
+    <div class="small" dropdown-select="dynamiccompetitorseditCtrl.productTypes" dropdown-model="dynamiccompetitorseditCtrl.productType"
+        dropdown-item-label="label" style="width: 100%; margin-bottom: 12px;"></div>
+
+    <label for="usersInput" localize="dp_users"></label>
+    <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="0" max="7500000000"
+        class="small margin-bottom">
+
+    <label for="stockVolume" localize="dp_stock_volume"></label>
+    <input type="number" id="stockVolume" ng-model="dynamiccompetitorseditCtrl.stockVolume" min="0" class="small margin-bottom">
+
+    <button type="button" ng-click="dynamiccompetitorseditCtrl.confirm()" localize="dp_create"></button>
+</div>

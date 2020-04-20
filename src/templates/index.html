@@ -1,0 +1,55 @@
+<h1>
+    <i class="fa fa-cubes"></i>
+    Dynamic Products
+    <i class="fa fa-times pull-right close-button" close-all-ui></i>
+</h1>
+
+<div class="flex-row" style="height: 100%">
+    <div class="flex2">
+        <ul class="left-tabs">
+            <li ng-repeat="tab in dynamicCtrl.tabs" ng-click="dynamicCtrl.tab = tab.tab"
+                ng-class="{ active: tab.tab == dynamicCtrl.tab }">
+                <i class="fa {{tab.icon}}"></i>
+                <span class="text-center">{{tab.label}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="flex4 padding" style="height: 100%; overflow: auto;">
+        <dynamichome ng-if="dynamicCtrl.tab == 'Home'" />
+        <dynamiccompetitors ng-if="dynamicCtrl.tab == 'Competitors'" />
+        <dynamicfeatures ng-if="dynamicCtrl.tab == 'Features'" />
+        <dynamicframeworks ng-if="dynamicCtrl.tab == 'Frameworks'" />
+        <dynamicproducts ng-if="dynamicCtrl.tab == 'Products'" />
+    </div>
+</div>
+
+<style>
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .margin {
+        margin-bottom: 12px;
+    }
+
+    .preset-list li {
+        display: block;
+        margin-bottom: 16px;
+        border-radius: 10px;
+    }
+
+    .preset-list li a {
+        display: block;
+        padding: 16px;
+        width: 100%;
+    }
+
+    .preset-list li a>* {
+        display: block;
+    }
+
+    .preset-list li:hover {
+        background-color: #abcee0;
+    }
+</style>

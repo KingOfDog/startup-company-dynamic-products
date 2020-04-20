@@ -1,0 +1,51 @@
+<div class="column">
+    <h3 localize="dp_create_product"></h3>
+    <p localize="dp_create_product_desc"></p>
+
+    <input type="text" ng-model="dynamicproductseditCtrl.name" placeholder="{{dynamicproductseditCtrl.getString('dp_product_name')}}"
+        class="margin-bottom small">
+    <span class="flex-row margin-bottom">
+        <i class="fa {{dynamicproductseditCtrl.faIcon}}" style="font-style: 38px; margin: 14px"></i>
+        <input type="text" ng-model="dynamicproductseditCtrl.faIcon" placeholder="{{dynamicproductseditCtrl.getString('dp_product_icon')}}"
+            class="small">
+    </span>
+
+    <label localize="dp_product_features"></label>
+    <ul style="max-height: 250px; overflow:auto" class="margin-bottom">
+        <li ng-repeat="(name, state) in dynamicproductseditCtrl.features" style="display: block;">
+            <label for="feature-{{name}">
+                            <input type="checkbox" id="feature-{{name}}" ng-model="dynamicproductseditCtrl.features[name]">
+                {{dynamicproductseditCtrl.getString(name)}}
+            </label>
+        </li>
+    </ul>
+
+    <label localize="dp_product_audience"></label>
+    <div class="section">
+        <ul class="multi-toggle">
+            <li ng-click="dynamicproductseditCtrl.audienceGender = null" ng-class="{ active: dynamicproductseditCtrl.audienceGender == null }"
+                localize="all"></li>
+            <li ng-repeat="gender in dynamicproductseditCtrl.audiences.genders" ng-click="dynamicproductseditCtrl.audienceGender = gender"
+                ng-class="{ active: dynamicproductseditCtrl.audienceGender == gender }" localize="{{gender}}"></li>
+        </ul>
+    </div>
+    <div class="section">
+        <ul class="multi-toggle">
+            <li ng-click="dynamicproductseditCtrl.clickAudienceAge(null)"
+                ng-class="{ active: dynamicproductseditCtrl.audienceAges.length == 0 }" localize="all"></li>
+            <li ng-repeat="age in dynamicproductseditCtrl.audiences.ages" ng-click="dynamicproductseditCtrl.clickAudienceAge(age)"
+                ng-class="{ active: dynamicproductseditCtrl.audienceAges.includes(age) }" localize="{{age}}"></li>
+        </ul>
+    </div>
+    <div class="section margin-bottom">
+        <ul class="multi-toggle-grid">
+            <li ng-click="dynamicproductseditCtrl.clicAudienceInterest(null)"
+                ng-class="{ active: dynamicproductseditCtrl.audienceInterests.length == 0 }" localize="all"></li>
+            <li ng-repeat="interest in dynamicproductseditCtrl.audiences.interests"
+                ng-click="dynamicproductseditCtrl.clickAudienceInterest(interest)"
+                ng-class="{ active: dynamicproductseditCtrl.audienceInterests.includes(interest) }" localize="{{interest}}"></li>
+        </ul>
+    </div>
+
+    <button type="button" ng-click="dynamicproductseditCtrl.confirm()" localize="dp_create"></button>
+</div>

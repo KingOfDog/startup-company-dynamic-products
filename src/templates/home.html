@@ -1,0 +1,15 @@
+<div class="flex-column" ng-if="dynamichomeCtrl.tab == 'home'">
+    <h3 localize="dp_import_preset"></h3>
+    <ul class="preset-list">
+        <li ng-repeat="preset in dynamichomeCtrl.presets">
+            <!--<a ng-click="dynamichomeCtrl.importPresetConfirmation(preset)">-->
+                <a ng-click="dynamichomeCtrl.showPreset(preset)">
+                <b>{{preset.name}}</b>
+                <span><i class="fa fa-user"></i> by {{preset.author}}</span>
+                <span>{{preset.description}}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<dynamicpreset ng-if="dynamichomeCtrl.tab == 'preset'" preset="{{dynamichomeCtrl.preset}}" />

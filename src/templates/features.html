@@ -1,0 +1,34 @@
+<div ng-if="dynamicfeaturesCtrl.tab == 'list'">
+    <h3 localize="dp_features"></h3>
+    <button class="small margin-bottom" ng-click="dynamicfeaturesCtrl.tab = 'edit'" localize="dp_create_new"></button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="dp_research_cost"></th>
+                <th localize="dp_category"></th>
+                <th localize="dp_actions"></th>
+            </tr>
+        </thead>
+        <tr ng-repeat="feature in dynamicfeaturesCtrl.features">
+            <td>
+                <i class="fa {{feature.faIcon}}"></i>
+                {{feature.name}}
+            </td>
+            <td>
+                {{dynamicfeaturesCtrl.format(feature.researchPoints)}}
+            </td>
+            <td>
+                {{feature.categoryName}}
+            </td>
+            <td>
+                <button class="small cancel" ng-click="dynamicfeaturesCtrl.copyToClipboard(feature)" uib-tooltip="{{dynamiccompetitorsCtrl.getString('dp_copy_clipboard')}}" tooltip-append-to-body="true" tooltip-placement="top">
+                    <i class="fa fa-clipboard"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamicfeaturesedit ng-if="dynamicfeaturesCtrl.tab == 'edit'"></dynamicfeaturesedit>

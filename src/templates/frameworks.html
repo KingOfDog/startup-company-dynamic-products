@@ -1,0 +1,29 @@
+<div ng-if="dynamicframeworksCtrl.tab == 'list'">
+    <h3 localize="dp_frameworks"></h3>
+    <button class="small margin-bottom" ng-click="dynamicframeworksCtrl.tab = 'edit'" localize="dp_create_new"></button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="dp_research_cost"></th>
+                <th localize="dp_actions"></th>
+            </tr>
+        </thead>
+        <tr ng-repeat="framework in dynamicframeworksCtrl.frameworks">
+            <td>
+                {{framework.name}}
+            </td>
+            <td>
+                {{dynamicframeworksCtrl.format(framework.researchPoints)}}
+            </td>
+            <td>
+                <button class="small cancel" ng-click="dynamicframeworksCtrl.copyToClipboard(framework)" uib-tooltip="{{dynamiccompetitorsCtrl.getString('dp_copy_clipboard')}}" tooltip-append-to-body="true" tooltip-placement="top">
+                    <i class="fa fa-clipboard"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamicframeworksedit ng-if="dynamicframeworksCtrl.tab == 'edit'"></dynamicframeworksedit>
