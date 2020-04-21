@@ -12,6 +12,7 @@ Currently there are the following presets:
 * Online Forum
 * Travel Planning
 * Music Streaming Service
+* Version Control Service
 
 I plan to include some of the features of my first, outdated mod More Products Deluxe. But there is a massive number of other ideas I've got which I'll try to implement in the future. Some of these ideas are:
 
