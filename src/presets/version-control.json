@@ -1,0 +1,69 @@
+{
+    "name": "Version Control",
+    "description": "Use Version Control so that you can fight off any script kiddies who want to break your code!",
+    "author": "KingOfDog",
+    "competitors": [{
+            "name": "GitHub",
+            "logoPath": "images/logos/companies/78.png",
+            "logoColorDegree": 300,
+            "users": 816147623,
+            "stockVolume": 7911645,
+            "stockPrice": 0,
+            "productTypeName": "VersionControlService"
+        },
+        {
+            "name": "GitLab",
+            "logoPath": "images/logos/companies/38.png",
+            "logoColorDegree": 300,
+            "users": 467813189,
+            "stockVolume": 641378,
+            "stockPrice": 0,
+            "productTypeName": "VersionControlService"
+        },
+        {
+            "name": "Gitea",
+            "logoPath": "images/logos/companies/32.png",
+            "logoColorDegree": 300,
+            "users": 95134579,
+            "stockVolume": 125012,
+            "stockPrice": 0,
+            "productTypeName": "VersionControlService"
+        }
+    ],
+    "components": [{
+            "name": "Version Control Component",
+            "type": "Component",
+            "employeeTypeName": "Developer",
+            "employeeLevel": "Intermediate",
+            "produceHours": 10,
+            "icon": "mods/dynamicproducts/thumbnail.png"
+        },
+        {
+            "name": "Debugging Component",
+            "type": "Component",
+            "employeeTypeName": "Developer",
+            "employeeLevel": "Expert",
+            "produceHours": 21,
+            "icon": "mods/dynamicproducts/thumbnail.png"
+        }
+    ],
+    "features": [{
+        "name": "Quality Control",
+        "faIcon": "fa-star",
+        "categoryName": "Users",
+        "level": "Expert",
+        "requirements": {
+            "VersionControlComponent": 1,
+            "DebuggingComponent": 2,
+            "BackendModule": 2
+        },
+        "researchPoints": 1800,
+        "availableProducts": ["VideoSharingService", "SocialMedia", "StreamingService", "ShoppingPlatform", "DatingPlatform", "GamingPlatform"]
+    }],
+    "products": [{
+        "name": "Version Control Service",
+        "features": ["LandingPage", "LoginSystem", "CommentFunctionality", "SharingFunctionality", "ContentManagementSystem", "TextAds", "BannerAds", "VideoAds", "Subscriptions", "AdBlockObfuscator", "DdosProtection", "HelpSystem", "ProfilePage", "QualityControl"],
+        "audienceMatches": ["age_group1", "age_group2", "Business", "Technology"],
+        "faIcon": "fa-git"
+    }]
+}
