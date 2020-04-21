@@ -1,0 +1,25 @@
+<div class="flex-column">
+    <div class="flex-row">
+        <button ng-click="dynamiccomponentseditCtrl.quitScreen()" class="small" localize="back"></button>
+    </div>
+    <h3 localize="dp_create_component"></h3>
+    <p localize="dp_create_component_desc"></p>
+    <p>Even though you can select module as a type, it is not yet fully supported. Modules consist of other components and currently you can't select any of these requirements. So, stay tuned :)</p>
+
+    <input type="text" ng-model="dynamiccomponentseditCtrl.name" placeholder="{{dynamiccomponentseditCtrl.getString('dp_component_name')}}"
+        class="margin-bottom small">
+
+    <label localize="type"></label>
+    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.types" dropdown-model="dynamiccomponentseditCtrl.type" dropdown-item-label="label"></div>
+
+    <label localize="employee_type"></label>
+    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeTypes" dropdown-model="dynamiccomponentseditCtrl.employeeType" dropdown-item-label="label"></div>
+
+    <label localize="dp_employee_level"></label>
+    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeLevels" dropdown-model="dynamiccomponentseditCtrl.employeeLevel" dropdown-item-label="label"></div>
+
+    <label for="produceHours" localize="dp_time_to_produce"></label>
+    <input type="number" ng-model="dynamiccomponentseditCtrl.produceHours" id="produceHours" class="margin-bottom small">
+
+    <button type="button" ng-click="dynamiccomponentseditCtrl.confirm()" localize="dp_create"></button>
+</div>

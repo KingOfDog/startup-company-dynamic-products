@@ -1,0 +1,31 @@
+<div ng-if="dynamiccomponentsCtrl.tab == 'list'">
+    <h3 localize="dp_components"></h3>
+    <button class="small margin-bottom" ng-click="dynamiccomponentsCtrl.tab = 'edit'" localize="dp_create_new"></button>
+
+    <table class="medium">
+        <thead>
+            <tr>
+                <th localize="name"></th>
+                <th localize="type"></th>
+                <th localize="employee_type"></th>
+                <th localize="dp_employee_level"></th>
+                <th localize="dp_actions"></th>
+            </tr>
+        </thead>
+       <tr ng-repeat="component in dynamiccomponentsCtrl.components">
+            <td>
+                {{component.name}}
+            </td>
+            <td>{{dynamiccomponentsCtrl.getString('dp_' + component.type)}}</td>
+            <td>{{dynamiccomponentsCtrl.getString(component.employeeTypeName)}}</td>
+            <td>{{dynamiccomponentsCtrl.getString(component.employeeLevel)}}</td>
+            <td>
+                <button class="small cancel" ng-click="dynamiccomponentsCtrl.copyToClipboard(component)" uib-tooltip="{{dynamiccompetitorsCtrl.getString('dp_copy_clipboard')}}" tooltip-append-to-body="true" tooltip-placement="top">
+                    <i class="fa fa-clipboard"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<dynamiccomponentsedit ng-if="dynamiccomponentsCtrl.tab == 'edit'" />

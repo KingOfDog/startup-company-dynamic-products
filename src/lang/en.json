@@ -3,6 +3,7 @@
     "strings": {
         "dp_home": "Home",
         "dp_competitors": "Competitors",
+        "dp_components": "Components",
         "dp_features": "Features",
         "dp_frameworks": "Frameworks",
         "dp_products": "Products",
@@ -15,6 +16,13 @@
         "dp_users": "Users",
         "dp_stock_volume": "Stock Volume",
         "dp_competitor_confirm": "Are you sure that you want to create this competitor?",
+
+        "dp_create_component": "Create Component",
+        "dp_create_component_desc": "Your employees don't have enough to do yet. Give them more tasks!",
+        "dp_component_name": "Component Name",
+        "dp_employee_level": "Employee Level",
+        "dp_time_to_produce": "Time to produce (hours)",
+        "dp_component_confirm": "Are you sure that you want to create this component?",
 
         "dp_create_feature": "Create Feature",
         "dp_create_feature_desc": "You can create your own features just like you want them. Currently, they are added to all existing product types by default.",
@@ -47,6 +55,8 @@
         "dp_create_new": "Create New",
         "dp_import": "Import",
         "dp_actions": "Actions",
-        "dp_copy_clipboard": "Copy to clipboard"
+        "dp_copy_clipboard": "Copy to clipboard",
+        "dp_component": "Component",
+        "dp_module": "Module"
     }
 }

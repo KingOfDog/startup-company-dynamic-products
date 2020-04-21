@@ -44,6 +44,44 @@ module.exports.registerCompetitor = function (competitor, addToSettings = true) 
     }
 }
 
+module.exports.registerComponent = function(component, addToSettings= true) {
+    console.log('Registering component', component);
+    if(Object.keys(ComponentNames).find(name => name == component.name)) {
+        console.log('Skipping component', component, 'as it already exists');
+        return;
+    }
+
+    const internalName = getInternalName(component.name);
+    const clone = Helpers.Clone(component);
+    clone.name = internalName;
+    
+    ComponentNames[internalName] = internalName;
+    Components.push(clone);
+
+    ResearchItemNames[internalName] = internalName;
+    ResearchItems.push({
+        name: internalName,
+        category: 'Production',
+        unlockType: 'Component',
+        points: 5,
+        unlocks: [internalName],
+    });
+
+    Modding.addTranslation(internalName, {
+        en: component.name,
+    });
+    Modding.addTranslation(internalName + '_description', {
+        en: component.name,
+    });
+
+    if(addToSettings) {
+        if(!GetRootScope().settings[config.name].components) {
+            GetRootScope().settings[config.name].components = [];
+        }
+        GetRootScope().settings[config.name].components.push(component);
+    }
+}
+
 module.exports.registerFeature = function (feature, addToSettings = true) {
     console.log('Registering feature', feature);
     const internalName = getInternalName(feature.name);

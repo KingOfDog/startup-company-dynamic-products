@@ -4,6 +4,7 @@ const config = require('./config.json');
 
 const {
     registerCompetitor,
+    registerComponent,
     registerFeature,
     registerFramework,
     registerProduct,
@@ -22,6 +23,7 @@ const presets = [
     require('./presets/online-forum.json'),
     require('./presets/travel-planning.json'),
     require('./presets/music-streaming.json'),
+    require('./presets/version-control.json'),
 ];
 
 exports.initialize = (modPath) => {
@@ -35,7 +37,7 @@ exports.initialize = (modPath) => {
         badgeCount: 0,
     });
 
-    $(document.body).append('<style>ul.tab-list { overflow-y: auto; height: 104px }</style>');
+    $(document.body).append('<style>ul.tab-list { overflow-y: auto; height: 3.25em }</style>');
 
     exports.views = [{
             name: 'dynamichome',
@@ -55,7 +57,7 @@ exports.initialize = (modPath) => {
         {
             name: 'dynamicpreset',
             viewPath: _modPath + 'templates/preset.html',
-            controller: ['$scope', function($scope) {
+            controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
                     return Helpers.GetLocalized(key)
@@ -64,13 +66,14 @@ exports.initialize = (modPath) => {
                 this.preset = $scope.$parent.dynamichomeCtrl.preset;
 
                 this.getCount = (name) => {
-                    if(!this.preset[name]) {
+                    if (!this.preset[name]) {
                         return 0;
                     }
                     return this.preset[name].length;
                 };
 
                 this.includes = {
+                    components: this.getCount('components'),
                     competitors: this.getCount('competitors'),
                     features: this.getCount('features'),
                     frameworks: this.getCount('frameworks'),
@@ -84,6 +87,9 @@ exports.initialize = (modPath) => {
                 };
 
                 this.importPreset = () => {
+                    if(this.preset.components) {
+                        this.preset.components.forEach(component => registerComponent(component));
+                    }
                     if (this.preset.features) {
                         this.preset.features.forEach(feature => registerFeature(feature));
                     }
@@ -164,9 +170,9 @@ exports.initialize = (modPath) => {
                 };
 
                 this.isValid = () => {
-                    if(
+                    if (
                         this.name.length == 0 ||
-                        this.logo == null || 
+                        this.logo == null ||
                         this.productType == null
                     ) {
                         return false;
@@ -176,7 +182,7 @@ exports.initialize = (modPath) => {
                 };
 
                 this.submit = () => {
-                    if(!this.isValid()) {
+                    if (!this.isValid()) {
                         console.log('Invalid competitor');
                         return;
                     }
@@ -202,6 +208,101 @@ exports.initialize = (modPath) => {
             }],
         },
         {
+            name: 'dynamiccomponents',
+            viewPath: _modPath + 'templates/components.html',
+            controller: ['$scope', function ($scope) {
+                // Get Language String
+                this.getString = (key) => {
+                    return Helpers.GetLocalized(key)
+                };
+
+                this.components = GetRootScope().settings[config.name].components;
+
+                this.tab = 'list';
+
+                this.copyToClipboard = (component) => {
+                    copyToClipboard(JSON.stringify(component));
+                };
+            }],
+        },
+        {
+            name: 'dynamiccomponentsedit',
+            viewPath: _modPath + 'templates/components_edit.html',
+            controller: ['$scope', function ($scope) {
+                // Get Language String
+                this.getString = (key) => {
+                    return Helpers.GetLocalized(key)
+                };
+
+                this.name = '';
+                this.type = null;
+                this.employeeType = null;
+                this.employeeLevel = null;
+                this.produceHours = 0;
+
+                this.types = [{
+                        label: this.getString('dp_component'),
+                        name: 'Component'
+                    },
+                    {
+                        label: this.getString('dp_module'),
+                        name: 'Module'
+                    }
+                ];
+                this.employeeTypes = [{
+                        label: this.getString('Designer'),
+                        name: 'Designer'
+                    },
+                    {
+                        label: this.getString('Developer'),
+                        name: 'Developer'
+                    },
+                    {
+                        label: this.getString('LeadDeveloper'),
+                        name: 'LeadDeveloper'
+                    },
+                    {
+                        label: this.getString('Marketer'),
+                        name: 'Marketer'
+                    },
+                    {
+                        label: this.getString('SysAdmin'),
+                        name: 'SysAdmin'
+                    },
+                ];
+                this.employeeLevels = Object.keys(EmployeeLevels).map(name => ({
+                    label: this.getString(name),
+                    name: name,
+                }));
+
+                this.confirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_component_confirm'), () => {
+                        this.submit();
+                    });
+                };
+
+                this.submit = () => {
+                    const newComponent = {
+                        name: this.name,
+                        type: this.type.name,
+                        employeeTypeName: this.employeeType.name,
+                        employeeLevel: this.employeeLevel.name,
+                        produceHours: this.produceHours,
+                        icon: 'mods/dynamicproducts/thumbnail.png',
+                    };
+                    console.log(newComponent);
+
+                    registerComponent(newComponent, true);
+
+                    this.quitScreen();
+                };
+
+                this.quitScreen = () => {
+                    $scope.$parent.dynamiccomponentsCtrl.tab = 'list';
+                };
+            }],
+        },
+        {
             name: 'dynamicfeatures',
             viewPath: _modPath + 'templates/features.html',
             controller: ['$scope', function ($scope) {
@@ -211,7 +312,7 @@ exports.initialize = (modPath) => {
                 };
 
                 this.tab = 'list';
-                
+
                 this.features = GetRootScope().settings[config.name].features;
 
                 this.copyToClipboard = (feature) => {
@@ -231,15 +332,17 @@ exports.initialize = (modPath) => {
                 this.getString = (key) => {
                     return Helpers.GetLocalized(key)
                 };
-                
+
                 this.name = '';
                 this.faIcon = '';
                 this.researchPoints = 0;
-                this.category = {name: 'Users'};
+                this.category = {
+                    name: 'Users'
+                };
                 this.requirements = {};
                 this.newRequirement = null;
                 this.level = '';
-               // this.dissatisfaction = 0;
+                // this.dissatisfaction = 0;
 
                 this.featureCategories = FeatureCategories;
                 this.featureLevels = Object.keys(EmployeeLevels).map(level => {
@@ -283,14 +386,14 @@ exports.initialize = (modPath) => {
 
                 this.isFeatureValid = () => {
                     console.log(this.name, this.faIcon, this.category, this.level, this.requirements);
-                    
+
                     if (
-                        this.name.length == 0 || 
-                        this.faIcon.length == 0 || 
+                        this.name.length == 0 ||
+                        this.faIcon.length == 0 ||
                         this.category == null ||
-                        this.level == null || 
+                        this.level == null ||
                         Object.keys(this.requirements).length == 0
-                        ) {
+                    ) {
                         return false;
                     }
 
@@ -349,7 +452,7 @@ exports.initialize = (modPath) => {
                 };
 
                 this.tab = 'list';
-                
+
                 this.frameworks = GetRootScope().settings[config.name].frameworks;
 
                 this.copyToClipboard = (framework) => {
@@ -384,15 +487,15 @@ exports.initialize = (modPath) => {
                 };
 
                 this.isValid = () => {
-                    if(this.name.length == 0) {
-                     return false;   
+                    if (this.name.length == 0) {
+                        return false;
                     }
 
                     return true;
                 };
 
                 this.submit = () => {
-                    if(!this.isValid) {
+                    if (!this.isValid) {
                         console.log('Invalid framework');
                         return;
                     }
@@ -557,6 +660,11 @@ exports.initialize = (modPath) => {
                         icon: 'fa-industry',
                     },
                     {
+                        label: this.getString('dp_components'),
+                        tab: 'Components',
+                        icon: 'fa-keyboard-o',
+                    },
+                    {
                         label: this.getString('dp_features'),
                         tab: 'Features',
                         icon: 'fa-gear',
@@ -583,10 +691,15 @@ exports.onLoadGame = settings => {
 
     if (!settings[config.name]) {
         settings[config.name] = {
+            competitors: [],
+            components: [],
             features: [],
             frameworks: [],
             products: [],
         };
+    }
+    if(!settings[config.name].components) {
+        settings[config.name].components = [];
     }
     if (!settings[config.name].features) {
         settings[config.name].features = [];
@@ -598,6 +711,9 @@ exports.onLoadGame = settings => {
         settings[config.name].products = [];
     }
 
+    settings[config.name].components.forEach(component => {
+        registerComponent(component, false);
+    });
     settings[config.name].features.forEach(feature => {
         registerFeature(feature, false);
     });
