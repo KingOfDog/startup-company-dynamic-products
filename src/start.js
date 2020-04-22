@@ -59,7 +59,7 @@ exports.initialize = (modPath) => {
                 this.getString = (key) => {
                     return Helpers.GetLocalized(key)
                 };
-                
+
                 this.tab = 'home';
                 this.presetTab = 'online';
 
@@ -85,7 +85,7 @@ exports.initialize = (modPath) => {
                         return;
                     }
                     console.log(this.usernam);
-                    
+
                     login(Game.debug.steamId, this.username)
                         .then(result => {
                             this.loggedIn = result;
@@ -338,11 +338,11 @@ exports.initialize = (modPath) => {
                 });
 
                 this.updateUsers = () => {
-                    if(typeof this.users == 'string') {
+                    if (typeof this.users == 'string') {
                         this.users = parseInt(this.users);
                     }
                     console.log(this.users);
-                    
+
                     if (!this.users) {
                         this.users = this.maxUsers;
                     }
@@ -353,7 +353,7 @@ exports.initialize = (modPath) => {
                     this.updateStockVolume();
                 };
                 this.updateStockVolume = () => {
-                    if(typeof this.stockVolume == 'string') {
+                    if (typeof this.stockVolume == 'string') {
                         this.stockVolume = parseInt(this.stockVolume);
                     }
                     if (!this.stockVolume) {
@@ -437,10 +437,12 @@ exports.initialize = (modPath) => {
                 };
 
                 this.name = '';
-                this.type = null;
+                let type = null;
                 this.employeeType = null;
                 this.employeeLevel = null;
                 this.produceHours = 1;
+                this.requirements = {};
+                this.newRequirement = null;
 
                 this.types = [{
                         label: this.getString('dp_component'),
@@ -451,36 +453,93 @@ exports.initialize = (modPath) => {
                         name: 'Module'
                     }
                 ];
-                this.employeeTypes = [{
-                        label: this.getString('Designer'),
-                        name: 'Designer'
-                    },
-                    {
-                        label: this.getString('Developer'),
-                        name: 'Developer'
-                    },
-                    {
-                        label: this.getString('LeadDeveloper'),
-                        name: 'LeadDeveloper'
-                    },
-                    {
-                        label: this.getString('Marketer'),
-                        name: 'Marketer'
-                    },
-                    {
-                        label: this.getString('SysAdmin'),
-                        name: 'SysAdmin'
-                    },
-                ];
+                this.employeeTypes = [];
                 this.employeeLevels = Object.keys(EmployeeLevels).map(name => ({
                     label: this.getString(name),
                     name: name,
                 }));
+                this.components = Components.map(component => ({
+                        label: this.getString(component.name),
+                        component: component
+                }));
 
-                this.updateProduceHours = () => {
-                    if(typeof this.produceHours == 'string') {
-                        this.produceHours = parseInt(this.produceHours);
+                this.updateType = () => {
+                    if (this.type.name == 'Component') {
+                        this.employeeTypes = [{
+                                label: this.getString('Designer'),
+                                name: 'Designer'
+                            },
+                            {
+                                label: this.getString('Developer'),
+                                name: 'Developer'
+                            },
+                            {
+                                label: this.getString('Marketer'),
+                                name: 'Marketer'
+                            },
+                            {
+                                label: this.getString('SysAdmin'),
+                                name: 'SysAdmin'
+                            },
+                        ];
+                    } else {
+                        this.employeeTypes = [{
+                                label: this.getString('Designer'),
+                                name: 'Designer'
+                            },
+                            {
+                                label: this.getString('LeadDeveloper'),
+                                name: 'LeadDeveloper'
+                            },
+                            {
+                                label: this.getString('Marketer'),
+                                name: 'Marketer'
+                            },
+                            {
+                                label: this.getString('SysAdmin'),
+                                name: 'SysAdmin'
+                            },
+                        ];
                     }
+                };
+
+                this.__defineGetter__('type', () => type);
+                this.__defineSetter__('type', (val) => {
+                    type = val;
+                    this.updateType();
+                });
+
+                this.onRequirementCountChange = () => {
+                    Object.entries(this.requirements).forEach(entry => {
+                        if (entry[1].count <= 0) {
+                            delete this.requirements[entry[0]];
+                        }
+                    });
+                };
+
+                this.addNewRequirement = () => {
+                    if (!this.components.includes(this.newRequirement)) {
+                        return;
+                    }
+
+                    const componentName = this.newRequirement.component.name;
+                    if (!this.requirements[componentName]) {
+                        this.requirements[componentName] = {
+                            component: this.newRequirement.component,
+                            count: 0
+                        };
+                    }
+                    this.requirements[componentName].count++;
+
+                    this.newRequirement = '';
+                };
+
+                this.isValid = () => {
+                    return this.name.length > 0 &&
+                        this.type != null &&
+                        this.employeeType != null &&
+                        this.employeeLevel != null &&
+                        (this.type.name == 'Component' || Object.keys(this.requirements).length > 0)
                 };
 
                 this.confirm = () => {
@@ -490,16 +549,29 @@ exports.initialize = (modPath) => {
                 };
 
                 this.submit = () => {
+                    if (!this.isValid()) {
+                        return;
+                    }
+
                     const newComponent = {
                         name: getInternalName(this.name),
                         displayName: this.name,
                         type: this.type.name,
                         employeeTypeName: this.employeeType.name,
                         employeeLevel: this.employeeLevel.name,
-                        produceHours: this.produceHours,
                         icon: 'mods/dynamicproducts/thumbnail.png',
                         createdSelf: true,
                     };
+
+                    if(this.type.name == 'Component') {
+                        newComponent.produceHours = this.produceHours;
+                    } else {
+                        const requirements = {};
+                        Object.entries(this.requirements).forEach(entry => {
+                            requirements[entry[0]] = entry[1].count;
+                        });
+                        newComponent.requirements = requirements;
+                    }
                     console.log(newComponent);
 
                     registerComponent(newComponent, true);
@@ -591,17 +663,16 @@ exports.initialize = (modPath) => {
                     this.requirements[componentName].count++;
 
                     this.newRequirement = '';
-                    this.showList = false;
                 };
 
-                this.isFeatureValid = () => {
+                this.isValid = () => {
                     console.log(this.name, this.faIcon, this.category, this.level, this.requirements);
 
                     if (
                         this.name.length == 0 ||
                         this.faIcon.length == 0 ||
                         this.category == null ||
-                        this.level == null ||
+                        this.level == '' ||
                         Object.keys(this.requirements).length == 0
                     ) {
                         return false;
@@ -617,7 +688,7 @@ exports.initialize = (modPath) => {
                 };
 
                 this.submit = () => {
-                    if (!this.isFeatureValid()) {
+                    if (!this.isValid()) {
                         console.log('Invalid feature');
                         return;
                     }
@@ -821,6 +892,11 @@ exports.initialize = (modPath) => {
                 };
 
                 this.submit = () => {
+                    if(!this.isValid()) {
+                        console.log('invalid product');
+                        return;
+                    }
+
                     const audienceMatches = [];
                     if (this.audienceGender) {
                         audienceMatches.push(this.audienceGender);

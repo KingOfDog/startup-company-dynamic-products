@@ -34,5 +34,5 @@
     <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatureLevel" min="1" id="maxFeatureLevel"
         class="margin-bottom small">
 
-    <button type="button" ng-click="dynamicframeworkseditCtrl.confirm()" localize="dp_create"></button>
+    <button type="button" ng-click="dynamicframeworkseditCtrl.confirm()" ng-disabled="!dynamicframeworkseditCtrl.isValid()" localize="dp_create"></button>
 </div>

@@ -4,25 +4,67 @@
     </div>
     <h3 localize="dp_create_component"></h3>
     <p localize="dp_create_component_desc"></p>
-    <p>Even though you can select module as a type, it is not yet fully supported. Modules consist of other components and currently you can't select any of these requirements. So, stay tuned :)</p>
+    <p>Even though you can select module as a type, it is not yet fully supported. Modules consist of other components
+        and currently you can't select any of these requirements. So, stay tuned :)</p>
 
-    <input type="text" ng-model="dynamiccomponentseditCtrl.name" placeholder="{{dynamiccomponentseditCtrl.getString('dp_component_name')}}"
-        class="margin-bottom small">
+    <input type="text" ng-model="dynamiccomponentseditCtrl.name"
+        placeholder="{{dynamiccomponentseditCtrl.getString('dp_component_name')}}" class="margin-bottom small">
 
     <label localize="type"></label>
-    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.types" dropdown-model="dynamiccomponentseditCtrl.type" dropdown-item-label="label"></div>
+    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.types"
+        dropdown-model="dynamiccomponentseditCtrl.type" dropdown-item-label="label"></div>
 
-    <label localize="employee_type"></label>
-    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeTypes" dropdown-model="dynamiccomponentseditCtrl.employeeType" dropdown-item-label="label"></div>
+    <div ng-if="dynamiccomponentseditCtrl.type">
+        <label localize="employee_type"></label>
+        <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeTypes"
+            dropdown-model="dynamiccomponentseditCtrl.employeeType" dropdown-item-label="label"></div>
 
-    <label localize="dp_employee_level"></label>
-    <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeLevels" dropdown-model="dynamiccomponentseditCtrl.employeeLevel" dropdown-item-label="label"></div>
-
-    <label for="produceHours" localize="dp_time_to_produce"></label>
-    <div class="flex-row margin-bottom">
-        <input type="range" ng-model="dynamiccomponentseditCtrl.produceHours" min="1.0" max="30" step="1" ng-change="dynamiccomponentseditCtrl.updateProduceHours()">
-        <input type="number" ng-model="dynamiccomponentseditCtrl.produceHours" min="1" max="30" id="produceHours" class="margin-bottom small">
+        <label localize="dp_employee_level"></label>
+        <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeLevels"
+            dropdown-model="dynamiccomponentseditCtrl.employeeLevel" dropdown-item-label="label"></div>
     </div>
 
-    <button type="button" ng-click="dynamiccomponentseditCtrl.confirm()" localize="dp_create"></button>
+    <div ng-if="dynamiccomponentseditCtrl.type.name == 'Component'" class="margin-bottom">
+        <label for="produceHours" localize="dp_time_to_produce"></label>
+        <div class="flex-row">
+            <input type="range" ng-model="dynamiccomponentseditCtrl.produceHours" min="1.0" max="30" step="1"
+                ng-change="dynamiccomponentseditCtrl.updateProduceHours()">
+            <input type="number" ng-model="dynamiccomponentseditCtrl.produceHours" min="1" max="30" id="produceHours"
+                class="small">
+        </div>
+    </div>
+
+    <div ng-if="dynamiccomponentseditCtrl.type.name == 'Module'" class="flex-column margin-bottom">
+        <label localize="requirements"></label>
+        <table class="medium">
+            <tr ng-repeat="(name, item) in dynamiccomponentseditCtrl.requirements">
+                <td>
+                    <component class="small" component="item.component"></component>
+                </td>
+                <td localize="{{ name }}"></td>
+                <td>
+                    <input type="number" ng-model="item.count" class="small" ng-change="dynamiccomponentseditCtrl.onRequirementCountChange()">
+                </td>
+            </tr>
+        </table>
+
+        <ui-select ng-model="dynamiccomponentseditCtrl.newRequirement" theme="select2" class="small"
+            on-select="dynamiccomponentseditCtrl.addNewRequirement($item, i)" append-to-body="true">
+            <ui-select-match placeholder="{{dynamiccomponentseditCtrl.getString('dp_select_requirement')}}">
+                <div class="dropdown-component">
+                    <component component="$select.selected.component" />
+                    <span>{{$select.selected.label}}</span>
+                </div>
+            </ui-select-match>
+            <ui-select-choices
+                repeat="item in dynamiccomponentseditCtrl.components | propsFilter: { label: $select.search }">
+                <div class="dropdown-component">
+                    <component component="item.component" />
+                    <span ng-bind-html="item.label | highlight: $select.search"></span>
+                </div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <button type="button" ng-click="dynamiccomponentseditCtrl.confirm()" ng-disabled="!dynamiccomponentseditCtrl.isValid()" localize="dp_create"></button>
 </div>
