@@ -13,7 +13,15 @@
         {
             "name": "it",
             "author": "Mario :D",
-            "file": "it.json"
+            "file": "it_wip.json"
+        },
+        {
+            "name": "fr",
+            "file": "fr_wip.json"
+        },
+        {
+            "name": "tr",
+            "file": "tr_wip.json"
         }
     ]
 }

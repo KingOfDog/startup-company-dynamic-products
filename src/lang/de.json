@@ -1,11 +1,14 @@
 {
     "dp_home": "Home",
     "dp_competitors": "Mitbewerber",
+    "dp_components": "Komponenten",
     "dp_features": "Features",
     "dp_frameworks": "Frameworks",
     "dp_products": "Produkte",
 
     "dp_create": "Erstellen",
+    "dp_loading": "Lädt...",
+    "dp_refresh": "Aktualisieren",
 
     "dp_create_competitor": "Mitbewerber erstellen",
     "dp_create_competitor_desc": "Du kannst einen eigenen Mitbewerber erstellen, der sich genauso wie jeder andere im Spiel verhält. Du kannst Aktien kaufen, Aktienv verkaufen und natürlich auch den Mitbewerber übernehmen.",
@@ -13,6 +16,13 @@
     "dp_users": "Nutzer",
     "dp_stock_volume": "Aktienvolumen",
     "dp_competitor_confirm": "Bist du dir sicher, dass du diesen Mitbewerber erstellen möchtest?",
+
+    "dp_create_component": "Komponente erstellen",
+    "dp_create_component_desc": "Deine Mitarbeiter haben noch nicht genug zu tun. Gib ihnen mehr Aufgaben!",
+    "dp_component_name": "Komponenten-Kame",
+    "dp_employee_level": "Mitarbeiter-Niveau",
+    "dp_time_to_produce": "Benötigte Entwicklungszeit (Stunden)",
+    "dp_component_confirm": "Bist du dir sicher, dass du diese Komponente erstellen möchtest?",
 
     "dp_create_feature": "Feature erstellen",
     "dp_create_feature_desc": "Du kannst deine eigenen Features erstellen, wie du es magst. Derzeit werden standardmäßig alle Features zu allen existierenden Produkt-Typen hinzugefügt.",
@@ -36,14 +46,33 @@
     "dp_product_audience": "Produktzielgruppe",
     "dp_product_confirm": "Bist du dir sicher, dass du diesen Produkt-Typen erstellen möchtest?",
 
+    "dp_online_agreement_1": "Möchtest du die Online-Dienste für Dynamic Products nutzen?",
+    "dp_online_agreement_2": "Es werden keine persönlichen Daten gesammelt abgesehen von deiner Steam Nutzer-ID und deinem angegebenen Nutzernamen.",
+    "dp_online_agree_button": "Ja, ich möchte die Online-Dienste nutzen",
+    "dp_online_username_desc": "Bitte gib einen Nutzernamen an, um die Online-Dienste für Dynamic Products zu nutzen.",
+    "dp_online_username": "Nutzername",
+    "dp_online_login": "Einloggen",
+
     "dp_import_preset": "Preset importieren",
+    "dp_presets_online": "Online",
+    "dp_presets_local": "Lokal",
     "dp_preset_includes": "Beinhaltet",
     "dp_preset_confirm": "Bist du dir sicher, dass du dieses Paket importieren möchtest? Derzeit kann diese Aktion nicht rückgängig gemacht werden.",
-    "dp_preset_success": "Prest erfolgreich importiert",
+    "dp_preset_success": "Preset erfolgreich importiert",
     "dp_preset_success_sub": "Viel Spaß mit dem neuen Zeug",
+
+    "dp_create_preset": "Preset erstellen",
+    "dp_create_preset_desc": "Verpacke deine individuellen Mitbewerber, Komponenten, Features, Frameworks und Produkte zu Presets und lade sie hoch, sodass andere Spieler sie nutzen können.",
+    "dp_preset_name": "Preset-Name",
+    "dp_preset_description": "Preset-Beschreibung",
+    "dp_create_preset_confirm": "Bist du dir sicher, dass du dieses Preset hochladen möchtest? Es ist danach sofort für andere Nutzer verfügbar.",
+    "dp_create_preset_success": "Preset erfolgreich erstellt",
+    "dp_create_preset_success_sub": "Andere Spieler können nun dein Preset für ihre Firma nutzen",
 
     "dp_create_new": "Neues erstellen",
     "dp_import": "Importieren",
     "dp_actions": "Aktionen",
-    "dp_copy_clipboard": "Kopieren"
+    "dp_copy_clipboard": "Kopieren",
+    "dp_component": "Komponente",
+    "dp_module": "Modul"
 }
