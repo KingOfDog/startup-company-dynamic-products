@@ -319,8 +319,8 @@ exports.initialize = (modPath) => {
                 this.name = '';
                 this.logo = null;
                 this.productType = null;
-                this.users = 1;
-                this.stockVolume = 1;
+                this.users = 1000;
+                this.stockVolume = 100;
                 this.maxUsers = 7779482758;
 
                 this.valuation = 0;
@@ -338,6 +338,11 @@ exports.initialize = (modPath) => {
                 });
 
                 this.updateUsers = () => {
+                    if(typeof this.users == 'string') {
+                        this.users = parseInt(this.users);
+                    }
+                    console.log(this.users);
+                    
                     if (!this.users) {
                         this.users = this.maxUsers;
                     }
@@ -348,8 +353,11 @@ exports.initialize = (modPath) => {
                     this.updateStockVolume();
                 };
                 this.updateStockVolume = () => {
+                    if(typeof this.stockVolume == 'string') {
+                        this.stockVolume = parseInt(this.stockVolume);
+                    }
                     if (!this.stockVolume) {
-                        return;
+                        this.stockVolume = 1e8;
                     }
                     this.stockPrice = Helpers.CalculateStockPrice({
                         stockVolume: this.stockVolume
@@ -433,7 +441,7 @@ exports.initialize = (modPath) => {
                 this.type = null;
                 this.employeeType = null;
                 this.employeeLevel = null;
-                this.produceHours = 0;
+                this.produceHours = 1;
 
                 this.types = [{
                         label: this.getString('dp_component'),
@@ -469,6 +477,12 @@ exports.initialize = (modPath) => {
                     label: this.getString(name),
                     name: name,
                 }));
+
+                this.updateProduceHours = () => {
+                    if(typeof this.produceHours == 'string') {
+                        this.produceHours = parseInt(this.produceHours);
+                    }
+                };
 
                 this.confirm = () => {
                     GetRootScope().confirm('', this.getString('dp_component_confirm'), () => {

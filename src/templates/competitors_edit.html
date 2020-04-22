@@ -27,12 +27,18 @@
         style="width: 100%; margin-bottom: 12px;"></div>
 
     <label for="usersInput" localize="dp_users"></label>
-    <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="1" max="{{dynamiccompetitorseditCtrl.maxUsers}}"
-        class="small margin-bottom" ng-change="dynamiccompetitorseditCtrl.updateUsers()">
+    <div class="flex-row margin-bottom">
+        <input type="range" ng-model="dynamiccompetitorseditCtrl.users" value="1000.0" min="1.0" max="{{dynamiccompetitorseditCtrl.maxUsers}}" step="1000" ng-change="dynamiccompetitorseditCtrl.updateUsers()">
+        <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="1" max="{{dynamiccompetitorseditCtrl.maxUsers}}" class="small"
+            ng-change="dynamiccompetitorseditCtrl.updateUsers()">
+    </div>
 
     <label for="stockVolume" localize="dp_stock_volume"></label>
-    <input type="number" id="stockVolume" ng-model="dynamiccompetitorseditCtrl.stockVolume" min="1"
+    <div class="flex-row margin-bottom">
+        <input type="range" ng-model="dynamiccompetitorseditCtrl.stockVolume" value="100.0" min="1.0" max="100000000" step="100" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
+        <input type="number" id="stockVolume" ng-model="dynamiccompetitorseditCtrl.stockVolume" min="1" max="100000000"
         class="small margin-bottom" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
+        </div>
 
     <p>
         Valuation: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.valuation, 1)}}
