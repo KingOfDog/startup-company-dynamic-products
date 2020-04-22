@@ -4,7 +4,8 @@
     "description": "A collection of well-known instant messaging services to expand your communication abilities!",
     "products": [{
         "faIcon": "fa-paper-plane",
-        "name": "Instant Messenger",
+        "name": "InstantMessenger",
+        "displayName": "Instant Messenger",
         "features": [
             "LandingPage",
             "ChatSystem",

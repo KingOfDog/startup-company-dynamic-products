@@ -5,7 +5,8 @@
   "products": [
     {
       "faIcon": "fa-plane",
-      "name": "Travel Planning",
+      "name": "TravelPlanning",
+      "displayName": "Travel Planning",
       "features": [
         "LandingPage",
         "LoginSystem",

@@ -7,8 +7,9 @@
 
     <div class="website-name flex-row">
         <img ng-src="{{ dynamiccompetitorseditCtrl.logo.url }}" class="website-logo">
-        <input type="text" ng-model="dynamiccompetitorseditCtrl.name" placeholder="{{dynamiccompetitorseditCtrl.getString('dp_competitor_name')}}"
-            class="small margin-bottom" maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
+        <input type="text" ng-model="dynamiccompetitorseditCtrl.name"
+            placeholder="{{dynamiccompetitorseditCtrl.getString('dp_competitor_name')}}" class="small margin-bottom"
+            maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
     </div>
 
     <hr class="big">
@@ -21,15 +22,24 @@
     <hr class="big">
 
     <label localize="producttype"></label>
-    <div class="small" dropdown-select="dynamiccompetitorseditCtrl.productTypes" dropdown-model="dynamiccompetitorseditCtrl.productType"
-        dropdown-item-label="label" style="width: 100%; margin-bottom: 12px;"></div>
+    <div class="small" dropdown-select="dynamiccompetitorseditCtrl.productTypes"
+        dropdown-model="dynamiccompetitorseditCtrl.productType" dropdown-item-label="label"
+        style="width: 100%; margin-bottom: 12px;"></div>
 
     <label for="usersInput" localize="dp_users"></label>
-    <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="0" max="7500000000"
-        class="small margin-bottom">
+    <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="1" max="{{dynamiccompetitorseditCtrl.maxUsers}}"
+        class="small margin-bottom" ng-change="dynamiccompetitorseditCtrl.updateUsers()">
 
     <label for="stockVolume" localize="dp_stock_volume"></label>
-    <input type="number" id="stockVolume" ng-model="dynamiccompetitorseditCtrl.stockVolume" min="0" class="small margin-bottom">
+    <input type="number" id="stockVolume" ng-model="dynamiccompetitorseditCtrl.stockVolume" min="1"
+        class="small margin-bottom" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
+
+    <p>
+        Valuation: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.valuation, 1)}}
+    </p>
+    <p>
+        Stock Price: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.stockPrice, 1)}}
+    </p>
 
     <button type="button" ng-click="dynamiccompetitorseditCtrl.confirm()" localize="dp_create"></button>
 </div>

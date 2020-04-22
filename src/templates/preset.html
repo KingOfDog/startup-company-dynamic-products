@@ -1,8 +1,8 @@
-<div class="column">
-    <div class="flex-row">
-        <button ng-click="dynamicpresetCtrl.quitScreen()" class="small" localize="back"></button>
-    </div>
+<div class="flex-row">
+    <button ng-click="dynamicpresetCtrl.quitScreen()" class="small" localize="back"></button>
+</div>
 
+<div class="column" ng-if="!dynamicpresetCtrl.loading">
     <h2>{{dynamicpresetCtrl.preset.name}}</h2>
     <p><i class="fa fa-user"></i> <b>{{dynamicpresetCtrl.preset.author}}</b></p>
     <p>{{dynamicpresetCtrl.preset.description}}</p>
@@ -14,3 +14,5 @@
         <button ng-click="dynamicpresetCtrl.importPresetConfirm()" localize="dp_import"></button>
     </div>
 </div>
+
+<p ng-if="dynamicpresetCtrl.loading" localize="dp_loading"></p>

@@ -4,7 +4,8 @@
   "description": "A collection of forum services!",
   "products": [{
     "faIcon": "fa-comments",
-    "name": "Online Forum",
+    "name": "OnlineForum",
+    "displayName": "Online Forum",
     "features": [
       "LandingPage",
       "LoginSystem",

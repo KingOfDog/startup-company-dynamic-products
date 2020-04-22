@@ -1,0 +1,19 @@
+{
+    "languages": [
+        {
+            "name": "en",
+            "author": "KingOfDog",
+            "file": "en.json"
+        },
+        {
+            "name": "de",
+            "author": "KingOfDog",
+            "file": "de.json"
+        },
+        {
+            "name": "it",
+            "author": "Mario :D",
+            "file": "it.json"
+        }
+    ]
+}

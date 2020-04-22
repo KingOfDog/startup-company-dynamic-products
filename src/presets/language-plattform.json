@@ -4,7 +4,8 @@
     "description": "Languages are among the most beautiful things on earth - let's learn new ones!",
     "features": [{
         "faIcon": "fa-microphone",
-        "name": "Voice Recognition",
+        "name": "VoiceRecognition",
+        "displayName": "Voice Recognition",
         "categoryName": "Users",
         "level": "Expert",
         "researchPoints": 200,
@@ -20,7 +21,8 @@
     },
     {
         "faIcon": "fa-language",
-        "name": "Translation Functionality",
+        "name": "TranslationFunctionality",
+        "displayName": "Translation Functionality",
         "categoryName": "Users",
         "level": "Intermediate",
         "researchPoints": 300,
@@ -41,7 +43,8 @@
 ],
     "products": [{
         "faIcon": "fa-language",
-        "name": "Language Learning Platform",
+        "name": "LanguageLearningPlatform",
+        "displayName": "Language Learning Platform",
         "features": [
             "LandingPage",
             "VoiceRecognition",

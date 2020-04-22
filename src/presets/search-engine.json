@@ -4,7 +4,8 @@
     "description": "Adds Search Engine as a new product type. Including several competitor products!",
     "products": [{
         "faIcon": "fa-search",
-        "name": "Search Engine",
+        "name": "SearchEngine",
+        "displayName": "Search Engine",
         "features": [
             "LandingPage",
             "SharingFunctionality",

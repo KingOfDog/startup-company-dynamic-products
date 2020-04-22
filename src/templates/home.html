@@ -1,15 +1,58 @@
 <div class="flex-column" ng-if="dynamichomeCtrl.tab == 'home'">
     <h3 localize="dp_import_preset"></h3>
-    <ul class="preset-list">
-        <li ng-repeat="preset in dynamichomeCtrl.presets">
-            <!--<a ng-click="dynamichomeCtrl.importPresetConfirmation(preset)">-->
-                <a ng-click="dynamichomeCtrl.showPreset(preset)">
-                <b>{{preset.name}}</b>
-                <span><i class="fa fa-user"></i> by {{preset.author}}</span>
-                <span>{{preset.description}}</span>
-            </a>
-        </li>
+
+    <ul class="tab-list">
+        <li ng-click="dynamichomeCtrl.presetTab = 'online'"
+            ng-class="{ active: dynamichomeCtrl.presetTab == 'online' }" localize="dp_presets_online"></li>
+        <li ng-click="dynamichomeCtrl.presetTab = 'local'" ng-class="{ active: dynamichomeCtrl.presetTab == 'local' }" localize="dp_presets_local"></li>
     </ul>
+
+    <div ng-if="dynamichomeCtrl.presetTab == 'online'">
+        <div ng-if="!dynamichomeCtrl.hasAgreed" class="text-center">
+            <p class="margin-top" localize="dp_online_agreement_1"></p>
+            <p localize="dp_online_agreement_2"></p>
+            <button class="blue margin-bottom" ng-click="dynamichomeCtrl.agree()" localize="dp_online_agree_button"></button>
+        </div>
+        <div ng-if="dynamichomeCtrl.hasAgreed && !dynamichomeCtrl.loggedIn" class="text-center">
+            <p class="margin-top" localize="dp_online_username_desc"></p>
+            <input type="text" ng-model="dynamichomeCtrl.username" class="margin-bottom" placeholder="{{dynamichomeCtrl.getString('dp_online_username')}}">
+            <button class="blue margin-bottom" ng-click="dynamichomeCtrl.login()" localize="dp_online_login"></button>
+        </div>
+
+        <div ng-if="dynamichomeCtrl.hasAgreed && dynamichomeCtrl.loggedIn">
+            <div class="flex-row margin-top margin-bottom">
+                <button class="small" ng-click="dynamichomeCtrl.tab = 'create'"
+                    localize="dp_create_new"></button>
+
+                <button class="cancel small" ng-click="dynamichomeCtrl.loadPresets()" localize="dp_refresh"></button>
+            </div>
+
+            <p ng-if="dynamichomeCtrl.loading" localize="dp_loading"></p>
+
+            <ul class="preset-list">
+                <li ng-repeat="preset in dynamichomeCtrl.presets">
+                    <a ng-click="dynamichomeCtrl.showPreset(preset)">
+                        <b>{{preset.name}}</b>
+                        <span><i class="fa fa-user"></i> by {{preset.author}}</span>
+                        <span>{{preset.description}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div ng-if="dynamichomeCtrl.presetTab == 'local'">
+        <ul class="preset-list">
+            <li ng-repeat="preset in dynamichomeCtrl.localPresets">
+                <a ng-click="dynamichomeCtrl.showPreset(preset)">
+                    <b>{{preset.name}}</b>
+                    <span><i class="fa fa-user"></i> by {{preset.author}}</span>
+                    <span>{{preset.description}}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <dynamicpreset ng-if="dynamichomeCtrl.tab == 'preset'" preset="{{dynamichomeCtrl.preset}}" />
+<dynamiccreatepreset ng-if="dynamichomeCtrl.tab == 'create'" />
