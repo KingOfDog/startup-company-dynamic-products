@@ -34,6 +34,11 @@
                     <input type="number" ng-model="item.count" class="small"
                         ng-change="dynamicfeatureseditCtrl.onRequirementCountChange()">
                 </td>
+                <td>
+                    <button class="red small" ng-click="dynamicfeatureseditCtrl.deleteRequirement(name)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
             </tr>
         </table>
 

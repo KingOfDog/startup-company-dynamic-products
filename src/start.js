@@ -517,6 +517,10 @@ exports.initialize = (modPath) => {
                     });
                 };
 
+                this.deleteRequirement = (name) => {
+                    delete this.requirements[name];
+                };
+
                 this.addNewRequirement = () => {
                     if (!this.components.includes(this.newRequirement)) {
                         return;
@@ -646,6 +650,10 @@ exports.initialize = (modPath) => {
                             delete this.requirements[entry[0]];
                         }
                     });
+                };
+
+                this.deleteRequirement = (name) => {
+                    delete this.requirements[name];
                 };
 
                 this.addNewRequirement = () => {

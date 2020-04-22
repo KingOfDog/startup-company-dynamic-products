@@ -45,6 +45,11 @@
                 <td>
                     <input type="number" ng-model="item.count" class="small" ng-change="dynamiccomponentseditCtrl.onRequirementCountChange()">
                 </td>
+                <td>
+                    <button class="red small" ng-click="dynamiccomponentseditCtrl.deleteRequirement(name)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
             </tr>
         </table>
 
