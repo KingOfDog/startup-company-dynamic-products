@@ -14,7 +14,7 @@
         <tr ng-repeat="feature in dynamicfeaturesCtrl.features">
             <td>
                 <i class="fa {{feature.faIcon}}"></i>
-                {{feature.name}}
+                {{feature.displayName}}
             </td>
             <td>
                 {{dynamicfeaturesCtrl.format(feature.researchPoints)}}

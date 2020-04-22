@@ -389,8 +389,7 @@ exports.initialize = (modPath) => {
                     }
 
                     const newCompetitor = {
-                        name: getInternalName(this.name),
-                        displayName: this.name,
+                        name: this.name,
                         logoPath: this.logo.url,
                         logoColorDegree: 300,
                         users: this.users,
