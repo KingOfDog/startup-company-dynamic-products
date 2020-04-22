@@ -11,10 +11,22 @@ const {
 } = require('./registration');
 
 const {
+    getInternalName,
     getFeatures,
     initLanguage,
     copyToClipboard,
 } = require('./helpers');
+
+const {
+    initOnline,
+    hasAgreedToOnline,
+    agreeToOnline,
+    isLoggedIn,
+    login,
+    getPresets,
+    downloadPreset,
+    uploadPreset,
+} = require('./http');
 
 const presets = [
     require('./presets/search-engine.json'),
@@ -42,11 +54,55 @@ exports.initialize = (modPath) => {
     exports.views = [{
             name: 'dynamichome',
             viewPath: _modPath + 'templates/home.html',
-            controller: ['$scope', function ($scope) {
+            controller: ['$scope', function ($scope, $http) {
+                // Get Language String
+                this.getString = (key) => {
+                    return Helpers.GetLocalized(key)
+                };
+                
                 this.tab = 'home';
+                this.presetTab = 'online';
 
-                this.presets = presets;
+                this.hasAgreed = hasAgreedToOnline();
+                this.loggedIn = isLoggedIn();
+
+                this.username = '';
+
+                this.localPresets = presets.map(p => {
+                    p.local = true;
+                    return p
+                });
+                this.loading = true;
+                this.presets = [];
                 this.preset = null;
+
+                this.agree = () => {
+                    agreeToOnline();
+                    this.hasAgreed = hasAgreedToOnline();
+                };
+                this.login = () => {
+                    if (this.username.length == 0) {
+                        return;
+                    }
+                    console.log(this.usernam);
+                    
+                    login(Game.debug.steamId, this.username)
+                        .then(result => {
+                            this.loggedIn = result;
+                            this.loadPresets();
+                        });
+                };
+
+                this.loadPresets = () => {
+                    this.loading = true;
+                    getPresets()
+                        .then(presets => {
+                            this.loading = false;
+                            this.presets = presets;
+                            GetRootScope().$digest();
+                        });
+                };
+                this.loadPresets();
 
                 this.showPreset = (preset) => {
                     this.preset = preset;
@@ -63,7 +119,18 @@ exports.initialize = (modPath) => {
                     return Helpers.GetLocalized(key)
                 };
 
-                this.preset = $scope.$parent.dynamichomeCtrl.preset;
+                this.loading = true;
+                this.preset = null;
+
+                this.loadPreset = (id) => {
+                    downloadPreset(id)
+                        .then(preset => {
+                            this.preset = preset;
+                            this.loading = false;
+                            this.calculateIncludes();
+                            GetRootScope().$digest();
+                        });
+                };
 
                 this.getCount = (name) => {
                     if (!this.preset[name]) {
@@ -72,13 +139,25 @@ exports.initialize = (modPath) => {
                     return this.preset[name].length;
                 };
 
-                this.includes = {
-                    components: this.getCount('components'),
-                    competitors: this.getCount('competitors'),
-                    features: this.getCount('features'),
-                    frameworks: this.getCount('frameworks'),
-                    products: this.getCount('products'),
+                this.includes = {};
+
+                this.calculateIncludes = () => {
+                    this.includes = {
+                        components: this.getCount('components'),
+                        competitors: this.getCount('competitors'),
+                        features: this.getCount('features'),
+                        frameworks: this.getCount('frameworks'),
+                        products: this.getCount('products'),
+                    };
                 };
+
+                if ($scope.$parent.dynamichomeCtrl.preset.local) {
+                    this.preset = $scope.$parent.dynamichomeCtrl.preset;
+                    this.loading = false;
+                    this.calculateIncludes();
+                } else {
+                    this.loadPreset($scope.$parent.dynamichomeCtrl.preset.id);
+                }
 
                 this.importPresetConfirm = () => {
                     GetRootScope().confirm('', this.getString('dp_preset_confirm'), () => {
@@ -87,7 +166,7 @@ exports.initialize = (modPath) => {
                 };
 
                 this.importPreset = () => {
-                    if(this.preset.components) {
+                    if (this.preset.components) {
                         this.preset.components.forEach(component => registerComponent(component));
                     }
                     if (this.preset.features) {
@@ -108,6 +187,92 @@ exports.initialize = (modPath) => {
 
                 this.quitScreen = () => {
                     $scope.$parent.dynamichomeCtrl.tab = 'home';
+                };
+            }],
+        },
+        {
+            name: 'dynamiccreatepreset',
+            viewPath: _modPath + 'templates/create_preset.html',
+            controller: ['$scope', function ($scope) {
+                // Get Language String
+                this.getString = (key) => {
+                    return Helpers.GetLocalized(key)
+                };
+
+                this.loading = false;
+
+                this.name = '';
+                this.description = '';
+                this.competitors = [];
+                this.components = [];
+                this.features = [];
+                this.frameworks = [];
+                this.products = [];
+
+                this.userCompetitors = GetRootScope().settings[config.name].competitors.filter(c => c.createdSelf);
+                this.userComponents = GetRootScope().settings[config.name].components.filter(c => c.createdSelf);
+                this.userFeatures = GetRootScope().settings[config.name].features.filter(c => c.createdSelf);
+                this.userFrameworks = GetRootScope().settings[config.name].frameworks.filter(c => c.createdSelf);
+                this.userProducts = GetRootScope().settings[config.name].products.filter(c => c.createdSelf);
+
+                this.isActive = (name, object) => {
+                    return !!this[name].find(o => o.name == object.name);
+                };
+
+                this.toggle = (name, object) => {
+                    const index = this[name].findIndex(o => o.name == object.name);
+                    if (index == -1) {
+                        this[name].push(object);
+                    } else {
+                        this[name].splice(index, 1);
+                    }
+                };
+
+                this.confirm = () => {
+                    GetRootScope().confirm('', this.getString('dp_preset_confirm'), () => {
+                        this.submit();
+                    });
+                };
+
+                this.isValid = () => {
+                    return this.name.length > 0 &&
+                        this.description.length > 0;
+                };
+
+                this.submit = () => {
+                    if (!this.isValid()) {
+                        return;
+                    }
+                    console.log('hallo welt');
+
+                    this.loading = true;
+
+                    const newPreset = {
+                        name: this.name,
+                        description: this.description,
+                        competitors: this.competitors,
+                        components: this.components,
+                        features: this.features,
+                        frameworks: this.frameworks,
+                        products: this.products,
+                    };
+                    uploadPreset(newPreset)
+                        .then(result => {
+                            console.log(result);
+                            this.loading = false;
+
+                            if (result.Success) {
+                                Helpers.ShowSuccessMessage(this.getString('dp_create_preset_success'), this.getString('dp_create_preset_success_sub'))
+                                this.quitScreen();
+                            }
+                        })
+                };
+
+                this.quitScreen = () => {
+                    $scope.$parent.dynamichomeCtrl.tab = 'home';
+                    setTimeout(() => {
+                        GetRootScope().$digest();
+                    }, 100);
                 };
             }],
         },
@@ -147,10 +312,19 @@ exports.initialize = (modPath) => {
                     return Helpers.GetLocalized(key)
                 };
 
+                this.format = (number, a = 0) => {
+                    return Helpers.SmartNumber(number, a);
+                };
+
                 this.name = '';
                 this.logo = null;
                 this.productType = null;
-                this.users = 0;
+                this.users = 1000;
+                this.stockVolume = 100;
+                this.maxUsers = 7779482758;
+
+                this.valuation = 0;
+                this.stockPrice = 0;
 
                 this.logos = _.range(1, 100).map(n => ({
                     number: n,
@@ -162,6 +336,33 @@ exports.initialize = (modPath) => {
                         productType: productType,
                     };
                 });
+
+                this.updateUsers = () => {
+                    if(typeof this.users == 'string') {
+                        this.users = parseInt(this.users);
+                    }
+                    console.log(this.users);
+                    
+                    if (!this.users) {
+                        this.users = this.maxUsers;
+                    }
+                    this.valuation = Helpers.CalculateValuation({
+                        users: this.users
+                    });
+                    this.stockVolume = Math.max(Math.round(this.valuation / 1000), 1);
+                    this.updateStockVolume();
+                };
+                this.updateStockVolume = () => {
+                    if(typeof this.stockVolume == 'string') {
+                        this.stockVolume = parseInt(this.stockVolume);
+                    }
+                    if (!this.stockVolume) {
+                        this.stockVolume = 1e8;
+                    }
+                    this.stockPrice = Helpers.CalculateStockPrice({
+                        stockVolume: this.stockVolume
+                    }, this.valuation);
+                }
 
                 this.confirm = () => {
                     GetRootScope().confirm('', this.getString('dp_competitor_confirm'), () => {
@@ -195,6 +396,7 @@ exports.initialize = (modPath) => {
                         stockVolume: this.stockVolume,
                         stockPrice: 0,
                         productTypeName: this.productType.productType.name,
+                        createdSelf: true,
                     };
 
                     registerCompetitor(newCompetitor);
@@ -238,7 +440,7 @@ exports.initialize = (modPath) => {
                 this.type = null;
                 this.employeeType = null;
                 this.employeeLevel = null;
-                this.produceHours = 0;
+                this.produceHours = 1;
 
                 this.types = [{
                         label: this.getString('dp_component'),
@@ -275,6 +477,12 @@ exports.initialize = (modPath) => {
                     name: name,
                 }));
 
+                this.updateProduceHours = () => {
+                    if(typeof this.produceHours == 'string') {
+                        this.produceHours = parseInt(this.produceHours);
+                    }
+                };
+
                 this.confirm = () => {
                     GetRootScope().confirm('', this.getString('dp_component_confirm'), () => {
                         this.submit();
@@ -283,12 +491,14 @@ exports.initialize = (modPath) => {
 
                 this.submit = () => {
                     const newComponent = {
-                        name: this.name,
+                        name: getInternalName(this.name),
+                        displayName: this.name,
                         type: this.type.name,
                         employeeTypeName: this.employeeType.name,
                         employeeLevel: this.employeeLevel.name,
                         produceHours: this.produceHours,
                         icon: 'mods/dynamicproducts/thumbnail.png',
+                        createdSelf: true,
                     };
                     console.log(newComponent);
 
@@ -420,7 +630,8 @@ exports.initialize = (modPath) => {
                     });
 
                     const newFeature = {
-                        name: this.name,
+                        name: getInternalName(this.name),
+                        displayName: this.name,
                         faIcon: this.faIcon,
                         categoryName: 'Users',
                         level: this.level.name,
@@ -428,6 +639,7 @@ exports.initialize = (modPath) => {
                         dissatisfaction: this.dissatisfaction,
                         researchPoints: this.researchPoints,
                         availableProducts: Object.keys(ProductTypeNames), // TODO: allow user to specify
+                        createdSelf: true,
                     };
                     console.log(newFeature);
 
@@ -501,13 +713,15 @@ exports.initialize = (modPath) => {
                     }
 
                     const newFramework = {
-                        name: this.name,
+                        name: getInternalName(this.name),
+                        displayName: this.name,
                         researchPoints: this.researchPoints,
                         pricePerUser: this.pricePerUser,
                         maxFeatures: this.maxFeatures,
                         maxFeatureLevel: this.maxFeatureLevel,
                         licenseCost: this.licenseCost,
                         cuPerMs: this.cuPerMs,
+                        createdSelf: true,
                     };
                     console.log('New Framework', newFramework);
 
@@ -615,10 +829,12 @@ exports.initialize = (modPath) => {
                     audienceMatches.push(...this.audienceInterests);
 
                     const newProduct = {
-                        name: this.name,
+                        name: getInternalName(this.name),
+                        displayName: this.name,
                         features: Object.keys(this.features).filter(name => this.features[name]),
                         audienceMatches: audienceMatches,
                         faIcon: this.faIcon,
+                        createdSelf: true,
                     };
                     console.log(newProduct);
 
@@ -691,6 +907,9 @@ exports.onLoadGame = settings => {
 
     if (!settings[config.name]) {
         settings[config.name] = {
+            agreedToOnline: false,
+            loggedIn: false,
+            username: null,
             competitors: [],
             components: [],
             features: [],
@@ -698,7 +917,7 @@ exports.onLoadGame = settings => {
             products: [],
         };
     }
-    if(!settings[config.name].components) {
+    if (!settings[config.name].components) {
         settings[config.name].components = [];
     }
     if (!settings[config.name].features) {
@@ -723,4 +942,12 @@ exports.onLoadGame = settings => {
     settings[config.name].products.forEach(product => {
         registerProduct(product, false);
     });
+
+    initOnline(config.name);
+    if (hasAgreedToOnline()) {
+        try {
+            login(Game.debug.steamId, GetRootScope().settings[config.name].username);
+        } catch (e) {}
+    }
+
 };

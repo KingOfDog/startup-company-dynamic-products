@@ -14,7 +14,7 @@
         </thead>
        <tr ng-repeat="component in dynamiccomponentsCtrl.components">
             <td>
-                {{component.name}}
+                {{component.displayName}}
             </td>
             <td>{{dynamiccomponentsCtrl.getString('dp_' + component.type)}}</td>
             <td>{{dynamiccomponentsCtrl.getString(component.employeeTypeName)}}</td>

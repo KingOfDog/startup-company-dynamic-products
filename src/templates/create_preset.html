@@ -1,0 +1,89 @@
+<div class="column">
+    <div class="flex-row">
+        <button ng-click="dynamiccreatepresetCtrl.quitScreen()" class="small" localize="back"></button>
+    </div>
+    <h3 localize="dp_create_preset"></h3>
+    <p localize="dp_create_preset_desc"></p>
+
+    <input type="text" ng-model="dynamiccreatepresetCtrl.name"
+        placeholder="{{dynamiccreatepresetCtrl.getString('dp_preset_name')}}" class="small margin-bottom">
+
+    <textarea class="small margin-bottom" ng-model="dynamiccreatepresetCtrl.description"
+        placeholder="{{dynamiccreatepresetCtrl.getString('dp_preset_description')}}"></textarea>
+
+    <h4 localize="dp_competitors"></h4>
+    <div class="select-list">
+        <div class="select-item" ng-repeat="competitor in dynamiccreatepresetCtrl.userCompetitors"
+            ng-click="dynamiccreatepresetCtrl.toggle('competitors', competitor)"
+            ng-class="{ active: dynamiccreatepresetCtrl.isActive('competitors', competitor) }">
+            {{competitor.name}}
+        </div>
+    </div>
+
+    <h4 localize="dp_components"></h4>
+    <div class="select-list">
+        <div class="select-item" ng-repeat="component in dynamiccreatepresetCtrl.userComponents"
+            ng-click="dynamiccreatepresetCtrl.toggle('components', component)"
+            ng-class="{ active: dynamiccreatepresetCtrl.isActive('components', component) }">
+            {{component.displayName}}
+        </div>
+    </div>
+
+    <h4 localize="dp_features"></h4>
+    <div class="select-list">
+        <div class="select-item" ng-repeat="feature in dynamiccreatepresetCtrl.userFeatures"
+            ng-click="dynamiccreatepresetCtrl.toggle('features', feature)"
+            ng-class="{ active: dynamiccreatepresetCtrl.isActive('features', feature) }">
+            {{feature.displayName}}
+        </div>
+    </div>
+
+    <h4 localize="dp_frameworks"></h4>
+    <div class="select-list">
+        <div class="select-item" ng-repeat="framework in dynamiccreatepresetCtrl.userFrameworks"
+            ng-click="dynamiccreatepresetCtrl.toggle('frameworks', framework)"
+            ng-class="{ active: dynamiccreatepresetCtrl.isActive('frameworks', framework) }">
+            {{framework.displayName}}
+        </div>
+    </div>
+
+    <h4 localize="dp_products"></h4>
+    <div class="select-list">
+        <div class="select-item" ng-repeat="product in dynamiccreatepresetCtrl.userProducts"
+            ng-click="dynamiccreatepresetCtrl.toggle('products', product)"
+            ng-class="{ active: dynamiccreatepresetCtrl.isActive('products', product) }">
+            {{product.displayName}}
+        </div>
+    </div>
+
+    <button type="button" class="margin-top" ng-click="dynamiccreatepresetCtrl.confirm()" localize="dp_create" ng-if="!dynamiccreatepresetCtrl.loading"></button>
+    <button type="button" class="margin-top" disabled localize="dp_loading" ng-if="dynamiccreatepresetCtrl.loading"></button>
+</div>
+
+<style>
+    textarea.small {
+        margin: 0 10px;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 100%;
+    }
+
+    .select-list {
+        max-height: 25em;
+        overflow-y: auto;
+    }
+
+    .select-list .select-item {
+        display: block;
+        padding: 18px 24px;
+        margin: 12px 0;
+        border: 2px solid #c6c8c9;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.18);
+        box-shadow: inset 0 10px 4px -2px rgba(255, 255, 255, 0.65), inset 0 -2px 2px 6px rgba(0, 0, 0, 0.1)
+    }
+
+    .select-list .select-item.active {
+        background-color: #abcee0;
+    }
+</style>

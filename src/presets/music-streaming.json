@@ -28,7 +28,8 @@
         }
     ],
     "features": [{
-        "name": "Content Recommendation",
+        "name": "ContentRecommendation",
+        "displayName": "Content Recommendation",
         "faIcon": "fa-thumbs-up",
         "categoryName": "Users",
         "level": "Expert",
@@ -41,7 +42,8 @@
         "availableProducts": ["VideoSharingService", "SocialMedia", "StreamingService", "ShoppingPlatform", "DatingPlatform", "GamingPlatform", "OnlineForum", "SearchEngine", "InstantMessenger", "LanguageLearningPlatform", "TravelPlanning"]
     }],
     "products": [{
-        "name": "Music Streaming Service",
+        "name": "MusicStreamingService",
+        "displayName": "Music Streaming Service",
         "features": ["LandingPage", "LoginSystem", "SharingFunctionality", "PaymentSystem", "ContentManagementSystem", "TextAds", "BannerAds", "VideoAds", "Subscriptions", "OfflineContent", "AdBlockObfuscator", "DdosProtection", "HelpSystem", "ProfilePage", "ContentRecommendation"],
         "audienceMatches": ["age_group1", "Entertainment", "Technology", "Sports", "Travel"],
         "faIcon": "fa-music"

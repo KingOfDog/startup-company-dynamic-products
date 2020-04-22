@@ -12,7 +12,7 @@
         <tr ng-repeat="product in dynamicproductsCtrl.products">
             <td>
                 <i class="fa {{product.faIcon}}"></i>
-                {{product.name}}
+                {{product.displayName}}
             </td>
             <td>
                 <button class="small cancel" ng-click="dynamicproductsCtrl.copyToClipboard(product)" uib-tooltip="{{dynamiccompetitorsCtrl.getString('dp_copy_clipboard')}}" tooltip-append-to-body="true" tooltip-placement="top">

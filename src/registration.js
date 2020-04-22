@@ -51,27 +51,28 @@ module.exports.registerComponent = function(component, addToSettings= true) {
         return;
     }
 
-    const internalName = getInternalName(component.name);
-    const clone = Helpers.Clone(component);
-    clone.name = internalName;
-    
-    ComponentNames[internalName] = internalName;
-    Components.push(clone);
+    if(!component.displayName) {
+        component.displayName = component.name;
+        component.name = getInternalName(component.name);
+    }
 
-    ResearchItemNames[internalName] = internalName;
+    ComponentNames[component.name] = component.name;
+    Components.push(component);
+
+    ResearchItemNames[component.name] = component.name;
     ResearchItems.push({
-        name: internalName,
+        name: component.name,
         category: 'Production',
         unlockType: 'Component',
         points: 5,
-        unlocks: [internalName],
+        unlocks: [component.name],
     });
 
-    Modding.addTranslation(internalName, {
-        en: component.name,
+    Modding.addTranslation(component.name, {
+        en: component.displayName,
     });
-    Modding.addTranslation(internalName + '_description', {
-        en: component.name,
+    Modding.addTranslation(component.name + '_description', {
+        en: component.displayName,
     });
 
     if(addToSettings) {
@@ -84,23 +85,25 @@ module.exports.registerComponent = function(component, addToSettings= true) {
 
 module.exports.registerFeature = function (feature, addToSettings = true) {
     console.log('Registering feature', feature);
-    const internalName = getInternalName(feature.name);
 
-    if (FeatureNames[internalName]) {
+    if (FeatureNames[feature.name]) {
         console.log('Skipping feature', feature, 'because it already exists');
         return;
     }
 
+    if(!feature.displayName) {
+        feature.displayName = feature.name;
+        feature.name = getInternalName(feature.name);
+    }
+
     // Add feature
-    FeatureNames[internalName] = internalName;
-    const clone = Helpers.Clone(feature);
-    clone.name = internalName;
-    Features.push(clone);
+    FeatureNames[feature.name] = feature.name;
+    Features.push(feature);
 
     // Add research items
-    ResearchItemNames[internalName] = internalName;
+    ResearchItemNames[feature.name] = feature.name;
     ResearchItems.push({
-        name: internalName,
+        name: feature.name,
         category: 'Features',
         unlockType: 'Feature',
         points: feature.researchPoints,
@@ -109,16 +112,16 @@ module.exports.registerFeature = function (feature, addToSettings = true) {
     // Add feature to specified product types
     feature.availableProducts.map(name => ProductTypes.find(product => product.name == name)).forEach(product => {
         if (product) {
-            product.features.push(internalName);
+            product.features.push(feature.name);
         }
     });
 
     // Add language strings
-    Modding.addTranslation(internalName, {
-        en: feature.name
+    Modding.addTranslation(feature.name, {
+        en: feature.displayName,
     });
     // TODO: Add option for description
-    Modding.addTranslation(internalName + '_description', {
+    Modding.addTranslation(feature.name + '_description', {
         en: 'The multipurpose feature ' + feature.name + ' enables every animal, human, robot and plant to live together in harmony. <3'
     });
 
@@ -132,35 +135,38 @@ module.exports.registerFeature = function (feature, addToSettings = true) {
 
 module.exports.registerFramework = function (framework, modPath, addToSettings = true) {
     console.log('Registering framework', framework);
-    const internalName = getInternalName(framework.name);
 
-    if (FrameworkNames[internalName]) {
+    if (FrameworkNames[framework.name]) {
         console.log('Skipping framework', framework, 'because it already exists');
         return;
     }
 
+    if(!framework.displayName) {
+        framework.displayName = framework.name;
+        framework.name = getInternalName(framework.name);
+    }
+
     // Add framework
-    FrameworkNames[internalName] = internalName;
+    FrameworkNames[framework.name] = framework.name;
 
     const clone = Helpers.Clone(framework);
-    clone.name = internalName;
     clone.logoPath = modPath + 'thumbnail.png';
     clone.order = _.maxBy(Frameworks, e => e.order).order + 1;
     delete clone.researchPoints;
     Frameworks.push(clone);
 
     // Add research items
-    ResearchItemNames[internalName] = internalName;
+    ResearchItemNames[framework.name] = framework.name;
     ResearchItems.push({
-        name: internalName,
+        name: framework.name,
         category: 'Frameworks',
         unlockType: 'Framework',
         points: framework.researchPoints,
     });
 
     // Add language strings
-    Modding.addTranslation(internalName, {
-        en: framework.name,
+    Modding.addTranslation(framework.name, {
+        en: framework.displayName,
     });
 
     if (addToSettings) {
@@ -173,19 +179,21 @@ module.exports.registerFramework = function (framework, modPath, addToSettings =
 
 module.exports.registerProduct = function (product, addToSettings = true) {
     console.log('Registering product', product);
-    const internalName = getInternalName(product.name);
 
-    if (ProductTypeNames[internalName]) {
+    if (ProductTypeNames[product.name]) {
         console.log('Skipping product', product, 'because it already exists');
         return;
     }
 
-    ProductTypeNames[internalName] = internalName;
-    const productCopy = JSON.parse(JSON.stringify(product));
-    productCopy.name = internalName
-    ProductTypes.push(productCopy);
-    Modding.addTranslation(internalName, {
-        en: product.name
+    if(!product.displayName) {
+        product.displayName = product.name;
+        product.name = getInternalName(product.name);
+    }
+
+    ProductTypeNames[product.name] = product.name;
+    ProductTypes.push(product);
+    Modding.addTranslation(product.name, {
+        en: product.displayName
     });
 
     if (addToSettings) {

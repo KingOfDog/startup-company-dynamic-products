@@ -31,7 +31,8 @@
         }
     ],
     "components": [{
-            "name": "Version Control Component",
+            "name": "VersionControlComponent",
+            "displayName": "Version Control Component",
             "type": "Component",
             "employeeTypeName": "Developer",
             "employeeLevel": "Intermediate",
@@ -39,7 +40,8 @@
             "icon": "mods/dynamicproducts/thumbnail.png"
         },
         {
-            "name": "Debugging Component",
+            "name": "DebuggingComponent",
+            "displayName": "Debugging Component",
             "type": "Component",
             "employeeTypeName": "Developer",
             "employeeLevel": "Expert",
@@ -48,7 +50,8 @@
         }
     ],
     "features": [{
-        "name": "Quality Control",
+        "name": "QualityControl",
+        "displayName": "Quality Control",
         "faIcon": "fa-star",
         "categoryName": "Users",
         "level": "Expert",
@@ -61,7 +64,8 @@
         "availableProducts": ["VideoSharingService", "SocialMedia", "StreamingService", "ShoppingPlatform", "DatingPlatform", "GamingPlatform"]
     }],
     "products": [{
-        "name": "Version Control Service",
+        "name": "VersionControlService",
+        "displayName": "Version Control Service",
         "features": ["LandingPage", "LoginSystem", "CommentFunctionality", "SharingFunctionality", "ContentManagementSystem", "TextAds", "BannerAds", "VideoAds", "Subscriptions", "AdBlockObfuscator", "DdosProtection", "HelpSystem", "ProfilePage", "QualityControl"],
         "audienceMatches": ["age_group1", "age_group2", "Business", "Technology"],
         "faIcon": "fa-git"

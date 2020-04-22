@@ -1,0 +1,13 @@
+{
+  "dp_competitors": "Concurrents",
+  "dp_create": "Créer",
+  "dp_create_competitor": "Créer un concurrent",
+  "dp_create_competitor_desc": "Vous pouvez créer un produit concurrent personnalisé qui se comportera comme n'importe quel autre concurrent du jeu. Vous pouvez acheter des actions, vendre des actions et bien sûr, vous pouvez également les acquérir et les fusionner sur votre propre site Web.",
+  "dp_competitor_name": "Nom du concurrent",
+  "dp_competitor_confirm": "Êtes-vous sûr de vouloir créer ce concurrent?",
+  "dp_create_feature": "Créer une fonctionnalité",
+  "dp_create_feature_desc": "Vous pouvez créer vos propres fonctionnalités comme vous le souhaitez. Actuellement, elles sont ajoutés à tous les types de produits existants par défaut.",
+  "dp_category": "Catégorie",
+  "dp_actions": "Actions",
+  "dp_copy_clipboard": "Copier dans le presse-papier"
+}
