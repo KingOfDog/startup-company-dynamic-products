@@ -9,23 +9,26 @@
         class="margin-bottom small">
 
     <div class="flex-row">
-        <div>
+        <div class="margin-right">
             <label for="researchPoints" localize="dp_research_cost"></label>
             <input type="number" ng-model="dynamicframeworkseditCtrl.researchPoints" min="0" class="margin-bottom small">
         </div>
 
-        <div>
+        <div class="margin-left margin-right">
             <label for="licenseCost" localize="license_cost"></label>
             <input type="number" ng-model="dynamicframeworkseditCtrl.licenseCost" min="0" id="licenseCost"
                 class="margin-bottom small">
         </div>
 
-        <div>
+        <div class="margin-left">
             <label for="pricePerUser" localize="price_per_user"></label>
             <input type="number" ng-model="dynamicframeworkseditCtrl.pricePerUser" min="0" id="pricePerUser"
                 class="margin-bottom small">
         </div>
     </div>
+
+    <label for="cuPerMs" localize="cu_per_ms"></label>
+    <input type="number" ng-model="dynamicframeworkseditCtrl.cuPerMs" min="0" id="cuPerMs" class="margin-bottom small">
 
     <label for="maxFeatures" localize="max_features"></label>
     <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatures" min="3" id="maxFeatures" class="margin-bottom small">

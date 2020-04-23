@@ -724,7 +724,6 @@ exports.initialize = (modPath) => {
 
                     registerFeature(newFeature);
 
-                    // Reset inputs
                     this.quitScreen();
                 };
 
@@ -765,9 +764,10 @@ exports.initialize = (modPath) => {
                 };
 
                 this.name = '';
-                this.researchPoints = 0;
-                this.licenseCost = 0;
-                this.pricePerUser = 0;
+                this.researchPoints = 1e3;
+                this.licenseCost = 1e5;
+                this.pricePerUser = 1e-4;
+                this.cuPerMs = 0.1;
                 this.maxFeatures = 3;
                 this.maxFeatureLevel = 1;
 
@@ -806,7 +806,6 @@ exports.initialize = (modPath) => {
 
                     registerFramework(newFramework, _modPath);
 
-                    // Reset input fields
                     this.quitScreen();
                 };
 
