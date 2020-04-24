@@ -34,6 +34,11 @@
                     <input type="number" ng-model="item.count" class="small"
                         ng-change="dynamicfeatureseditCtrl.onRequirementCountChange()">
                 </td>
+                <td>
+                    <button class="red small" ng-click="dynamicfeatureseditCtrl.deleteRequirement(name)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
             </tr>
         </table>
 
@@ -69,5 +74,5 @@
             ng-model="dynamicfeatureseditCtrl.dissatisfaction" class="small">
     </div>
 
-    <button type="button" ng-click="dynamicfeatureseditCtrl.confirm()" localize="dp_create"></button>
+    <button type="button" ng-click="dynamicfeatureseditCtrl.confirm()" ng-disabled="!dynamicfeatureseditCtrl.isValid()" localize="dp_create"></button>
 </div>

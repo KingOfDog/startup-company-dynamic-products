@@ -41,11 +41,11 @@
         </div>
 
     <p>
-        Valuation: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.valuation, 1)}}
+        <span localize="valuation"></span>: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.valuation, 1)}}
     </p>
     <p>
-        Stock Price: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.stockPrice, 1)}}
+        <span localize="stock_price"></span>: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.stockPrice, 1)}}
     </p>
 
-    <button type="button" ng-click="dynamiccompetitorseditCtrl.confirm()" localize="dp_create"></button>
+    <button type="button" ng-click="dynamiccompetitorseditCtrl.confirm()" ng-disabled="!dynamiccompetitorseditCtrl.isValid()" localize="dp_create"></button>
 </div>
