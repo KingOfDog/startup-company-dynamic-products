@@ -109,3 +109,29 @@ return;
     const result = await sendRequest('POST', 'preset', preset);
     return result;
 }
+
+module.exports.uploadImage = async function(file) {
+    if(!agreedToOnline || !loggedIn) {
+        return;
+    }
+    const formData = new FormData();
+    formData.append('image', file);
+
+    $.ajax({
+        url: 'http://localhost:8000/' + 'image',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        xhr: () => {
+            const xhr = $.ajaxSettings.xhr();
+            if(xhr.upload) {
+                xhr.upload.addEventListener('progress', e => {
+                    console.log(e);
+                }, false);
+            }
+            return xhr;
+        }
+    })
+}

@@ -26,6 +26,7 @@ const {
     getPresets,
     downloadPreset,
     uploadPreset,
+    uploadImage,
 } = require('./http');
 
 const presets = [
@@ -80,13 +81,18 @@ exports.initialize = (modPath) => {
                     agreeToOnline();
                     this.hasAgreed = hasAgreedToOnline();
                 };
+
+                this.isValid = () => {
+                    return this.username.trim().length > 0;
+                };
+
                 this.login = () => {
-                    if (this.username.length == 0) {
+                    if (!this.isValid()) {
                         return;
                     }
-                    console.log(this.usernam);
+                    console.log(this.username);
 
-                    login(Game.debug.steamId, this.username)
+                    login(Game.debug.steamId, this.username.trim())
                         .then(result => {
                             this.loggedIn = result;
                             this.loadPresets();
@@ -336,6 +342,15 @@ exports.initialize = (modPath) => {
                         productType: productType,
                     };
                 });
+
+                $('#file').on('change', () => {
+                    this.uploadFile();
+                });
+                this.uploadFile = () => {
+                    const file = document.getElementById('file').files[0];
+                    console.log(file);
+                    uploadImage(file);
+                };
 
                 this.updateUsers = () => {
                     if (typeof this.users == 'string') {
@@ -939,12 +954,6 @@ exports.initialize = (modPath) => {
                 // Get Language String
                 this.getString = (key) => {
                     return Helpers.GetLocalized(key)
-                };
-
-                // TODO: Continue with file upload
-                this.uploadFile = (files) => {
-                    console.log(files);
-
                 };
 
                 this.tab = 'Home';

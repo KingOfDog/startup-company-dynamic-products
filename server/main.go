@@ -1,12 +1,18 @@
 package main
 
 import (
+	"github.com/KingOfDog/dynamic-products/contains"
+
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
+
+	"github.com/google/uuid"
 
 	"github.com/gorilla/mux"
 
@@ -160,6 +166,13 @@ type FeatureRequirement struct {
 	Count       uint
 }
 
+type Image struct {
+	gorm.Model
+	Name     string
+	Size     int64
+	FileName string
+}
+
 func GetDatabase() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "main.db")
 	if err != nil {
@@ -309,6 +322,54 @@ func PresetUploadHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func ImageUploadHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(32 << 20)
+
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	// Max file size 2MB
+	if header.Size > 2<<20 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - File too big"))
+		return
+	}
+
+	name := strings.Split(header.Filename, ".")
+	log.Println("file name " + name[0])
+
+	allowedFileTypes := [2]string{"png", "jpg"}
+	if len(name) <= 1 || helpers.Contains(allowedFileTypes, name[len(name)-1]) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - Invalid file type"))
+		return
+	}
+
+	os.MkdirAll("./uploads/images", 0777)
+
+	fileName := uuid.New().String() + "." + name[len(name)-1]
+	f, err := os.OpenFile("./uploads/images/"+fileName, os.O_WRONLY|os.O_CREATE, 0777)
+	if err != nil {
+		panic(err)
+	}
+
+	io.Copy(f, file)
+
+	image := Image{
+		Name:     header.Filename,
+		Size:     header.Size,
+		FileName: fileName,
+	}
+
+	db := GetDatabase()
+	defer db.Close()
+
+	db.Create(&image)
+}
+
 func PresetDownloadHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	presetID, err := strconv.ParseUint(vars["presetID"], 10, 64)
@@ -425,7 +486,7 @@ func Init() {
 
 func main() {
 	db := GetDatabase()
-	db.AutoMigrate(&User{}, &Preset{}, &Feature{}, &Framework{}, &Competitor{}, &ProductType{}, &Component{}, &FeatureRequirement{})
+	db.AutoMigrate(&User{}, &Preset{}, &Feature{}, &Framework{}, &Competitor{}, &ProductType{}, &Component{}, &FeatureRequirement{}, &Image{})
 	db.Close()
 
 	Init()
@@ -435,6 +496,7 @@ func main() {
 	r.HandleFunc("/presets", FindPresetsHandler).Methods("GET")
 	r.HandleFunc("/preset/{presetID}", PresetDownloadHandler).Methods("GET")
 	r.HandleFunc("/preset", PresetUploadHandler).Methods("POST")
+	r.HandleFunc("/image", ImageUploadHandler).Methods("POST")
 	r.HandleFunc("/test", TestHandler).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
