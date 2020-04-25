@@ -1,4 +1,8 @@
-const SERVER_URL = 'https://dynamic-products.kingofdog.de';
+const config = require('./config.json');
+
+const SERVER_URL = config.serverUrl;
+
+module.exports.SERVER_URL = SERVER_URL;
 
 let _modName;
 let agreedToOnline = false;
@@ -101,37 +105,52 @@ module.exports.downloadPreset = async function (presetID) {
     return result;
 }
 
-module.exports.uploadPreset = async function(preset) {
-    if(!agreedToOnline || !loggedIn) {
-return;
+module.exports.uploadPreset = async function (preset) {
+    if (!agreedToOnline || !loggedIn) {
+        return;
     }
     preset.author = currentUser.steamID;
     const result = await sendRequest('POST', 'preset', preset);
     return result;
 }
 
-module.exports.uploadImage = async function(file) {
-    if(!agreedToOnline || !loggedIn) {
+module.exports.uploadImage = async function (file) {
+    if (!agreedToOnline || !loggedIn) {
         return;
     }
-    const formData = new FormData();
-    formData.append('image', file);
 
-    $.ajax({
-        url: 'http://localhost:8000/' + 'image',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        xhr: () => {
-            const xhr = $.ajaxSettings.xhr();
-            if(xhr.upload) {
-                xhr.upload.addEventListener('progress', e => {
-                    console.log(e);
-                }, false);
-            }
-            return xhr;
-        }
-    })
+    return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        $.ajax({
+            url: SERVER_URL + '/image',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            xhr: () => {
+                const xhr = $.ajaxSettings.xhr();
+                if (xhr.upload) {
+                    xhr.upload.addEventListener('progress', e => {
+                        console.log(e);
+                    }, false);
+                }
+                return xhr;
+            },
+            success: result => {
+                result = JSON.parse(result);
+                
+                if(result.Success) {
+                    resolve(result);
+                } else {
+                    reject();
+                }
+            },
+            error: error => {
+                reject(error);
+            },
+        });
+    });
 }

@@ -5,13 +5,29 @@
     <h3 localize="dp_create_framework"></h3>
     <p localize="dp_create_framework_desc"></p>
 
-    <input type="text" ng-model="dynamicframeworkseditCtrl.name" placeholder="{{dynamicframeworkseditCtrl.getString('dp_framework_name')}}"
-        class="margin-bottom small">
+    <div class="flex-row margin-bottom website-name">
+        <img
+            ng-src="{{ dynamicframeworkseditCtrl.icon ? dynamicframeworkseditCtrl.icon.url : 'mods/dynamicproducts/thumbnail.png' }}" class="website-logo">
+        <input type="text" ng-model="dynamicframeworkseditCtrl.name"
+            placeholder="{{dynamicframeworkseditCtrl.getString('dp_framework_name')}}" class="small" maxlength="20" restrict-to="[a-zA-Z0-9/\s]+">
+    </div>
+
+    <label localize="dp_icon"></label>
+    <div class="flex-row margin-bottom">
+        <div class="upload-wrapper">
+            <button class="blue small">
+                <i class="fa fa-upload"></i>
+                <span localize="dp_upload_image"></span>
+            </button>
+            <input type="file" id="file" accept="image/jpeg,image/png">
+        </div>
+    </div>
 
     <div class="flex-row">
         <div class="margin-right">
             <label for="researchPoints" localize="dp_research_cost"></label>
-            <input type="number" ng-model="dynamicframeworkseditCtrl.researchPoints" min="0" class="margin-bottom small">
+            <input type="number" ng-model="dynamicframeworkseditCtrl.researchPoints" min="0"
+                class="margin-bottom small">
         </div>
 
         <div class="margin-left margin-right">
@@ -31,11 +47,13 @@
     <input type="number" ng-model="dynamicframeworkseditCtrl.cuPerMs" min="0" id="cuPerMs" class="margin-bottom small">
 
     <label for="maxFeatures" localize="max_features"></label>
-    <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatures" min="3" id="maxFeatures" class="margin-bottom small">
+    <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatures" min="3" id="maxFeatures"
+        class="margin-bottom small">
 
     <label for="maxFeatureLevel" localize="max_feature_level"></label>
     <input type="number" ng-model="dynamicframeworkseditCtrl.maxFeatureLevel" min="1" id="maxFeatureLevel"
         class="margin-bottom small">
 
-    <button type="button" ng-click="dynamicframeworkseditCtrl.confirm()" ng-disabled="!dynamicframeworkseditCtrl.isValid()" localize="dp_create"></button>
+    <button type="button" ng-click="dynamicframeworkseditCtrl.confirm()"
+        ng-disabled="!dynamicframeworkseditCtrl.isValid()" localize="dp_create"></button>
 </div>

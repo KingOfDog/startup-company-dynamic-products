@@ -14,6 +14,17 @@
     <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.types"
         dropdown-model="dynamiccomponentseditCtrl.type" dropdown-item-label="label"></div>
 
+    <label localize="dp_icon"></label>
+    <div class="flex-row">
+        <div class="upload-wrapper">
+            <button class="blue small">
+                <i class="fa fa-upload"></i>
+                <span localize="dp_upload_image"></span>
+            </button>
+            <input type="file" id="file" accept="image/jpeg,image/png">
+        </div>
+    </div>
+    
     <div ng-if="dynamiccomponentseditCtrl.type">
         <label localize="employee_type"></label>
         <div class="small margin-bottom" dropdown-select="dynamiccomponentseditCtrl.employeeTypes"

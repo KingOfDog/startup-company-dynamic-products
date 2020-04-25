@@ -334,6 +334,7 @@ exports.initialize = (modPath) => {
 
                 this.logos = _.range(1, 100).map(n => ({
                     number: n,
+                    id: -n,
                     url: `images/logos/companies/${n}.png`,
                 }));
                 this.productTypes = ProductTypes.map(productType => {
@@ -349,7 +350,20 @@ exports.initialize = (modPath) => {
                 this.uploadFile = () => {
                     const file = document.getElementById('file').files[0];
                     console.log(file);
-                    uploadImage(file);
+                    uploadImage(file)
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .then(result => {
+                            console.log(result);
+                            this.logo = {
+                                online: true,
+                                id: result.ImageID,
+                                url: result.URL,
+                            };
+                            $('#file').val('');
+                            GetRootScope().$digest();
+                        });
                 };
 
                 this.updateUsers = () => {
@@ -405,6 +419,7 @@ exports.initialize = (modPath) => {
 
                     const newCompetitor = {
                         name: this.name,
+                        imageId: this.logo.id,
                         logoPath: this.logo.url,
                         logoColorDegree: 300,
                         users: this.users,
@@ -458,6 +473,7 @@ exports.initialize = (modPath) => {
                 this.produceHours = 1;
                 this.requirements = {};
                 this.newRequirement = null;
+                this.icon = null;
 
                 this.types = [{
                         label: this.getString('dp_component'),
@@ -474,8 +490,8 @@ exports.initialize = (modPath) => {
                     name: name,
                 }));
                 this.components = Components.map(component => ({
-                        label: this.getString(component.name),
-                        component: component
+                    label: this.getString(component.name),
+                    component: component
                 }));
 
                 this.updateType = () => {
@@ -553,6 +569,27 @@ exports.initialize = (modPath) => {
                     this.newRequirement = '';
                 };
 
+                $('#file').on('change', () => {
+                    this.uploadFile();
+                });
+                this.uploadFile = () => {
+                    const file = document.getElementById('file').files[0];
+                    console.log(file);
+                    uploadImage(file)
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .then(result => {
+                            console.log(result);
+                            this.icon = {
+                                id: result.ImageID,
+                                url: result.URL,
+                            };
+                            $('#file').val('');
+                            GetRootScope().$digest();
+                        });
+                };
+
                 this.isValid = () => {
                     return this.name.length > 0 &&
                         this.type != null &&
@@ -578,11 +615,12 @@ exports.initialize = (modPath) => {
                         type: this.type.name,
                         employeeTypeName: this.employeeType.name,
                         employeeLevel: this.employeeLevel.name,
+                        imageId: -1,
                         icon: 'mods/dynamicproducts/thumbnail.png',
                         createdSelf: true,
                     };
 
-                    if(this.type.name == 'Component') {
+                    if (this.type.name == 'Component') {
                         newComponent.produceHours = this.produceHours;
                     } else {
                         const requirements = {};
@@ -591,6 +629,12 @@ exports.initialize = (modPath) => {
                         });
                         newComponent.requirements = requirements;
                     }
+
+                    if(this.icon) {
+                        newComponent.imageId = this.icon.id;
+                        newComponent.icon = this.icon.url;
+                    }
+
                     console.log(newComponent);
 
                     registerComponent(newComponent, true);
@@ -785,6 +829,29 @@ exports.initialize = (modPath) => {
                 this.cuPerMs = 0.1;
                 this.maxFeatures = 3;
                 this.maxFeatureLevel = 1;
+                this.icon = null;
+
+                $('#file').on('change', () => {
+                    this.uploadFile();
+                });
+                this.uploadFile = () => {
+                    const file = document.getElementById('file').files[0];
+                    console.log(file);
+                    uploadImage(file)
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .then(result => {
+                            console.log(result);
+                            this.icon = {
+                                online: true,
+                                id: result.ImageID,
+                                url: result.URL,
+                            };
+                            $('#file').val('');
+                            GetRootScope().$digest();
+                        });
+                };
 
                 this.confirm = () => {
                     GetRootScope().confirm('', this.getString('dp_framework_confirm'), () => {
@@ -816,7 +883,15 @@ exports.initialize = (modPath) => {
                         licenseCost: this.licenseCost,
                         cuPerMs: this.cuPerMs,
                         createdSelf: true,
+                        imageId: -1,
+                        logoPath: 'mods/dynamicproducts/thumbnail.png',
                     };
+
+                    if(this.icon) {
+                        newFramework.imageId = this.icon.id;
+                        newFramework.logoPath = this.icon.url;
+                    }
+
                     console.log('New Framework', newFramework);
 
                     registerFramework(newFramework, _modPath);
@@ -914,7 +989,7 @@ exports.initialize = (modPath) => {
                 };
 
                 this.submit = () => {
-                    if(!this.isValid()) {
+                    if (!this.isValid()) {
                         console.log('invalid product');
                         return;
                     }
