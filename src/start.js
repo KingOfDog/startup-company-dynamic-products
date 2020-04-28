@@ -630,7 +630,7 @@ exports.initialize = (modPath) => {
                         newComponent.requirements = requirements;
                     }
 
-                    if(this.icon) {
+                    if (this.icon) {
                         newComponent.imageId = this.icon.id;
                         newComponent.icon = this.icon.url;
                     }
@@ -638,6 +638,7 @@ exports.initialize = (modPath) => {
                     console.log(newComponent);
 
                     registerComponent(newComponent, true);
+                    runBackgroundWorkerInjection();
 
                     this.quitScreen();
                 };
@@ -782,6 +783,7 @@ exports.initialize = (modPath) => {
                     console.log(newFeature);
 
                     registerFeature(newFeature);
+                    runBackgroundWorkerInjection();
 
                     this.quitScreen();
                 };
@@ -887,7 +889,7 @@ exports.initialize = (modPath) => {
                         logoPath: 'mods/dynamicproducts/thumbnail.png',
                     };
 
-                    if(this.icon) {
+                    if (this.icon) {
                         newFramework.imageId = this.icon.id;
                         newFramework.logoPath = this.icon.url;
                     }
@@ -895,6 +897,7 @@ exports.initialize = (modPath) => {
                     console.log('New Framework', newFramework);
 
                     registerFramework(newFramework, _modPath);
+                    runBackgroundWorkerInjection();
 
                     this.quitScreen();
                 };
@@ -1012,6 +1015,7 @@ exports.initialize = (modPath) => {
                     console.log(newProduct);
 
                     registerProduct(newProduct);
+                    runBackgroundWorkerInjection();
 
                     // Reset inputs
                     this.quitScreen();
@@ -1072,6 +1076,7 @@ exports.initialize = (modPath) => {
 exports.onLoadGame = settings => {
     initLanguage().then();
 
+    console.log('loaded game');
     if (!settings[config.name]) {
         settings[config.name] = {
             agreedToOnline: false,
@@ -1117,4 +1122,83 @@ exports.onLoadGame = settings => {
         } catch (e) {}
     }
 
+    runBackgroundWorkerInjection();
+};
+
+function runBackgroundWorkerInjection() {
+    let a = GetRootScope();
+    let e = 1;
+    let t = moment(a.settings.date).subtract(1, "minutes").toDate();
+    let n = true;
+    Game.BackgroundWorker._performance.start = performance.now();
+    Game.dataToTransfer = {
+        date: null != t ? t.toString() : a.settings.date,
+        started: a.settings.started,
+        minutes: e,
+        producedCuByHosting: null != a.settings.hosting && null != a.settings.hosting.performance ? a.settings.hosting.performance.producedCu : null,
+        progress: a.settings.progress,
+        products: a.settings.products,
+        featureInstances: a.settings.featureInstances,
+        actions: a.settings.actions,
+        isRerun: n,
+        betaVersionAtStart: a.settings.betaVersionAtStart,
+        compatibilityModifiers: a.settings.compatibilityModifiers,
+        dynamicProducts: a.settings[config.name],
+    };
+    console.log(Game.dataToTransfer);
+    Game.BackgroundWorker.postMessage({
+        method: 'update',
+        data: Game.dataToTransfer,
+    });
+    console.log(_modPath);
+
+    Game.BackgroundWorker.postMessage({
+        method: 'injectJs',
+        data: {
+            method: backgroundWorkerInjection.toString(),
+            modPath: _modPath,
+        },
+    });
+    Helpers.RunBackgroundWorker(null, null, true);
+}
+
+const backgroundWorkerInjection = modPath => {
+    console.log('hallo welt', worker.settings, Frameworks);
+    settings = worker.settings.dynamicProducts;
+    settings.components.forEach(component => {
+        if (ComponentNames[component.name]) {
+            return;
+        }
+
+        ComponentNames[component.name] = component.name;
+        Components.push(component);
+    });
+    settings.features.forEach(feature => {
+        if (FeatureNames[feature.name]) {
+            return;
+        }
+
+        FeatureNames[feature.name] = feature.name;
+        Features.push(feature);
+    });
+    settings.frameworks.forEach(framework => {
+        if (FrameworkNames[framework.name]) {
+            return;
+        }
+
+        FrameworkNames[framework.name] = framework.name;
+
+        const clone = Helpers.Clone(framework);
+        clone.order = _.maxBy(Frameworks, e => e.order).order + 1;
+        delete clone.researchPoints;
+        Frameworks.push(clone);
+    });
+    settings.products.forEach(product => {
+        if (ProductTypeNames[product.name]) {
+            return;
+        }
+
+        ProductTypeNames[product.name] = product.name;
+        ProductTypes.push(product);
+    });
 };
