@@ -13,6 +13,7 @@
     "dp_create_competitor": "Create Competitor",
     "dp_create_competitor_desc": "You can create a custom competitor product that will behave like any other competitor in the game. You can buy stocks, sell stocks and of course, you can also aquire it and merge it into your own website.",
     "dp_competitor_name": "Competitor Name",
+    "dp_competitor_custom_image": "Or you can upload your own image:",
     "dp_users": "Users",
     "dp_stock_volume": "Stock Volume",
     "dp_competitor_confirm": "Are you sure that you want to create this competitor?",
@@ -74,5 +75,7 @@
     "dp_actions": "Actions",
     "dp_copy_clipboard": "Copy to clipboard",
     "dp_component": "Component",
-    "dp_module": "Module"
+    "dp_module": "Module",
+    "dp_icon": "Icon",
+    "dp_upload_image": "Upload Image"
 }

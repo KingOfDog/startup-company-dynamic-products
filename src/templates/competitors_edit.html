@@ -18,6 +18,16 @@
         <img ng-repeat="logo in dynamiccompetitorseditCtrl.logos" ng-src="{{logo.url}}" class="website-logo"
             ng-mousedown="dynamiccompetitorseditCtrl.logo = logo">
     </div>
+    <p localize="dp_competitor_custom_image" class="margin-top"></p>
+    <div class="flex-row">
+        <div class="upload-wrapper">
+            <button class="blue small">
+                <i class="fa fa-upload"></i>
+                <span localize="dp_upload_image"></span>
+            </button>
+            <input type="file" id="file" accept="image/jpeg,image/png">
+        </div>
+    </div>
 
     <hr class="big">
 
@@ -28,24 +38,31 @@
 
     <label for="usersInput" localize="dp_users"></label>
     <div class="flex-row margin-bottom">
-        <input type="range" ng-model="dynamiccompetitorseditCtrl.users" value="1000.0" min="1.0" max="{{dynamiccompetitorseditCtrl.maxUsers}}" step="1000" ng-change="dynamiccompetitorseditCtrl.updateUsers()">
-        <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="1" max="{{dynamiccompetitorseditCtrl.maxUsers}}" class="small"
+        <input type="range" ng-model="dynamiccompetitorseditCtrl.users" value="1000.0" min="1.0"
+            max="{{dynamiccompetitorseditCtrl.maxUsers}}" step="1000"
+            ng-change="dynamiccompetitorseditCtrl.updateUsers()">
+        <input type="number" id="usersInput" ng-model="dynamiccompetitorseditCtrl.users" min="1"
+            max="{{dynamiccompetitorseditCtrl.maxUsers}}" class="small"
             ng-change="dynamiccompetitorseditCtrl.updateUsers()">
     </div>
 
     <label for="stockVolume" localize="dp_stock_volume"></label>
     <div class="flex-row margin-bottom">
-        <input type="range" ng-model="dynamiccompetitorseditCtrl.stockVolume" value="100.0" min="1.0" max="100000000" step="100" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
+        <input type="range" ng-model="dynamiccompetitorseditCtrl.stockVolume" value="100.0" min="1.0" max="100000000"
+            step="100" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
         <input type="number" id="stockVolume" ng-model="dynamiccompetitorseditCtrl.stockVolume" min="1" max="100000000"
-        class="small margin-bottom" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
-        </div>
+            class="small margin-bottom" ng-change="dynamiccompetitorseditCtrl.updateStockVolume()">
+    </div>
 
     <p>
-        <span localize="valuation"></span>: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.valuation, 1)}}
+        <span localize="valuation"></span>:
+        {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.valuation, 1)}}
     </p>
     <p>
-        <span localize="stock_price"></span>: {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.stockPrice, 1)}}
+        <span localize="stock_price"></span>:
+        {{dynamiccompetitorseditCtrl.format(dynamiccompetitorseditCtrl.stockPrice, 1)}}
     </p>
 
-    <button type="button" ng-click="dynamiccompetitorseditCtrl.confirm()" ng-disabled="!dynamiccompetitorseditCtrl.isValid()" localize="dp_create"></button>
+    <button type="button" ng-click="dynamiccompetitorseditCtrl.confirm()"
+        ng-disabled="!dynamiccompetitorseditCtrl.isValid()" localize="dp_create"></button>
 </div>

@@ -150,7 +150,6 @@ module.exports.registerFramework = function (framework, modPath, addToSettings =
     FrameworkNames[framework.name] = framework.name;
 
     const clone = Helpers.Clone(framework);
-    clone.logoPath = modPath + 'thumbnail.png';
     clone.order = _.maxBy(Frameworks, e => e.order).order + 1;
     delete clone.researchPoints;
     Frameworks.push(clone);

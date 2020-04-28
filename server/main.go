@@ -1,13 +1,23 @@
 package main
 
 import (
+	"image"
+
+	"kingofdog.de/dynamic-products/images"
+
+	"kingofdog.de/dynamic-products/helpers"
+
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
+	"github.com/google/uuid"
+
+	"github.com/disintegration/imaging"
 	"github.com/gorilla/mux"
 
 	"github.com/jinzhu/gorm"
@@ -55,11 +65,13 @@ type Competitor struct {
 	Users           uint
 	StockVolume     uint
 	LogoColorDegree uint
-	LogoPath        string
+	ImageID         int
+	Image           Image
 }
 
 type CompetitorJSON struct {
 	Name            string `json:"name"`
+	ImageID         int    `json:"imageId"`
 	LogoPath        string `json:"logoPath"`
 	LogoColorDegree uint   `json:"logoColorDegree"`
 	Users           uint   `json:"users"`
@@ -67,22 +79,27 @@ type CompetitorJSON struct {
 	ProductTypeName string `json:"productTypeName"`
 }
 
-type ProductType struct {
+type Component struct {
 	gorm.Model
-	Presets         []*Preset `gorm:"many2many:preset_products;"`
-	Name            string    `gorm:"unique;not null"`
-	DisplayName     string
-	Icon            string
-	Features        []*Feature `gorm:"many2many:product_features;"`
-	AudienceMatches string
+	Name          string `gorm:"unique;not null"`
+	DisplayName   string
+	ImageID       uint
+	Image         Image
+	Type          string
+	EmployeeType  string
+	EmployeeLevel string
+	ProduceHours  uint
 }
 
-type ProductTypeJSON struct {
-	Name            string   `json:"name"`
-	DisplayName     string   `json:"displayName"`
-	Icon            string   `json:"faIcon"`
-	Features        []string `json:"features"`
-	AudienceMatches []string `json:"audienceMatches"`
+type ComponentJSON struct {
+	Name          string `json:"name"`
+	DisplayName   string `json:"displayName"`
+	ImageID       int    `json:"imageId"`
+	Icon          string `json:"icon"`
+	Type          string `json:"type"`
+	EmployeeType  string `json:"employeeTypeName"`
+	EmployeeLevel string `json:"employeeLevel"`
+	ProduceHours  uint   `json:"produceHours"`
 }
 
 type Feature struct {
@@ -108,6 +125,14 @@ type FeatureJSON struct {
 	ProductTypes   []string        `json:"availableProducts"`
 }
 
+type FeatureRequirement struct {
+	FeatureID   uint
+	Feature     Feature
+	ComponentID uint
+	Component   Component
+	Count       uint
+}
+
 type Framework struct {
 	gorm.Model
 	Name            string `gorm:"uniqe;not null"`
@@ -131,33 +156,29 @@ type FrameworkJSON struct {
 	CuPerMs         float64 `json:"cuPerMs"`
 }
 
-type Component struct {
+type ProductType struct {
 	gorm.Model
-	Name          string `gorm:"unique;not null"`
-	DisplayName   string
-	Icon          string
-	Type          string
-	EmployeeType  string
-	EmployeeLevel string
-	ProduceHours  uint
+	Presets         []*Preset `gorm:"many2many:preset_products;"`
+	Name            string    `gorm:"unique;not null"`
+	DisplayName     string
+	Icon            string
+	Features        []*Feature `gorm:"many2many:product_features;"`
+	AudienceMatches string
 }
 
-type ComponentJSON struct {
-	Name          string `json:"name"`
-	DisplayName   string `json:"displayName"`
-	Icon          string `json:"icon"`
-	Type          string `json:"type"`
-	EmployeeType  string `json:"employeeTypeName"`
-	EmployeeLevel string `json:"employeeLevel"`
-	ProduceHours  uint   `json:"produceHours"`
+type ProductTypeJSON struct {
+	Name            string   `json:"name"`
+	DisplayName     string   `json:"displayName"`
+	Icon            string   `json:"faIcon"`
+	Features        []string `json:"features"`
+	AudienceMatches []string `json:"audienceMatches"`
 }
 
-type FeatureRequirement struct {
-	FeatureID   uint
-	Feature     Feature
-	ComponentID uint
-	Component   Component
-	Count       uint
+type Image struct {
+	gorm.Model
+	Name     string
+	Size     int64
+	FileName string
 }
 
 func GetDatabase() *gorm.DB {
@@ -309,6 +330,81 @@ func PresetUploadHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func ImageUploadHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(32 << 20)
+
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	// Max file size 2MB
+	if header.Size > 2<<20 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - File too big"))
+		return
+	}
+
+	name := strings.Split(header.Filename, ".")
+	log.Println("file name " + name[0])
+
+	// Only png and jpg files allowed
+	allowedFileTypes := []string{"png", "jpg"}
+	if len(name) <= 1 || !helpers.Contains(allowedFileTypes, name[len(name)-1]) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - Invalid file type"))
+		return
+	}
+
+	os.MkdirAll("./uploads/images", 0777)
+	fileName := uuid.New().String() + "." + name[len(name)-1]
+
+	// Resize image and save it
+	imageFile, _, _ := image.Decode(file)
+	imageFile = imaging.Resize(imageFile, 0, 110, imaging.NearestNeighbor)
+	imaging.Save(imageFile, "./uploads/images/"+fileName)
+
+	imageData := Image{
+		Name:     header.Filename,
+		Size:     header.Size,
+		FileName: fileName,
+	}
+
+	db := GetDatabase()
+	defer db.Close()
+
+	db.Create(&imageData)
+
+	encodedImage, _ := images.ReadAsBase64("./uploads/images/" + fileName)
+	json.NewEncoder(w).Encode(struct {
+		Success bool
+		URL     string
+		ImageID uint
+	}{
+		Success: true,
+		URL:     encodedImage,
+		ImageID: imageData.ID,
+	})
+}
+
+func ImageDownloadHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	fileName := vars["fileName"]
+
+	bytes, err := ioutil.ReadFile("./uploads/images/" + fileName)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/jpeg")
+	w.Header().Set("Content-Length", strconv.Itoa(len(bytes)))
+	if _, err := w.Write(bytes); err != nil {
+		log.Println("unable to write image")
+	}
+}
+
 func PresetDownloadHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	presetID, err := strconv.ParseUint(vars["presetID"], 10, 64)
@@ -425,7 +521,7 @@ func Init() {
 
 func main() {
 	db := GetDatabase()
-	db.AutoMigrate(&User{}, &Preset{}, &Feature{}, &Framework{}, &Competitor{}, &ProductType{}, &Component{}, &FeatureRequirement{})
+	db.AutoMigrate(&User{}, &Preset{}, &Feature{}, &Framework{}, &Competitor{}, &ProductType{}, &Component{}, &FeatureRequirement{}, &Image{})
 	db.Close()
 
 	Init()
@@ -435,6 +531,8 @@ func main() {
 	r.HandleFunc("/presets", FindPresetsHandler).Methods("GET")
 	r.HandleFunc("/preset/{presetID}", PresetDownloadHandler).Methods("GET")
 	r.HandleFunc("/preset", PresetUploadHandler).Methods("POST")
+	r.HandleFunc("/image", ImageUploadHandler).Methods("POST")
+	r.HandleFunc("/image/{fileName}", ImageDownloadHandler).Methods("GET")
 	r.HandleFunc("/test", TestHandler).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", r))
@@ -487,12 +585,13 @@ func (p *Preset) ConvToJSON() PresetJSON {
 }
 
 func (c *CompetitorJSON) ConvToCompetitor() Competitor {
+
 	return Competitor{
 		Name:            c.Name,
 		Users:           c.Users,
 		StockVolume:     c.StockVolume,
+		ImageID:         c.ImageID,
 		LogoColorDegree: c.LogoColorDegree,
-		LogoPath:        c.LogoPath,
 	}
 }
 
@@ -502,9 +601,17 @@ func (c *Competitor) ConvToJSON() CompetitorJSON {
 
 	db.Model(&c).Related(&c.ProductType)
 
+	var logoPath string
+	if c.ImageID < 0 {
+		logoPath = "images/logos/companies/" + string(-c.ImageID) + ".png"
+	} else if c.ImageID > 0 {
+		db.Model(&c).Related(&c.Image)
+		logoPath, _ = images.ReadAsBase64("./uploads/images/" + c.Image.FileName)
+	}
+
 	return CompetitorJSON{
 		Name:            c.Name,
-		LogoPath:        c.LogoPath,
+		LogoPath:        logoPath,
 		LogoColorDegree: c.LogoColorDegree,
 		Users:           c.Users,
 		StockVolume:     c.StockVolume,
@@ -517,10 +624,14 @@ func (c *ComponentJSON) ConvToComponent() Component {
 		c.DisplayName = c.Name
 		c.Name = RemoveSpaces(c.Name)
 	}
+	var imageID uint
+	if c.ImageID > 0 {
+		imageID = uint(c.ImageID)
+	}
 	return Component{
 		Name:          c.Name,
 		DisplayName:   c.DisplayName,
-		Icon:          c.Icon,
+		ImageID:       imageID,
 		Type:          c.Type,
 		EmployeeType:  c.EmployeeType,
 		EmployeeLevel: c.EmployeeLevel,
@@ -529,10 +640,18 @@ func (c *ComponentJSON) ConvToComponent() Component {
 }
 
 func (c *Component) ConvToJSON() ComponentJSON {
+	db := GetDatabase()
+	defer db.Close()
+
+	icon := "mods/dynamicproducts/thumbnail.png"
+	if c.ImageID > 0 {
+		db.Model(&c).Related(&c.Image)
+		icon, _ = images.ReadAsBase64("./uploads/images/" + c.Image.FileName)
+	}
 	return ComponentJSON{
 		Name:          c.Name,
 		DisplayName:   c.DisplayName,
-		Icon:          c.Icon,
+		Icon:          icon,
 		Type:          c.Type,
 		EmployeeType:  c.EmployeeType,
 		EmployeeLevel: c.EmployeeLevel,
