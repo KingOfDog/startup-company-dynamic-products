@@ -369,6 +369,8 @@ exports.initialize = (modPath) => {
                     return Helpers.SmartNumber(number, a);
                 };
 
+                this.loggedIn = isLoggedIn();
+
                 this.name = '';
                 this.logo = null;
                 this.productType = null;
@@ -391,9 +393,13 @@ exports.initialize = (modPath) => {
                     };
                 });
 
-                $('#file').on('change', () => {
-                    this.uploadFile();
-                });
+                this.selectFile = () => {
+                    $('#file').click();
+                    $('#file').one('change', () => {
+                        console.log('hallo');
+                        this.uploadFile();
+                    });
+                };
                 this.uploadFile = () => {
                     const file = document.getElementById('file').files[0];
                     console.log(file);
@@ -410,6 +416,9 @@ exports.initialize = (modPath) => {
                             };
                             $('#file').val('');
                             GetRootScope().$digest();
+                        })
+                        .catch(error => {
+                            console.log(error);
                         });
                 };
 
@@ -512,6 +521,8 @@ exports.initialize = (modPath) => {
                 this.getString = (key) => {
                     return Helpers.GetLocalized(key);
                 };
+
+                this.loggedIn = isLoggedIn();
 
                 this.name = '';
                 let type = null;
@@ -616,9 +627,13 @@ exports.initialize = (modPath) => {
                     this.newRequirement = '';
                 };
 
-                $('#file').on('change', () => {
-                    this.uploadFile();
-                });
+                this.selectFile = () => {
+                    $('#file').click();
+                    $('#file').one('change', () => {
+                        console.log('hallo');
+                        this.uploadFile();
+                    });
+                };
                 this.uploadFile = () => {
                     const file = document.getElementById('file').files[0];
                     console.log(file);
@@ -685,7 +700,7 @@ exports.initialize = (modPath) => {
                     console.log(newComponent);
 
                     registerComponent(newComponent, true);
-                    runBackgroundWorkerInjection();
+                    runBackgroundWorkerInjection(GetRootScope(), GetRootScope().settings);
 
                     this.quitScreen();
                 };
@@ -830,7 +845,7 @@ exports.initialize = (modPath) => {
                     console.log(newFeature);
 
                     registerFeature(newFeature);
-                    runBackgroundWorkerInjection();
+                    runBackgroundWorkerInjection(GetRootScope(), GetRootScope().settings);
 
                     this.quitScreen();
                 };
@@ -944,7 +959,7 @@ exports.initialize = (modPath) => {
                     console.log('New Framework', newFramework);
 
                     registerFramework(newFramework, _modPath);
-                    runBackgroundWorkerInjection();
+                    runBackgroundWorkerInjection(GetRootScope(), GetRootScope().settings);
 
                     this.quitScreen();
                 };
@@ -987,6 +1002,8 @@ exports.initialize = (modPath) => {
 
                 this.name = '';
                 this.faIcon = '';
+                this.featureCategories = FeatureCategories;
+                this.selectedFeatureCategory = 'Users';
                 this.features = getFeatures();
                 this.audienceAges = [];
                 this.audienceGender = null;
@@ -1054,7 +1071,7 @@ exports.initialize = (modPath) => {
                     const newProduct = {
                         name: getInternalName(this.name),
                         displayName: this.name,
-                        features: Object.keys(this.features).filter(name => this.features[name]),
+                        features: this.features.filter(item => item.selected).map(item => item.feature.name),
                         audienceMatches: audienceMatches,
                         faIcon: this.faIcon,
                         createdSelf: true,
@@ -1062,7 +1079,7 @@ exports.initialize = (modPath) => {
                     console.log(newProduct);
 
                     registerProduct(newProduct);
-                    runBackgroundWorkerInjection();
+                    runBackgroundWorkerInjection(GetRootScope(), GetRootScope().settings);
 
                     // Reset inputs
                     this.quitScreen();

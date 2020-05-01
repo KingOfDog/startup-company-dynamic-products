@@ -1,8 +1,12 @@
-FROM golang:1.14-alpine AS build
+FROM golang
 
-COPY main.go go.*
-RUN CGO_ENABLED=0 go build -o /bin/demo
+WORKDIR /app/server
+COPY . .
 
-FROM scratch
-COPY --from=build /bin/demo /bin/demo
-ENTRYPOINT ["/bin/demo"]
+RUN go mod download
+
+RUN go build
+RUN ls
+ENTRYPOINT [ "./dynamic-products" ]
+
+EXPOSE 8000

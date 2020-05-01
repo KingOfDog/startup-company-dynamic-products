@@ -230,8 +230,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func PresetUploadHandler(w http.ResponseWriter, r *http.Request) {
 	var body PresetJSON
-	if json.NewDecoder(r.Body).Decode(&body) != nil {
-		panic("error")
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		log.Fatalln("Failed uploading preset", err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - Could not parse preset"))
+		return
 	}
 
 	db := GetDatabase()
@@ -335,7 +338,9 @@ func ImageUploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	file, header, err := r.FormFile("image")
 	if err != nil {
-		panic(err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - Did not find file"))
+		return
 	}
 	defer file.Close()
 
@@ -361,7 +366,13 @@ func ImageUploadHandler(w http.ResponseWriter, r *http.Request) {
 	fileName := uuid.New().String() + "." + name[len(name)-1]
 
 	// Resize image and save it
-	imageFile, _, _ := image.Decode(file)
+	imageFile, _, err := image.Decode(file)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("400 - Could not decode image"))
+		return
+	}
 	imageFile = imaging.Resize(imageFile, 0, 110, imaging.NearestNeighbor)
 	imaging.Save(imageFile, "./uploads/images/"+fileName)
 
@@ -524,6 +535,7 @@ func main() {
 	db.AutoMigrate(&User{}, &Preset{}, &Feature{}, &Framework{}, &Competitor{}, &ProductType{}, &Component{}, &FeatureRequirement{}, &Image{})
 	db.Close()
 
+	log.Println("Initializing...")
 	Init()
 
 	r := mux.NewRouter()
@@ -535,6 +547,7 @@ func main() {
 	r.HandleFunc("/image/{fileName}", ImageDownloadHandler).Methods("GET")
 	r.HandleFunc("/test", TestHandler).Methods("GET")
 
+	log.Println("Listening...")
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
 
