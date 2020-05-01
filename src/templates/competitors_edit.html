@@ -20,13 +20,12 @@
     </div>
     <p localize="dp_competitor_custom_image" class="margin-top"></p>
     <div class="flex-row">
-        <div class="upload-wrapper">
-            <button class="blue small">
-                <i class="fa fa-upload"></i>
-                <span localize="dp_upload_image"></span>
-            </button>
-            <input type="file" id="file" accept="image/jpeg,image/png">
-        </div>
+        <button class="blue small" ng-click="dynamiccompetitorseditCtrl.selectFile()"
+            ng-disabled="{{!dynamiccompetitorseditCtrl.loggedIn}}">
+            <i class="fa fa-upload"></i>
+            <span localize="dp_upload_image"></span>
+        </button>
+        <input type="file" id="file" accept="image/jpeg,image/png" style="display: none;">
     </div>
 
     <hr class="big">

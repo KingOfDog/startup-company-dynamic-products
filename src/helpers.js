@@ -1,19 +1,18 @@
-module.exports.getFeatures = function() {
-    const features = {};
-    Object.keys(FeatureNames).forEach(name => {
-        features[name] = false;
-    });
-    return features;
+module.exports.getFeatures = function () {
+    return Features.map(feature => ({
+        selected: false,
+        feature,
+    }));
 }
 
-module.exports.getInternalName = function(name) {
+module.exports.getInternalName = function (name) {
     const random = Math.round(Math.random() * 8999 + 1000);
     return _.startCase(_.toLower(name)).replace(/ /g, '') + random;
 }
 
 const languages = require('./lang/lang.json');
 
-module.exports.initLanguage = async function() {
+module.exports.initLanguage = async function () {
     console.log('Loading languages...');
     const strings = {};
 
@@ -21,7 +20,7 @@ module.exports.initLanguage = async function() {
         const langStrings = require('./lang/' + lang.file);
 
         Object.entries(langStrings).forEach(string => {
-            if(!strings[string[0]]) {
+            if (!strings[string[0]]) {
                 strings[string[0]] = {};
             }
             strings[string[0]][lang.name] = string[1];
@@ -34,7 +33,7 @@ module.exports.initLanguage = async function() {
     console.log('Loaded languages!');
 }
 
-module.exports.copyToClipboard = function(string) {
+module.exports.copyToClipboard = function (string) {
     const el = document.createElement('textarea');
     el.value = string;
     document.body.appendChild(el);

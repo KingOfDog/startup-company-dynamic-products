@@ -116,7 +116,7 @@ module.exports.uploadPreset = async function (preset) {
 
 module.exports.uploadImage = async function (file) {
     if (!agreedToOnline || !loggedIn) {
-        return;
+        throw new Error('not logged in');
     }
 
     return new Promise((resolve, reject) => {
@@ -141,11 +141,11 @@ module.exports.uploadImage = async function (file) {
             },
             success: result => {
                 result = JSON.parse(result);
-                
-                if(result.Success) {
+
+                if (result.Success) {
                     resolve(result);
                 } else {
-                    reject();
+                    reject('could not upload image');
                 }
             },
             error: error => {
