@@ -39,6 +39,55 @@ const presets = [
     require('./presets/version-control.json'),
 ];
 
+function loadSettings(settings) {
+    if (!settings[config.name]) {
+        settings[config.name] = {
+            agreedToOnline: false,
+            loggedIn: false,
+            username: null,
+            competitors: [],
+            components: [],
+            features: [],
+            frameworks: [],
+            products: [],
+        };
+    }
+    if (!settings[config.name].components) {
+        settings[config.name].components = [];
+    }
+    if (!settings[config.name].features) {
+        settings[config.name].features = [];
+    }
+    if (!settings[config.name].frameworks) {
+        settings[config.name].frameworks = [];
+    }
+    if (!settings[config.name].products) {
+        settings[config.name].products = [];
+    }
+
+    settings[config.name].components.forEach(component => {
+        registerComponent(component, false);
+    });
+    settings[config.name].features.forEach(feature => {
+        registerFeature(feature, false);
+    });
+    settings[config.name].frameworks.forEach(framework => {
+        registerFramework(framework, _modPath, false);
+    });
+    settings[config.name].products.forEach(product => {
+        registerProduct(product, false);
+    });
+}
+
+const loadGame = Helpers.LoadGame;
+Helpers.LoadGame = (e, t, n) => {
+    console.log(config.name, 'Loading game...');
+    if (null == t) return void n(null);
+    t.date = new Date(t.date), t.started = 0 != t.started && new Date(t.started), t.paused = !0, e.settings = t, loadSettings(e.settings), runBackgroundWorkerInjection(e, t), Helpers.PrepareSavegameCompatibility(t), e.updateFinanceData();
+    let a = Buildings.find(e => e.name == t.office.buildingName);
+    null != a ? Helpers.GoToBuilding(a) : (e.setActiveView("cityMap"), ToggleLoader(!1)), Helpers.SafeApply(), n(t), e.$broadcast(Enums.GameEvents.MilestoneTrigger), e.$broadcast(Enums.GameEvents.MailChange), e.$broadcast(Enums.GameEvents.UiUpdate), e.$broadcast(Enums.GameEvents.RackChange), Game.Lifecycle.PauseTime(!0, !0), "$apply" != e.$$phase && "$digest" != e.$$phase && e.$apply(), Helpers.UpdateTopbar(), Helpers.UpdateTopbarProgress(), Helpers.UpdateRetirementProgress(), Helpers.UpdateAndSetUiDay(), Helpers.UpdateDiscord(), e.$broadcast(Enums.GameEvents.OnLoadGame), Modding._executeEvent("onLoadGame", e.settings)
+};
+
 exports.initialize = (modPath) => {
     _modPath = modPath;
 
@@ -58,7 +107,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope, $http) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.tab = 'home';
@@ -71,7 +120,7 @@ exports.initialize = (modPath) => {
 
                 this.localPresets = presets.map(p => {
                     p.local = true;
-                    return p
+                    return p;
                 });
                 this.loading = true;
                 this.presets = [];
@@ -90,7 +139,6 @@ exports.initialize = (modPath) => {
                     if (!this.isValid()) {
                         return;
                     }
-                    console.log(this.username);
 
                     login(Game.debug.steamId, this.username.trim())
                         .then(result => {
@@ -122,7 +170,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.loading = true;
@@ -188,7 +236,7 @@ exports.initialize = (modPath) => {
                         this.preset.competitors.forEach(competitor => registerCompetitor(competitor));
                     }
 
-                    Helpers.ShowSuccessMessage(this.getString('dp_preset_success'), this.getString('dp_preset_success_sub'))
+                    Helpers.ShowSuccessMessage(this.getString('dp_preset_success'), this.getString('dp_preset_success_sub'));
                 };
 
                 this.quitScreen = () => {
@@ -202,7 +250,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.loading = false;
@@ -249,7 +297,6 @@ exports.initialize = (modPath) => {
                     if (!this.isValid()) {
                         return;
                     }
-                    console.log('hallo welt');
 
                     this.loading = true;
 
@@ -264,14 +311,14 @@ exports.initialize = (modPath) => {
                     };
                     uploadPreset(newPreset)
                         .then(result => {
-                            console.log(result);
+                            console.log('preset', result);
                             this.loading = false;
 
                             if (result.Success) {
-                                Helpers.ShowSuccessMessage(this.getString('dp_create_preset_success'), this.getString('dp_create_preset_success_sub'))
+                                Helpers.ShowSuccessMessage(this.getString('dp_create_preset_success'), this.getString('dp_create_preset_success_sub'));
                                 this.quitScreen();
                             }
-                        })
+                        });
                 };
 
                 this.quitScreen = () => {
@@ -288,7 +335,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.competitors = GetRootScope().settings[config.name].competitors;
@@ -315,7 +362,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.format = (number, a = 0) => {
@@ -391,7 +438,7 @@ exports.initialize = (modPath) => {
                     this.stockPrice = Helpers.CalculateStockPrice({
                         stockVolume: this.stockVolume
                     }, this.valuation);
-                }
+                };
 
                 this.confirm = () => {
                     GetRootScope().confirm('', this.getString('dp_competitor_confirm'), () => {
@@ -445,7 +492,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.components = GetRootScope().settings[config.name].components;
@@ -463,7 +510,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.name = '';
@@ -595,7 +642,7 @@ exports.initialize = (modPath) => {
                         this.type != null &&
                         this.employeeType != null &&
                         this.employeeLevel != null &&
-                        (this.type.name == 'Component' || Object.keys(this.requirements).length > 0)
+                        (this.type.name == 'Component' || Object.keys(this.requirements).length > 0);
                 };
 
                 this.confirm = () => {
@@ -654,7 +701,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.tab = 'list';
@@ -676,7 +723,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.name = '';
@@ -695,13 +742,13 @@ exports.initialize = (modPath) => {
                     return {
                         label: this.getString(level),
                         name: level
-                    }
+                    };
                 });
                 this.components = Components.map(component => {
                     return {
                         label: this.getString(component.name),
                         component: component
-                    }
+                    };
                 });
 
                 this.onRequirementCountChange = () => {
@@ -747,7 +794,7 @@ exports.initialize = (modPath) => {
                     }
 
                     return true;
-                }
+                };
 
                 this.confirm = () => {
                     GetRootScope().confirm('', this.getString('dp_feature_confirm'), () => {
@@ -799,7 +846,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.tab = 'list';
@@ -821,7 +868,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.name = '';
@@ -913,7 +960,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.tab = 'list';
@@ -935,7 +982,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.name = '';
@@ -1032,7 +1079,7 @@ exports.initialize = (modPath) => {
             controller: ['$scope', function ($scope) {
                 // Get Language String
                 this.getString = (key) => {
-                    return Helpers.GetLocalized(key)
+                    return Helpers.GetLocalized(key);
                 };
 
                 this.tab = 'Home';
@@ -1070,50 +1117,12 @@ exports.initialize = (modPath) => {
             }]
         }
     ];
-
 };
 
 exports.onLoadGame = settings => {
     initLanguage().then();
 
-    console.log('loaded game');
-    if (!settings[config.name]) {
-        settings[config.name] = {
-            agreedToOnline: false,
-            loggedIn: false,
-            username: null,
-            competitors: [],
-            components: [],
-            features: [],
-            frameworks: [],
-            products: [],
-        };
-    }
-    if (!settings[config.name].components) {
-        settings[config.name].components = [];
-    }
-    if (!settings[config.name].features) {
-        settings[config.name].features = [];
-    }
-    if (!settings[config.name].frameworks) {
-        settings[config.name].frameworks = [];
-    }
-    if (!settings[config.name].products) {
-        settings[config.name].products = [];
-    }
-
-    settings[config.name].components.forEach(component => {
-        registerComponent(component, false);
-    });
-    settings[config.name].features.forEach(feature => {
-        registerFeature(feature, false);
-    });
-    settings[config.name].frameworks.forEach(framework => {
-        registerFramework(framework, _modPath, false);
-    });
-    settings[config.name].products.forEach(product => {
-        registerProduct(product, false);
-    });
+    loadSettings(settings);
 
     initOnline(config.name);
     if (hasAgreedToOnline()) {
@@ -1121,50 +1130,29 @@ exports.onLoadGame = settings => {
             login(Game.debug.steamId, GetRootScope().settings[config.name].username);
         } catch (e) {}
     }
-
-    runBackgroundWorkerInjection();
 };
 
-function runBackgroundWorkerInjection() {
-    let a = GetRootScope();
-    let e = 1;
-    let t = moment(a.settings.date).subtract(1, "minutes").toDate();
-    let n = true;
-    Game.BackgroundWorker._performance.start = performance.now();
-    Game.dataToTransfer = {
-        date: null != t ? t.toString() : a.settings.date,
-        started: a.settings.started,
-        minutes: e,
-        producedCuByHosting: null != a.settings.hosting && null != a.settings.hosting.performance ? a.settings.hosting.performance.producedCu : null,
-        progress: a.settings.progress,
-        products: a.settings.products,
-        featureInstances: a.settings.featureInstances,
-        actions: a.settings.actions,
-        isRerun: n,
-        betaVersionAtStart: a.settings.betaVersionAtStart,
-        compatibilityModifiers: a.settings.compatibilityModifiers,
-        dynamicProducts: a.settings[config.name],
-    };
-    console.log(Game.dataToTransfer);
-    Game.BackgroundWorker.postMessage({
-        method: 'update',
-        data: Game.dataToTransfer,
-    });
-    console.log(_modPath);
+function runBackgroundWorkerInjection(a, settings) {
+    // Create background worker if not existing.
+    if (!Game.BackgroundWorker) {
+        Helpers.ResetEngine();
+    }
 
+    // Injecting a custom function into the background worker which has its own code
     Game.BackgroundWorker.postMessage({
         method: 'injectJs',
         data: {
-            method: backgroundWorkerInjection.toString(),
+            method: backgroundWorkerInjection.toString().replace('{}', JSON.stringify(settings[config.name])),
             modPath: _modPath,
         },
     });
+
+    // Executing the original background worker
     Helpers.RunBackgroundWorker(null, null, true);
 }
 
 const backgroundWorkerInjection = modPath => {
-    console.log('hallo welt', worker.settings, Frameworks);
-    settings = worker.settings.dynamicProducts;
+    const settings = {};
     settings.components.forEach(component => {
         if (ComponentNames[component.name]) {
             return;
