@@ -44,14 +44,14 @@ module.exports.registerCompetitor = function (competitor, addToSettings = true) 
     }
 }
 
-module.exports.registerComponent = function(component, addToSettings= true) {
+module.exports.registerComponent = function (component, addToSettings = true) {
     console.log('Registering component', component);
-    if(Object.keys(ComponentNames).find(name => name == component.name)) {
+    if (Object.keys(ComponentNames).find(name => name == component.name)) {
         console.log('Skipping component', component, 'as it already exists');
         return;
     }
 
-    if(!component.displayName) {
+    if (!component.displayName) {
         component.displayName = component.name;
         component.name = getInternalName(component.name);
     }
@@ -75,8 +75,8 @@ module.exports.registerComponent = function(component, addToSettings= true) {
         en: component.displayName,
     });
 
-    if(addToSettings) {
-        if(!GetRootScope().settings[config.name].components) {
+    if (addToSettings) {
+        if (!GetRootScope().settings[config.name].components) {
             GetRootScope().settings[config.name].components = [];
         }
         GetRootScope().settings[config.name].components.push(component);
@@ -91,7 +91,7 @@ module.exports.registerFeature = function (feature, addToSettings = true) {
         return;
     }
 
-    if(!feature.displayName) {
+    if (!feature.displayName) {
         feature.displayName = feature.name;
         feature.name = getInternalName(feature.name);
     }
@@ -141,7 +141,7 @@ module.exports.registerFramework = function (framework, modPath, addToSettings =
         return;
     }
 
-    if(!framework.displayName) {
+    if (!framework.displayName) {
         framework.displayName = framework.name;
         framework.name = getInternalName(framework.name);
     }
@@ -184,7 +184,7 @@ module.exports.registerProduct = function (product, addToSettings = true) {
         return;
     }
 
-    if(!product.displayName) {
+    if (!product.displayName) {
         product.displayName = product.name;
         product.name = getInternalName(product.name);
     }
