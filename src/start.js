@@ -236,6 +236,7 @@ exports.initialize = (modPath) => {
                         this.preset.competitors.forEach(competitor => registerCompetitor(competitor));
                     }
 
+                    runBackgroundWorkerInjection(GetRootScope(), GetRootScope().settings);
                     Helpers.ShowSuccessMessage(this.getString('dp_preset_success'), this.getString('dp_preset_success_sub'));
                 };
 
@@ -1151,9 +1152,7 @@ exports.onLoadGame = settings => {
 
 function runBackgroundWorkerInjection(a, settings) {
     // Create background worker if not existing.
-    if (!Game.BackgroundWorker) {
-        Helpers.ResetEngine();
-    }
+    Helpers.ResetEngine();
 
     // Injecting a custom function into the background worker which has its own code
     Game.BackgroundWorker.postMessage({
