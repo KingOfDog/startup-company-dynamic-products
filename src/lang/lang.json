@@ -22,6 +22,11 @@
         {
             "name": "tr",
             "file": "tr_wip.json"
+        },
+        {
+            "name": "ca",
+            "author": "T0M",
+            "file": "cs_wip.json"
         }
     ]
 }
